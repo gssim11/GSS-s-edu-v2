@@ -939,11 +939,24 @@ function openProf(p){
   showDialog();
 }
 
+/* 신경계물리치료관 전용 학습자료 (중요도 순) */
+const NEURO_LINKS=[
+ {t:'🧠 신경계물리치료 종합 가이드 (질환·평가·운동처방)', u:'https://neuro-pt-3.vercel.app/', hl:true},
+ {t:'📚 신경계물리치료학 학습 포털 2026', u:'https://npt-2026-1.vercel.app/', hl:true},
+ {t:'🤲 신경계 중재기법 — 보바스·PNF·보이타', u:'https://npt-approach.vercel.app/', hl:false},
+ {t:'🗺️ Neuro Atlas — 신경해부학·신경과학 강의록', u:'https://na-ns.vercel.app/', hl:false},
+ {t:'⏱️ 신경계물리치료학 뇌과학 공부법', u:'https://study-methods-mu.vercel.app/', hl:false},
+ {t:'💪 근육 성장과 손실의 과학 (머슬 메모리)', u:'https://muscle-memory-alpha.vercel.app/', hl:false}
+];
+function neuroLinksHTML(){
+  return '<div class="say" style="border-style:dashed"><span class="who">📎 신경계물리치료 학습자료</span>심경섭 교수 제작 자료입니다. <b>중요도 순</b>으로 정렬했으니 위에서부터 보세요.</div>'
+    + NEURO_LINKS.map(function(L){ return jobLink(L.t, L.u, L.hl); }).join('');
+}
 function openHall(b){
   const p = professors.find(x=>x.subj===b.subj);
   setDialog(b.emoji, 'linear-gradient(135deg,'+b.color+',#2a3550)', b.name, SUBJ_NAME[b.subj]+' · 강의관');
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
-  body.innerHTML='<div class="say"><span class="who">'+b.name+'</span>'+b.name+'에 입장했습니다. 오늘 과목은 <b>'+SUBJ_NAME[b.subj]+'</b>. 강의를 듣거나 퀴즈로 학점을 쌓으세요.</div>'+jobLink('📘 학과 교육과정·로드맵','https://physi.ansan.ac.kr/physi/roadmap',false);
+  body.innerHTML='<div class="say"><span class="who">'+b.name+'</span>'+b.name+'에 입장했습니다. 오늘 과목은 <b>'+SUBJ_NAME[b.subj]+'</b>. 강의를 듣거나 퀴즈로 학점을 쌓으세요.</div>'+jobLink('📘 학과 교육과정·로드맵','https://physi.ansan.ac.kr/physi/roadmap',false)+(b.subj==='neuro'?neuroLinksHTML():'');
   foot.innerHTML='';
   addFoot('📖 강의 요약', ()=>lectureSummary(b.subj, p?p.name:b.name));
   addFoot('📝 퀴즈 시작', ()=>startQuiz(b.subj, p?p.name:b.name), true);
