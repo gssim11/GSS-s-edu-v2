@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>나를 이해하기 — 성향·리더십·진로 탐색 워크시트</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='none' stroke='%234F5DFF' stroke-width='2'/%3E%3Cpath d='M16 7 L19 16 L16 25 L13 16 Z' fill='%234F5DFF'/%3E%3Ccircle cx='16' cy='16' r='2.4' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#F5F7FC;--card:#FFFFFF;--border:#E2E7F3;--bstrong:#C9D3EC;--text:#1D2333;--muted:#5A6478;--dim:#8B94AB;
+--accent:#4F5DFF;--accent2:#7A5CFF;--cyan:#0FB5D6;--fire:#E2574C;--grad:linear-gradient(100deg,#0FB5D6,#4F5DFF 55%,#7A5CFF);}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Pretendard','Noto Sans KR','Apple SD Gothic Neo',system-ui,sans-serif;background:
+ radial-gradient(900px 420px at 12% -6%,rgba(79,93,255,.08),transparent 60%),
+ radial-gradient(760px 420px at 95% -4%,rgba(15,181,214,.08),transparent 58%),var(--bg);
+ color:var(--text);line-height:1.65;min-height:100vh}
+.wrap{max-width:860px;margin:0 auto;padding:34px 18px 60px}
+h1{text-align:center;font-size:27px;line-height:1.3;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sub{text-align:center;color:var(--muted);font-size:13px;margin:8px 0 6px}
+.banner{display:flex;gap:10px;align-items:flex-start;max-width:700px;margin:14px auto 0;padding:12px 15px;border-radius:14px;background:#EEF1FF;border:1px solid var(--border);font-size:12px;color:var(--muted);line-height:1.7}
+.banner b{color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 14px 34px -22px rgba(35,50,120,.25);padding:20px 18px;margin-top:18px}
+.step-t{font-size:13px;font-weight:800;color:var(--accent);margin-bottom:4px}
+.hint{font-size:11.5px;color:var(--dim);margin-bottom:12px;line-height:1.6}
+.frow{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.fg label{display:block;font-size:11px;color:var(--dim);margin-bottom:4px}
+.fg input,.fg select{background:#fff;color:var(--text);border:1px solid var(--bstrong);border-radius:10px;padding:9px 10px;font-size:14px;font-family:inherit;min-width:120px}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,93,255,.15)}
+details>summary{cursor:pointer;font-size:12.5px;color:var(--accent);font-weight:700;list-style:none}
+details>summary::-webkit-details-marker{display:none}
+.qitem{padding:10px 12px;margin:7px 0;background:#F7F9FE;border:1px solid var(--border);border-radius:11px}
+.qitem .qq{font-size:12.8px;font-weight:700;margin-bottom:6px}
+.qopt{display:block;font-size:12.3px;color:var(--muted);padding:4px 2px;cursor:pointer}
+.qopt:hover{color:var(--accent)}
+.qopt input{accent-color:var(--accent);margin-right:6px}
+.lead-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:560px){.lead-grid{grid-template-columns:repeat(2,1fr)}}
+.lead-card{position:relative;cursor:pointer;border:1px solid var(--border);border-radius:12px;padding:10px 6px 8px;background:#FBFCFF;text-align:center;transition:.15s}
+.lead-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 10px 22px -14px rgba(79,93,255,.5)}
+.lead-card svg{width:46px;height:46px;display:block;margin:0 auto 5px}
+.lead-card .ln{font-size:11.5px;font-weight:700}
+.lead-card .lk{font-size:9.5px;color:var(--dim)}
+.lead-card.sel{border-color:var(--accent);background:#EEF1FF;box-shadow:0 0 0 2px var(--accent)}
+.lead-card.sel::after{content:'✓';position:absolute;top:5px;right:7px;font-size:12px;color:var(--accent);font-weight:800}
+.lead-clear{display:inline-block;margin-top:9px;font-size:11px;color:var(--dim);cursor:pointer;border-bottom:1px dotted var(--dim)}
+.btnrow{text-align:center;margin-top:18px}
+.btn{font-family:inherit;font-weight:700;cursor:pointer;border-radius:13px;padding:12px 30px;font-size:15px;border:none;background:var(--grad);color:#fff;box-shadow:0 12px 26px -12px rgba(79,93,255,.7);transition:.18s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
+.btn.ghost{background:#fff;color:var(--muted);border:1px solid var(--bstrong);box-shadow:none;font-size:12.5px;padding:9px 16px}
+#result{display:none;margin-top:22px}
+.rp-sec{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 14px 34px -24px rgba(35,50,120,.22);padding:20px 18px;margin-bottom:14px}
+.rp-h{font-size:16.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.rp-h::before{content:'';width:4px;height:16px;border-radius:3px;background:var(--grad)}
+.np{font-size:13.5px;line-height:1.95;margin:0 0 10px}
+.np b{color:var(--accent)}
+.rp-muted{color:var(--dim)}
+.lead-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:12px;background:#F2F5FF;border:1px solid var(--border)}
+.lead-badge svg{width:30px;height:30px}
+.lead-badge .lbn{font-size:15px;font-weight:800;color:var(--accent)}
+.todo{list-style:none;padding:0;margin:4px 0 0}
+.todo li{position:relative;padding:8px 8px 8px 30px;margin:6px 0;background:#F7F9FE;border:1px solid var(--border);border-radius:10px;font-size:12.7px;line-height:1.6}
+.todo li::before{content:'✦';position:absolute;left:11px;top:8px;color:var(--accent)}
+.foot{text-align:center;font-size:11px;color:var(--dim);margin-top:26px;line-height:1.8}
+/* 요약 인쇄 */
+#printSummary{display:none}
+.ps-page{background:#fff;color:#111;max-width:190mm;margin:0 auto;padding:10mm 8mm;font-size:11.5pt;line-height:1.55}
+.ps-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #333;padding-bottom:6px;margin-bottom:10px}
+.ps-h b{font-size:15pt}.ps-h span{font-size:9pt;color:#666}
+.ps-info{width:100%;border-collapse:collapse;margin-bottom:10px;font-size:10.5pt}
+.ps-info td{border:1px solid #bbb;padding:4px 8px}
+.ps-info td:nth-child(odd){background:#f2f2f2;width:17%;font-weight:700}
+.ps-pillars{display:flex;gap:8px;margin-bottom:10px}
+.ps-pillars>div{flex:1;border:1px solid #bbb;border-radius:6px;padding:7px 9px;font-size:10pt}
+.ps-pillars b{display:block;font-size:9pt;color:#555;margin-bottom:2px}
+.ps-sec{margin-bottom:9px}
+.ps-sec h4{font-size:11pt;margin:0 0 4px;padding-left:7px;border-left:4px solid #333}
+.ps-sec p{margin:0 0 4px;font-size:10.3pt}
+.ps-ck{list-style:none;padding:0;margin:0}
+.ps-ck li{font-size:10.3pt;margin:3px 0}
+.ps-memo{border:1px solid #bbb;border-radius:6px;min-height:70px;padding:6px 9px}
+.ps-memo i{display:block;border-bottom:1px dotted #999;height:17px}
+.ps-sign{display:flex;justify-content:space-between;margin-top:10px;font-size:10pt}
+.ps-foot{margin-top:8px;font-size:8.5pt;color:#777;border-top:1px solid #ccc;padding-top:5px;line-height:1.5}
+@media print{
+ body.sumonly *{visibility:hidden}
+ body.sumonly #printSummary,body.sumonly #printSummary *{visibility:visible}
+ body.sumonly #printSummary{display:block;position:absolute;left:0;top:0;width:100%}
+ .btnrow,.banner{display:none!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>나를 이해하기</h1>
+  <p class="sub">성향·리더십·진로 탐색 워크시트 — 나의 강점을 발견하고 진로의 방향을 그려봅니다</p>
+  <div class="banner"><span>🧭</span><span><b>이 도구는 검사·진단이 아닙니다.</b> 자기보고(성향 문항)와 그림 선호(리더십 이미지)를 바탕으로 <b>스스로를 이해하고 진로를 탐색</b>하도록 돕는 교육용 워크시트입니다. 결과는 대화의 재료일 뿐이며, 특정 종교·신앙과 무관합니다.</span></div>
+
+  <div class="card">
+    <div class="step-t">STEP 1 · 나의 성향 알아보기 (16유형)</div>
+    <div class="hint">유형을 이미 아신다면 선택만 하세요. 모르신다면 아래 간단 검사(24문항·자체 제작)로 확인할 수 있습니다.</div>
+    <div class="frow">
+      <div class="fg"><label>이름 (선택)</label><input id="pnm" type="text" placeholder="홍길동"></div>
+      <div class="fg"><label>16유형</label><select id="p16"><option value="">선택 안 함</option><option>ISTJ</option><option>ISFJ</option><option>INFJ</option><option>INTJ</option><option>ISTP</option><option>ISFP</option><option>INFP</option><option>INTP</option><option>ESTP</option><option>ESFP</option><option>ENFP</option><option>ENTP</option><option>ESTJ</option><option>ESFJ</option><option>ENFJ</option><option>ENTJ</option></select></div>
+    </div>
+    <details style="margin-top:10px"><summary>📋 유형을 모르시나요? — 간단 성향 검사 시작 (24문항 · 약 3분)</summary>
+      <p class="hint" style="margin-top:8px">각 문항에서 더 나에 가까운 쪽을 고르세요. 정답은 없습니다. ※ 특정 상표 검사의 문항이 아닌 자체 제작 문항이며, 교육용 참고 결과입니다.</p>
+      <div id="quizItems"></div>
+      <div style="text-align:center;margin:10px 0 4px"><button type="button" class="btn ghost" onclick="scoreQuiz()">결과 확인</button> <span id="quizOut" style="font-size:13px;color:var(--accent);margin-left:8px"></span></div>
+    </details>
+  </div>
+
+  <div class="card">
+    <div class="step-t">STEP 2 · 내가 지향하는 리더상 (그림 선택)</div>
+    <div class="hint">가장 끌리는 리더의 모습을 하나 고르세요. 그림 선택은 "지금의 나"보다 <b>되고 싶은 나</b>를 비출 때가 많습니다. (표준화 검사가 아닌 탐색 활동입니다)</div>
+    <div class="lead-grid" id="leadGrid"></div>
+    <span class="lead-clear" id="leadClear" style="display:none" onclick="clearLeader()">선택 해제</span>
+  </div>
+
+  <div class="btnrow"><button class="btn" onclick="runReport()">✦ 자기이해 리포트 만들기</button></div>
+
+  <div id="result">
+    <div class="btnrow" style="margin:0 0 14px"><button class="btn ghost" onclick="printSummary()">📋 상담 요약 1장 인쇄</button></div>
+    <div id="report"></div>
+  </div>
+
+  <div class="foot">물리치료학과 · 대학일자리센터 교육용 | 본 자료는 표준화 심리검사가 아니며, 특정 종교·신앙과 무관한 자기이해 교육 자료입니다.<br>인터넷·서버 없이 이 파일만으로 동작하며 개인정보를 수집·전송하지 않습니다.</div>
+</div>
+<div id="printSummary" aria-hidden="true"></div>
+<script>
+function $(id){return document.getElementById(id);}
+var CURLEADER_SEL='';
+var T16=['ISTJ','ISFJ','INFJ','INTJ','ISTP','ISFP','INFP','INTP','ESTP','ESFP','ENFP','ENTP','ESTJ','ESFJ','ENFJ','ENTJ'];
+var Q16=[
+ ['EI','여럿이 어울린 뒤에는','오히려 힘이 나서 더 놀고 싶다','혼자만의 시간이 필요하다'],
+ ['EI','새 조 모임에서 나는','먼저 말을 꺼내는 편이다','분위기를 보며 듣는 편이다'],
+ ['EI','생각은','말하면서 정리된다','정리한 뒤에 말한다'],
+ ['EI','주말에 더 끌리는 쪽은','사람들과의 약속','집에서의 재충전'],
+ ['EI','낯선 사람이 많은 자리에서','금방 적응해 대화한다','아는 사람 곁에 머문다'],
+ ['EI','발표는','은근히 기다려진다','가능하면 피하고 싶다'],
+ ['SN','설명을 들을 때','구체적인 예시와 순서가 좋다','전체 그림과 의미가 먼저 궁금하다'],
+ ['SN','실습 매뉴얼을 받으면','적힌 대로 정확히 따른다','더 나은 방법이 떠오른다'],
+ ['SN','대화 주제로 끌리는 것은','실제 경험담','아이디어와 가능성'],
+ ['SN','일할 때 나는','검증된 방식이 편하다','새로운 시도가 즐겁다'],
+ ['SN','미래를 생각할 때','현실적인 계획부터 세운다','상상부터 펼친다'],
+ ['SN','세부 사항을','잘 기억하는 편이다','자주 놓친다(큰 흐름은 기억)'],
+ ['TF','친구가 고민을 말하면','해결책부터 찾아준다','마음부터 공감해 준다'],
+ ['TF','결정할 때 더 중요한 것은','공정한 기준','사람들의 감정'],
+ ['TF','피드백을 줄 때','사실대로 정확히 말한다','상처받지 않게 돌려 말한다'],
+ ['TF','갈등 상황에서','옳고 그름을 가리고 싶다','관계 회복이 먼저다'],
+ ['TF','더 듣고 싶은 칭찬은','유능하다','따뜻하다'],
+ ['TF','영화를 보고 나면','개연성과 설정을 따져 본다','인물의 감정에 젖는다'],
+ ['JP','과제가 나오면','미리 계획해 일찍 끝낸다','마감이 다가와야 몰입된다'],
+ ['JP','여행은','일정표대로가 편하다','그때그때 끌리는 대로가 좋다'],
+ ['JP','책상은','정돈돼 있어야 편하다','어질러도 내 나름의 질서가 있다'],
+ ['JP','갑작스러운 계획 변경은','불편하다','오히려 재미있다'],
+ ['JP','할 일 목록을','만들고 지우는 게 좋다','머릿속으로 대충 둔다'],
+ ['JP','결정은','빨리 매듭짓는 편이다','끝까지 열어 두는 편이다']];
+var AXIS_WORK={'E':'사람과 부딪히며 에너지를 얻어 회의·발표·현장 대응에서 힘이 나고','I':'혼자 몰입할 때 성과가 나서 깊이 있는 준비·기록·분석에 강하고',
+ 'S':'사실·데이터·매뉴얼을 정확히 다뤄 실측 기반 문제 해결에 강하며','N':'패턴과 가능성을 읽어 기획·개선·새로운 시도를 떠올리는 데 강하며',
+ 'T':'기준과 논리로 판단해 공정한 결정·분석 업무와 결이 맞고','F':'사람의 감정과 관계를 읽어 상담·돌봄·협업 조율과 결이 맞고',
+ 'J':'계획을 세우고 마감을 지키는 운영·관리형 일에서 안정감을 얻습니다','P':'상황 변화에 유연하게 대응하는 현장·대응형 일에서 활력을 얻습니다'};
+var TEMPER={'NT':['전략·분석가형','연구·기획·데이터 분석·전략·개발 직군에서 강점이 살아납니다'],
+ 'NF':['성장·촉진가형','교육·상담·코칭·홍보·인사(HR) 직군에서 강점이 살아납니다'],
+ 'SJ':['운영·관리자형','행정·품질·운영·회계·보건관리 직군에서 강점이 살아납니다'],
+ 'SP':['현장·해결사형','임상 실기·응급 대응·서비스·스포츠 현장 직군에서 강점이 살아납니다']};
+var PT_HINT={'NT':'임상연구 코디네이터(CRC)·의료 데이터/보험심사·재활로봇·디지털헬스 기획·대학원 연구',
+ 'NF':'소아·노인 재활, 환자 교육·상담, 예방운동·건강증진 강사, 지역사회 보건 프로그램',
+ 'SJ':'병원 행정·QI(질 향상)·심사청구·감염/안전관리·재활 파트 운영·보건직 공무원',
+ 'SP':'급성기·스포츠재활 현장, 도수·실기 중심 임상, 운동센터·필라테스 지도 및 창업'};
+var LEADERS=[
+ {id:'vision',nm:'비전형',en:'Visionary',kw:'큰 그림·방향 제시',
+  el:'화',sip:'식상',
+  svg:'<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="lgV" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#57E7FF"/><stop offset="1" stop-color="#A87BFF"/></linearGradient></defs><path d="M5 42 L19 26 L27 33 L43 42" stroke="url(#lgV)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="19" cy="16" r="3.4" fill="url(#lgV)"/><path d="M19 20 L19 27 M19 22 L13 26 M19 22 L28 15 M16 33 L19 27 L23 33" stroke="url(#lgV)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 9 l1.4 3 3 1.4 -3 1.4 -1.4 3 -1.4 -3 -3 -1.4 3 -1.4 z" fill="url(#lgV)"/></svg>',
+  strong:'멀리 내다보고 사람들에게 나아갈 방향과 의미를 제시합니다. 변화와 혁신, 새 판을 여는 데 강합니다.',
+  shadow:'큰 그림에 몰두하다 현실의 디테일·실행을 놓치거나, 앞서가다 팀과 속도가 어긋날 수 있습니다.',
+  fit:'창업 초기, 전환기, 새 사업·비전 수립처럼 방향이 필요한 국면.'},
+ {id:'coach',nm:'코치형',en:'Coach',kw:'성장·잠재력 개발',
+  el:'목',sip:'인성',
+  svg:'<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="lgC" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5FE3B0"/><stop offset="1" stop-color="#57E7FF"/></linearGradient></defs><path d="M26 42 h7 v-7 h7 v-7" stroke="url(#lgC)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="33" cy="24" r="2.8" fill="url(#lgC)"/><path d="M33 27 L33 33 M33 29 L28 26 M30 40 L33 33 L36 39" stroke="url(#lgC)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="14" r="3.4" fill="url(#lgC)"/><path d="M12 18 L12 27 M12 20 L27 26 M12 20 L7 26 M8 36 L12 27 L16 36" stroke="url(#lgC)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  strong:'사람의 가능성을 보고 키웁니다. 질문하고 기다리며 각자의 성장을 돕는 데 탁월합니다.',
+  shadow:'성장에 시간을 들이다 단기 성과가 늦어지거나, 냉정한 결정이 필요할 때 무를 수 있습니다.',
+  fit:'인재 육성, 장기 조직 빌딩, 신입·주니어가 많은 팀.'},
+ {id:'servant',nm:'섬김형',en:'Servant',kw:'지원·헌신',
+  el:'수',sip:'인성',
+  svg:'<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="lgS" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5FC8FF"/><stop offset="1" stop-color="#5B6CFF"/></linearGradient></defs><circle cx="24" cy="11" r="3" fill="url(#lgS)"/><path d="M24 14 L24 21 M24 16 L19 19 M24 16 L29 19 M21 26 L24 21 L27 26" stroke="url(#lgS)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 30 Q24 22 38 30" stroke="url(#lgS)" stroke-width="2.4" stroke-linecap="round"/><circle cx="10" cy="35" r="2.6" fill="url(#lgS)"/><circle cx="38" cy="35" r="2.6" fill="url(#lgS)"/><path d="M10 38 L10 42 M38 38 L38 42 M10 32 L10 30 M38 32 L38 30" stroke="url(#lgS)" stroke-width="2" stroke-linecap="round"/></svg>',
+  strong:'앞에 나서기보다 뒤에서 받칩니다. 구성원이 잘되도록 돕고 신뢰로 조직을 묶습니다.',
+  shadow:'남을 챙기다 자기 소진되거나, 주도적 결단·방향 제시가 필요할 때 뒤로 물러설 수 있습니다.',
+  fit:'신뢰가 자산인 공동체·비영리, 번아웃 회복이 필요한 팀, 수평 문화.'},
+ {id:'demo',nm:'민주형',en:'Democratic',kw:'참여·합의',
+  el:'토',sip:'인성',
+  svg:'<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="lgD" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8AB4FF"/><stop offset="1" stop-color="#A87BFF"/></linearGradient></defs><ellipse cx="24" cy="31" rx="12" ry="4.5" stroke="url(#lgD)" stroke-width="2.2"/><circle cx="24" cy="14" r="3" fill="url(#lgD)"/><path d="M24 17 L24 24" stroke="url(#lgD)" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="24" r="3" fill="url(#lgD)"/><path d="M9 27 L9 33" stroke="url(#lgD)" stroke-width="2" stroke-linecap="round"/><circle cx="39" cy="24" r="3" fill="url(#lgD)"/><path d="M39 27 L39 33" stroke="url(#lgD)" stroke-width="2" stroke-linecap="round"/><path d="M31 8 h9 v6 h-5 l-2 3 v-3 h-2 z" stroke="url(#lgD)" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+  strong:'의견을 모으고 함께 결정합니다. 참여를 이끌어 집단지성과 실행 동의를 얻는 데 강합니다.',
+  shadow:'합의에 시간이 걸리거나, 위기·속도전에서 결정이 지연될 수 있습니다.',
+  fit:'전문가 집단, 이해관계 조율, 몰입·주인의식이 중요한 프로젝트.'},
+ {id:'command',nm:'지휘형',en:'Commanding',kw:'결단·추진',
+  el:'금',sip:'관성',
+  svg:'<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="lgM" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#B9C6FF"/><stop offset="1" stop-color="#5B6CFF"/></linearGradient></defs><path d="M6 38 H38 M38 38 l-5 -4 M38 38 l-5 4" stroke="url(#lgM)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="31" cy="14" r="3.4" fill="url(#lgM)"/><path d="M31 18 L31 26 M31 20 L40 17 M31 20 L26 24 M27 33 L31 26 L35 33" stroke="url(#lgM)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="20" r="2.4" fill="url(#lgM)" opacity="0.75"/><path d="M16 23 L16 29" stroke="url(#lgM)" stroke-width="1.8" stroke-linecap="round" opacity="0.75"/><circle cx="9" cy="24" r="2" fill="url(#lgM)" opacity="0.5"/></svg>',
+  strong:'빠르게 판단하고 밀어붙입니다. 명확한 지시와 책임으로 위기와 난국을 돌파합니다.',
+  shadow:'강한 추진이 반발·경직을 부르거나, 구성원의 자율·동기를 눌러버릴 수 있습니다.',
+  fit:'위기·구조조정, 명확한 목표와 데드라인, 신속한 실행이 생명인 국면.'},
+ {id:'innov',nm:'혁신형',en:'Innovator',kw:'창의·실험',
+  el:'화',sip:'식상',
+  svg:'<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="lgI" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9BD6"/><stop offset="1" stop-color="#A87BFF"/></linearGradient></defs><circle cx="24" cy="11" r="5" stroke="url(#lgI)" stroke-width="2.2"/><path d="M22 16 h4 M22.6 19 h2.8 M24 2 v2.5 M14 6 l1.8 1.8 M34 6 l-1.8 1.8 M11 13 h2.6 M34.4 13 H37" stroke="url(#lgI)" stroke-width="1.8" stroke-linecap="round"/><circle cx="24" cy="28" r="3.2" fill="url(#lgI)"/><path d="M24 31 L24 38 M24 33 L17 27 M24 33 L31 27 M20 44 L24 38 L28 44" stroke="url(#lgI)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  strong:'남과 다르게 생각하고 새것을 시도합니다. 아이디어와 실험으로 돌파구를 만듭니다.',
+  shadow:'끊임없는 변화가 피로를 부르거나, 검증·안정화·마무리가 약할 수 있습니다.',
+  fit:'R&D, 신제품·신시장 개척, 정체된 조직의 재점화.'},
+ {id:'strat',nm:'분석전략형',en:'Strategist',kw:'논리·설계',
+  el:'금',sip:'관성',
+  svg:'<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="lgT" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#57E7FF"/><stop offset="1" stop-color="#5B6CFF"/></linearGradient></defs><path d="M7 40 V31 M13 40 V25 M19 40 V33" stroke="url(#lgT)" stroke-width="2.6" stroke-linecap="round"/><path d="M6 27 l7 -6 6 4 8 -9" stroke="url(#lgT)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.75"/><circle cx="36" cy="15" r="3.4" fill="url(#lgT)"/><path d="M36 19 L36 27 M36 21 L26 24 M36 21 L41 25 M32 34 L36 27 L40 34" stroke="url(#lgT)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  strong:'데이터와 논리로 판을 읽고 최적 경로를 설계합니다. 계획·리스크 관리에 강합니다.',
+  shadow:'분석에 오래 머물러 실행이 늦거나(분석 마비), 사람의 감정을 덜 살필 수 있습니다.',
+  fit:'복잡한 의사결정, 기획·전략·재무, 리스크가 큰 장기 과제.'},
+ {id:'relate',nm:'관계조율형',en:'Harmonizer',kw:'공감·화합',
+  el:'토',sip:'재성',
+  svg:'<svg viewBox="0 0 48 48" fill="none"><defs><linearGradient id="lgR" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF8A6B"/><stop offset="1" stop-color="#FF9BD6"/></linearGradient></defs><circle cx="13" cy="17" r="3.2" fill="url(#lgR)"/><path d="M13 20 L13 28 M13 22 L18 26 M13 22 L8 26 M10 35 L13 28 L16 35" stroke="url(#lgR)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="35" cy="17" r="3.2" fill="url(#lgR)"/><path d="M35 20 L35 28 M35 22 L30 26 M35 22 L40 26 M32 35 L35 28 L38 35" stroke="url(#lgR)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 26 Q24 31 30 26" stroke="url(#lgR)" stroke-width="2" stroke-linecap="round"/><path d="M24 8 c-1.6 -2 -4.6 -0.6 -4.6 1.8 0 2 2.2 3.4 4.6 5.4 2.4 -2 4.6 -3.4 4.6 -5.4 0 -2.4 -3 -3.8 -4.6 -1.8 z" fill="url(#lgR)"/></svg>',
+  strong:'분위기를 읽고 갈등을 다독입니다. 사람 사이를 잇고 협력을 끌어내는 데 탁월합니다.',
+  shadow:'화합을 우선하다 필요한 갈등·직면을 피하거나, 결단이 미뤄질 수 있습니다.',
+  fit:'다양성·갈등이 많은 조직, 협업·파트너십, 감정 노동이 큰 현장.'}];
+function temperKey(t){if(!t||t.length<4)return null;return (t.indexOf('N')>=0?'N':'S')+(t.indexOf('N')>=0?(t.charAt(2)==='T'?'T':'F'):(t.charAt(3)==='J'?'J':'P'));}
+function leaderById(id){for(var i=0;i<LEADERS.length;i++)if(LEADERS[i].id===id)return LEADERS[i];return null;}
+function fillQuiz(){var box=$('quizItems');if(!box)return;
+  box.innerHTML=Q16.map(function(q,i){
+    return '<div class="qitem"><div class="qq">'+(i+1)+'. '+q[1]+'</div>'
+     +'<label class="qopt"><input type="radio" name="q'+i+'" value="A"> '+q[2]+'</label>'
+     +'<label class="qopt"><input type="radio" name="q'+i+'" value="B"> '+q[3]+'</label></div>';}).join('');}
+function scoreQuiz(){
+  var cnt={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0},answered=0;
+  for(var i=0;i<Q16.length;i++){
+    var sel=document.querySelector('input[name="q'+i+'"]:checked');
+    if(!sel)continue;answered++;
+    var ax=Q16[i][0]; /* 'EI'|'SN'|'TF'|'JP' */
+    if(sel.value==='A')cnt[ax.charAt(0)]++;else cnt[ax.charAt(1)]++;
+  }
+  if(answered<Q16.length){alert('아직 '+(Q16.length-answered)+'문항이 남았습니다. 모두 답해 주세요.');return;}
+  /* 동점이면 뒤 글자(I/N/F/P) 채택 */
+  var t=(cnt.E>cnt.I?'E':'I')+(cnt.S>cnt.N?'S':'N')+(cnt.T>cnt.F?'T':'F')+(cnt.J>cnt.P?'J':'P');
+  if($('p16'))$('p16').value=t;
+  if($('quizOut'))$('quizOut').innerHTML='당신의 유형: <b>'+t+'</b> — 위 선택칸에 자동 적용되었습니다. 이제 분석을 실행하세요!';
+  return t;
+}
+function careerReport(t16,leader,nm){
+  t16=(t16&&T16.indexOf(t16)>=0)?t16:''; var lead=leader?leaderById(leader):null;
+  if(!t16&&!lead)return '';
+  var who=nm?(nm+' 님'):'나';
+  var H='<div class="rp-sec"><h3 class="rp-h">🎓 진로·취업 자기이해 리포트</h3>'
+   +'<p class="np">'+who+'의 <b>성향(자기보고)</b>과 <b>지향하는 리더상(그림 선호)</b>을 바탕으로, 어떤 환경과 직무에서 강점이 살아나는지 탐색합니다. 이 리포트는 검사·진단이 아니라 <b>스스로를 이해하고 방향을 그려보는 출발점</b>입니다.</p></div>';
+  if(t16){
+    var tk=temperKey(t16),tp=TEMPER[tk];
+    var axes=t16.split('').map(function(ch){return AXIS_WORK[ch]||'';}).filter(Boolean);
+    H+='<div class="rp-sec"><h3 class="rp-h">🧬 나의 성향 — '+t16+'</h3>'
+     +'<p class="np">스스로 보고한 유형으로 읽으면, '+who+'은(는) '+axes.slice(0,2).join(' ')+' '+axes.slice(2).join(' ')+'</p>'
+     +'<p class="np">네 글자를 묶으면 <b>'+tp[0]+'</b> 기질에 가깝습니다. '+tp[1]+'.</p>'
+     +'<p class="np"><b>보건·재활 계열 예시(참고)</b> — '+PT_HINT[tk]+' 같은 길이 이 기질과 결이 닿는 편입니다. 물론 예시는 출발점일 뿐, 같은 유형이라도 경험과 훈련에 따라 전혀 다른 길에서 꽃핍니다.</p></div>';
+  }else{
+    H+='<div class="rp-sec"><h3 class="rp-h">🧬 나의 성향</h3><p class="np">16유형을 선택하시면 성향과 직군 힌트를 함께 풀어 드립니다. (지금은 리더형 선호만으로 탐색합니다)</p></div>';
+  }
+  if(lead){
+    H+='<div class="rp-sec"><h3 class="rp-h">👑 내가 지향하는 리더상 — '+lead.nm+'</h3>'
+     +'<div style="margin-bottom:10px"><div class="lead-badge">'+lead.svg+'<span class="lbn">'+lead.nm+' · '+lead.en+'</span></div></div>'
+     +'<p class="np">'+lead.strong+'</p>'
+     +'<p class="np"><b>이 리더형의 그림자</b> — '+lead.shadow+' <b>잘 맞는 상황</b> — '+lead.fit+'</p>'
+     +'<p class="np">기억할 점: 그림 선택은 <b>지금의 나</b>보다 <b>되고 싶은 나</b>를 비출 때가 많습니다. ① 실제로 이런 리더라서 ② 이렇게 되고 싶어서 ③ 지금 이런 리더십이 필요해서 — 셋 중 어디에 가까운지 스스로 물어보면, 같은 선택도 전혀 다른 과제가 보입니다.</p></div>';
+  }
+  if(t16&&lead){
+    var tk2=temperKey(t16);
+    H+='<div class="rp-sec"><h3 class="rp-h">🔗 성향 × 리더상 연결</h3>'
+     +'<p class="np">'+TEMPER[tk2][0]+' 기질의 '+who+'이(가) <b>'+lead.nm+'</b>을 지향한다는 것은, 일상의 일하는 방식(성향)과 원하는 역할(리더상)을 잇는 다리를 놓는 일입니다. 겹치는 부분은 그대로 강점으로 밀고, 어긋나는 부분은 "학습할 근육"으로 적어 두세요. 어긋남은 결함이 아니라 <b>성장 목록</b>입니다.</p></div>';
+  }
+  H+='<div class="rp-sec"><h3 class="rp-h">💭 방향을 그리는 5가지 질문</h3><ul class="todo">'
+   +'<li>최근 1년, 시간 가는 줄 모르고 <b>몰입했던 순간</b>은 언제였나요? 무엇을 하고 있었나요?</li>'
+   +'<li>남들이 나에게 자주 <b>부탁하거나 칭찬하는 일</b>은 무엇인가요? (그게 시장이 보는 내 강점입니다)</li>'
+   +'<li>반대로, 오래 하면 <b>기운이 빠지는 일</b>은 무엇인가요? (피할 수 없다면 줄이는 설계가 필요합니다)</li>'
+   +'<li><b>3년 뒤의 나</b>는 어디서, 누구와, 어떤 문제를 풀고 있으면 좋겠나요?</li>'
+   +'<li>그 모습에 다가가기 위해 <b>이번 학기에 시도할 한 가지</b>는 무엇인가요?</li></ul></div>';
+  H+='<div class="rp-sec"><h3 class="rp-h">✅ 실행 체크리스트 (이번 달)</h3><ul class="todo">'
+   +'<li><b>강점 3개 기록</b> — 위 질문 1·2의 답을 문장으로 적어 프로필(자기소개서 소재)로 저장</li>'
+   +'<li><b>관심 직무 3개 조사</b> — 채용공고에서 요구 역량을 뽑고, 가능하면 현직자 1명 인터뷰(대학일자리센터 프로그램 활용)</li>'
+   +'<li><b>교육과정 연결</b> — 다음 학기 과목·실습 중 그 역량과 닿는 것을 1개 이상 선택</li>'
+   +'<li><b>자격·경험 로드맵</b> — 졸업까지 필요한 자격·경험을 학기별로 배치</li>'
+   +'<li><b>30일 실행 1가지</b> — 스터디 개설, 동아리, 봉사, 공모전 등 손에 잡히는 첫 행동 시작</li></ul></div>';
+  H+='<p class="rp-muted" style="font-size:.78rem;line-height:1.7;text-align:center;margin-top:4px">본 리포트는 자기보고(16유형)와 그림 선호(리더형)에 기반한 <b>탐색용 교육 자료</b>이며, 표준화된 심리검사·직업적성검사가 아닙니다. 특정 종교·신앙과 무관한 자기이해 교육 자료입니다. 진로 결정은 <b>대학일자리센터 전문 상담</b>과 병행하시길 권합니다.</p>';
+  return H;
+}
+function fillLeaders(){var box=$('leadGrid');if(!box)return;
+  box.innerHTML=LEADERS.map(function(L){return '<div class="lead-card" data-id="'+L.id+'" onclick="pickLeader(\''+L.id+'\')">'+L.svg+'<div class="ln">'+L.nm+'</div><div class="lk">'+L.kw+'</div></div>';}).join('');}
+function pickLeader(id){CURLEADER_SEL=id;
+  var cards=$('leadGrid').children;for(var i=0;i<cards.length;i++)cards[i].className='lead-card'+(cards[i].getAttribute('data-id')===id?' sel':'');
+  $('leadClear').style.display='inline-block';}
+function clearLeader(){CURLEADER_SEL='';var cards=$('leadGrid').children;for(var i=0;i<cards.length;i++)cards[i].className='lead-card';$('leadClear').style.display='none';}
+function runReport(){
+  var t16=$('p16').value;if(T16.indexOf(t16)<0)t16='';
+  var leader=(CURLEADER_SEL&&leaderById(CURLEADER_SEL))?CURLEADER_SEL:'';
+  var nm=($('pnm').value||'').trim();
+  if(!t16&&!leader){alert('16유형을 선택하거나, 리더 그림을 하나 골라 주세요.');return;}
+  $('report').innerHTML=careerReport(t16,leader,nm);
+  $('result').style.display='block';
+  if($('result').scrollIntoView)$('result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function pad(n){return (n<10?'0':'')+n;}
+function summaryHTML(){
+  var t16=$('p16').value;if(T16.indexOf(t16)<0)t16='';
+  var lead=(CURLEADER_SEL&&leaderById(CURLEADER_SEL))?leaderById(CURLEADER_SEL):null;
+  var nm=($('pnm').value||'').trim();
+  var tk=t16?temperKey(t16):null;
+  var today=new Date(),ds=today.getFullYear()+'.'+pad(today.getMonth()+1)+'.'+pad(today.getDate());
+  var H='<div class="ps-page">';
+  H+='<div class="ps-h"><b>자기이해 · 진로 상담 요약</b><span>나를 이해하기 워크시트</span></div>';
+  H+='<table class="ps-info"><tr><td>이름</td><td>'+(nm||'&nbsp;')+'</td><td>상담일</td><td>'+ds+'</td></tr>'
+   +'<tr><td>학과/학년</td><td>&nbsp;</td><td>상담자</td><td>&nbsp;</td></tr></table>';
+  H+='<div class="ps-pillars">'
+   +'<div><b>성향(자기보고)</b>'+(t16||'미입력')+(tk?(' — '+TEMPER[tk][0]):'')+'</div>'
+   +'<div><b>지향 리더상</b>'+(lead?lead.nm+' — '+lead.kw:'미선택')+'</div>'
+   +'<div><b>강점이 사는 곳</b>'+(tk?TEMPER[tk][1]:'상담 중 기록')+'</div></div>';
+  if(tk)H+='<div class="ps-sec"><h4>진로 탐색 힌트 (보건·재활 예시)</h4><p>'+PT_HINT[tk]+'</p></div>';
+  H+='<div class="ps-sec"><h4>이번 달 실행 약속 (하나만 ✔)</h4><ul class="ps-ck">'
+   +'<li>☐ 강점 3개를 문장으로 기록(자기소개서 소재)</li>'
+   +'<li>☐ 관심 직무 1~3개의 채용공고에서 요구 역량 조사</li>'
+   +'<li>☐ 현직자·선배 1명 인터뷰(대학일자리센터 프로그램 활용)</li>'
+   +'<li>☐ 다음 학기 과목·실습을 관심 분야와 연결해 선택</li>'
+   +'<li>☐ 스터디·동아리·봉사 등 30일 내 첫 행동 시작</li>'
+   +'<li>☐ 기타: ______________________________________</li></ul></div>';
+  H+='<div class="ps-sec"><h4>상담 메모</h4><div class="ps-memo"><i></i><i></i><i></i><i></i></div></div>';
+  H+='<div class="ps-sign"><span>다음 만남: ______________</span><span>학생 서명: ______________</span><span>상담자 서명: ______________</span></div>';
+  H+='<div class="ps-foot">본 요약은 자기보고와 그림 선호에 기반한 대화 촉진용 참고 자료이며 표준화 검사·진단이 아닙니다. 특정 종교·신앙과 무관하며, 평가·선발 목적 사용을 권장하지 않습니다.</div>';
+  H+='</div>';return H;
+}
+function printSummary(){
+  if($('result').style.display!=='block'){alert('먼저 리포트를 만들어 주세요.');return;}
+  $('printSummary').innerHTML=summaryHTML();
+  document.body.className=(document.body.className+' sumonly').trim();
+  var off=function(){document.body.className=document.body.className.replace(/\s*sumonly/,'');};
+  if(window.addEventListener)window.addEventListener('afterprint',off,{once:true});
+  try{window.print();}catch(e){}
+  setTimeout(off,1200);
+}
+fillLeaders();fillQuiz();
+</script>
+</body>
+</html>
