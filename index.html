@@ -476,7 +476,7 @@ window.addEventListener('resize', resize); resize();
 const WORLD = { w: 1800, h: 1120 };
 
 /* Buildings: academic halls (each maps to a subject) + a social hub */
-const BUILDINGS = [{"id": "anatomy", "name": "해부학관", "subj": "anatomy", "emoji": "🦴", "x": 50, "y": 80, "w": 260, "h": 155, "color": "#b0413e", "roof": "#7d2a28"}, {"id": "neuroanat", "name": "신경해부학관", "subj": "neuroanat", "emoji": "🧠", "x": 410, "y": 80, "w": 260, "h": 155, "color": "#5b6ee0", "roof": "#3a49a8"}, {"id": "neuro", "name": "신경계물리치료관", "subj": "neuro", "emoji": "🩺", "x": 770, "y": 80, "w": 260, "h": 155, "color": "#7b57c9", "roof": "#553a8f"}, {"id": "exercise", "name": "운동치료관", "subj": "exercise", "emoji": "🏋️", "x": 1130, "y": 80, "w": 260, "h": 155, "color": "#2f9e8f", "roof": "#1f6e63"}, {"id": "funcanat", "name": "기능해부·신경운동관", "subj": "funcanat", "emoji": "🚶", "x": 1490, "y": 80, "w": 260, "h": 155, "color": "#3d9a70", "roof": "#276b4c"}, {"id": "msk", "name": "근골격계물리치료관", "subj": "msk", "emoji": "🦵", "x": 50, "y": 400, "w": 260, "h": 155, "color": "#d08a2e", "roof": "#996216"}, {"id": "modality", "name": "물리적인자치료관", "subj": "modality", "emoji": "⚡", "x": 410, "y": 400, "w": 260, "h": 155, "color": "#3a72c4", "roof": "#274f8c"}, {"id": "cardio", "name": "심화호흡물리치료관", "subj": "cardio", "emoji": "🫁", "x": 770, "y": 400, "w": 260, "h": 155, "color": "#c8506a", "roof": "#8f2f47"}, {"id": "clindx", "name": "임상의사결정관", "subj": "clindx", "emoji": "🔎", "x": 1130, "y": 400, "w": 260, "h": 155, "color": "#2c8f9c", "roof": "#1c6470"}, {"id": "office", "name": "학과사무실", "subj": null, "emoji": "🏢", "x": 1490, "y": 400, "w": 260, "h": 155, "color": "#5b6472", "roof": "#3a414c", "role": "office"}, {"id": "hub", "name": "학생회관·도서관", "subj": null, "emoji": "📚", "x": 50, "y": 720, "w": 260, "h": 155, "color": "#4a8f5a", "roof": "#316b3f", "role": "hub"}, {"id": "club", "name": "전공동아리방", "subj": null, "emoji": "🎽", "x": 410, "y": 720, "w": 260, "h": 155, "color": "#c98b3a", "roof": "#8a642a", "role": "club"}, {"id": "career", "name": "대학일자리플러스센터", "subj": null, "emoji": "💼", "x": 1130, "y": 720, "w": 260, "h": 155, "color": "#2f7fb0", "roof": "#1f4f80", "role": "career"}, {"id": "council", "name": "물치 학회실", "subj": null, "emoji": "📣", "x": 1490, "y": 720, "w": 260, "h": 155, "color": "#3c8f7a", "roof": "#276b5a", "role": "council"}];
+const BUILDINGS = [{"id": "anatomy", "name": "해부학관", "subj": "anatomy", "emoji": "🦴", "x": 50, "y": 80, "w": 260, "h": 155, "color": "#b0413e", "roof": "#7d2a28"}, {"id": "neuroanat", "name": "신경해부학관", "subj": "neuroanat", "emoji": "🧠", "x": 410, "y": 80, "w": 260, "h": 155, "color": "#5b6ee0", "roof": "#3a49a8"}, {"id": "neuro", "name": "신경계물리치료관", "subj": "neuro", "emoji": "🩺", "x": 770, "y": 80, "w": 260, "h": 155, "color": "#7b57c9", "roof": "#553a8f"}, {"id": "exercise", "name": "운동치료관", "subj": "exercise", "emoji": "🏋️", "x": 1130, "y": 80, "w": 260, "h": 155, "color": "#2f9e8f", "roof": "#1f6e63"}, {"id": "funcanat", "name": "기능해부·신경운동관", "subj": "funcanat", "emoji": "🚶", "x": 1490, "y": 80, "w": 260, "h": 155, "color": "#3d9a70", "roof": "#276b4c"}, {"id": "msk", "name": "근골격계물리치료관", "subj": "msk", "emoji": "🦵", "x": 50, "y": 400, "w": 260, "h": 155, "color": "#d08a2e", "roof": "#996216"}, {"id": "modality", "name": "물리적인자치료관", "subj": "modality", "emoji": "⚡", "x": 410, "y": 400, "w": 260, "h": 155, "color": "#3a72c4", "roof": "#274f8c"}, {"id": "cardio", "name": "심화호흡물리치료관", "subj": "cardio", "emoji": "🫁", "x": 770, "y": 400, "w": 260, "h": 155, "color": "#c8506a", "roof": "#8f2f47"}, {"id": "clindx", "name": "임상의사결정관", "subj": "clindx", "emoji": "🔎", "x": 1130, "y": 400, "w": 260, "h": 155, "color": "#2c8f9c", "roof": "#1c6470"}, {"id": "office", "name": "학과사무실", "subj": null, "emoji": "🏢", "x": 1490, "y": 400, "w": 260, "h": 155, "color": "#5b6472", "roof": "#3a414c", "role": "office"}, {"id": "hub", "name": "국가고시·도서관", "subj": null, "emoji": "📚", "x": 50, "y": 720, "w": 260, "h": 155, "color": "#4a8f5a", "roof": "#316b3f", "role": "hub"}, {"id": "club", "name": "전공동아리방", "subj": null, "emoji": "🎽", "x": 410, "y": 720, "w": 260, "h": 155, "color": "#c98b3a", "roof": "#8a642a", "role": "club"}, {"id": "career", "name": "대학일자리플러스센터", "subj": null, "emoji": "💼", "x": 1130, "y": 720, "w": 260, "h": 155, "color": "#2f7fb0", "roof": "#1f4f80", "role": "career"}, {"id": "council", "name": "물치 학회실", "subj": null, "emoji": "📣", "x": 1490, "y": 720, "w": 260, "h": 155, "color": "#3c8f7a", "roof": "#276b5a", "role": "council"}];
 function building(id){ return BUILDINGS.find(b=>b.id===id); }
 /* door (interaction point) = bottom-center, just outside */
 function doorOf(b){ return { x: b.x + b.w/2, y: b.y + b.h + 26 }; }
@@ -872,13 +872,15 @@ function updateNear(){
   BUILDINGS.forEach(b=>{ if(!b.subj && !b.role) return; const dr=doorOf(b); const d=dist(player.x,player.y,dr.x,dr.y); if(d<bestD){bestD=d;best={type: b.subj ? 'building' : b.role, ref:b};} });
   // hub door (social)
   if(typeof staff!=='undefined'){ staff.forEach(p=>{ const d=dist(player.x,player.y,p.x,p.y); if(d<bestD){bestD=d;best={type:'staff',ref:p};} }); }
+  if(typeof FESTIVAL!=='undefined'){ const fb=FESTIVAL[1]; const d=dist(player.x,player.y,fb.x,fb.y+30); if(d<bestD){bestD=d;best={type:'partners',ref:fb};} }
   if(!best) best = funNearCheck();
   state.near = best;
   if (best){
     let label;
     if (best.type==='prof') label = best.ref.name+' 와(과) 대화';
     else if (best.type==='building') label = best.ref.name+' 강의 듣기';
-    else if (best.type==='hub') label = '학생회관 둘러보기';
+    else if (best.type==='hub') label = '국가고시·도서관 둘러보기';
+    else if (best.type==='partners') label = '🤝 협력기관 (협회·센터)';
     else if (best.type==='cafe') label = '☕ 커피 한 잔 — 스피드 UP';
     else if (best.type==='stage') label = '🔔 골든벨 퀴즈 러시!';
     else if (best.type==='pet') label = '🐈 냥이 쓰다듬기';
@@ -902,6 +904,7 @@ function tryInteract(){
   if (n.type==='prof') openProf(n.ref);
   else if (n.type==='building') openHall(n.ref);
   else if (n.type==='hub') openHub();
+  else if (n.type==='partners') openPartners();
   else if (n.type==='cafe') funCafe();
   else if (n.type==='stage') gbStart();
   else if (n.type==='pet') funPet();
@@ -965,14 +968,28 @@ function openHall(b){
 }
 
 function openHub(){
-  setDialog('📚','linear-gradient(135deg,#4a8f5a,#2a3550)','학생회관·도서관','자율 AI들의 휴식·잡담 공간');
+  setDialog('📚','linear-gradient(135deg,#4a8f5a,#2a3550)','국가고시·도서관','물리치료 국가고시 준비 · 열람 공간');
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
   const around = students.filter(s=>dist(s.x,s.y,player.x,player.y)<260).map(s=>s.name);
-  body.innerHTML='<div class="say"><span class="who">안내</span>여기는 AI 학생들이 쉬는 시간에 모여 잡담하는 곳입니다. 지금 근처 학생: <b>'+(around.length?around.join(', '):'없음')+'</b><br><br>가만히 관전하면 AI들이 스스로 대화하는 모습을 볼 수 있어요(👁️ 관전 모드 추천).</div>'+jobLink('📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설','https://gssim11.github.io/PT-novel/',true)+jobLink('📰 학과뉴스','https://physi.ansan.ac.kr/physi/board/3',false)+jobLink('📷 포토갤러리','https://physi.ansan.ac.kr/physi/board/7',false);
+  body.innerHTML='<div class="say"><span class="who">🎓 국가고시 준비 · 가족회사</span>안산대학교 물리치료학과 <b>가족회사</b>가 운영하는 국가고시 학습 플랫폼입니다. 이론·문제풀이·모의고사를 한 곳에서 준비하세요.</div>'+jobLink('🎯 프로리온 ProReOn — 국시 이론·문제풀이·모의고사·360° 강의','https://proreon.ai.kr/home',true)+jobLink('🐯 국시독립 — 물리치료 국가고시 문제은행 앱','https://xn--3e0b93j8pf2qk.com/',true)+'<div class="expl"><span class="tag">참고</span>캠퍼스 각 교과관에서도 과목별 국시 기출 퀴즈를 풀 수 있습니다.</div>'+'<div class="say"><span class="who">📚 도서관·휴게</span>AI 학생들이 쉬는 시간에 모여 잡담하는 곳이기도 합니다. 지금 근처 학생: <b>'+(around.length?around.join(', '):'없음')+'</b> (👁️ 관전 모드 추천)</div>'+jobLink('📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설','https://gssim11.github.io/PT-novel/',false);
   foot.innerHTML='';
   addFoot('👁️ 관전 모드 켜기', ()=>{ toggleSpectate(true); closeDialog(); });
   addFoot('닫기', closeDialog);
   showDialog();
+}
+
+function openPartners(){
+  setDialog('🤝','linear-gradient(135deg,#3a72c4,#2a3550)','협력기관','학과와 연계하는 협회 · 센터');
+  const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
+  body.innerHTML='<div class="say"><span class="who">안내</span>안산대학교 물리치료학과와 교류·연계가 활발한 협회·센터·가족회사입니다. 교육과정·자격·국가고시·현장 정보를 만나보세요.</div>'
+   +'<div class="say" style="border-style:dashed;border-color:var(--gold)"><span class="who" style="color:var(--gold-hi)">🤝 협회 · 센터</span>교육과정과 자격인증을 운영하는 연계 기관입니다.</div>'
+   +jobLink('🧘 굿얼라인재활필라테스협회 (GARP)','https://garp.kr/',true)
+   +jobLink('🏃 대한건강운동재활협회 (KAHER)','https://kaher.vercel.app/index.html',true)
+   +jobLink('🧍 웰니스포스처 — 네이버 블로그','https://blog.naver.com/newksb1004',false)
+   +'<div class="say" style="border-style:dashed;border-color:var(--gold)"><span class="who" style="color:var(--gold-hi)">🎓 가족회사 · 국가고시</span>학과 가족회사가 운영하는 국가고시 학습 플랫폼입니다.</div>'
+   +jobLink('🎯 프로리온 ProReOn — 국시 이론·문제풀이·모의고사','https://proreon.ai.kr/home',true)
+   +jobLink('🐯 국시독립 — 물리치료 국가고시 문제은행 앱','https://xn--3e0b93j8pf2qk.com/',true);
+  foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
 }
 
 function addFoot(label, fn, primary){
@@ -1575,7 +1592,7 @@ function openOffice(){
   body.innerHTML=
    '<div class="say"><span class="who">안내</span>수강·학적·증명·행정 문의는 학과사무실로 오세요. 친절한 조교 선생님들이 도와드립니다.</div>'+
    '<div class="say"><span class="who">👩‍💼 조교 선생님</span><b>정성예</b> 조교 · <b>김희연</b> 조교</div>'+
-   jobLink('🏫 물리치료학과 홈페이지 바로가기','https://physi.ansan.ac.kr/physi',false)+jobLink('💼 물리치료 채용공고 (PT-JOB)','https://pt-job.vercel.app/',false)+jobLink('📖 걷는 법을 배우는 시간 (물리치료학과 성장소설)','https://gssim11.github.io/PT-novel/',false)+'<div class="expl"><span class="tag">위치·연락</span>안산대학교 <b>성실관 205호</b> 물리치료학과 · Tel 031-363-6943 · Fax 031-363-7704</div>';
+   jobLink('🏫 물리치료학과 홈페이지 바로가기','https://physi.ansan.ac.kr/physi',false)+jobLink('📰 학과뉴스','https://physi.ansan.ac.kr/physi/board/3',false)+jobLink('📷 포토갤러리','https://physi.ansan.ac.kr/physi/board/7',false)+jobLink('💼 물리치료 채용공고 (PT-JOB)','https://pt-job.vercel.app/',false)+jobLink('📖 걷는 법을 배우는 시간 (물리치료학과 성장소설)','https://gssim11.github.io/PT-novel/',false)+'<div class="expl"><span class="tag">위치·연락</span>안산대학교 <b>성실관 205호</b> 물리치료학과 · Tel 031-363-6943 · Fax 031-363-7704</div>';
   foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
 }
 function openStaff(ref){
@@ -1691,7 +1708,7 @@ function openCampusTour(){
 const REST = { x:620, y:1030 };
 const FESTIVAL = [
   { x:740,  y:800,  c:'#c8506a', n:'학술제' },
-  { x:1060, y:800,  c:'#3a72c4', n:'포스터' },
+  { x:1060, y:800,  c:'#3a72c4', n:'협력기관' },
   { x:1415, y:1030, c:'#4a8f5a', n:'체험부스' },
   { x:65,   y:1030, c:'#d08a2e', n:'물치제' }
 ];
@@ -1819,6 +1836,7 @@ function tapApproach(wx,wy){
   if(typeof STAGE!=='undefined')props.push({x:STAGE.x,y:STAGE.y+34});
   if(typeof ENTRANCE!=='undefined')props.push({x:ENTRANCE.x,y:ENTRANCE.y-40});
   if(typeof pet!=='undefined')props.push({x:pet.x,y:pet.y+24});
+  if(typeof FESTIVAL!=='undefined')props.push({x:FESTIVAL[1].x,y:FESTIVAL[1].y+34});
   for(var j=0;j<props.length;j++){ var d=dist(wx,wy,props[j].x,props[j].y); if(d<bd){bd=d;best=props[j];} }
   return best;
 }
