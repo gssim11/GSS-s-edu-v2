@@ -476,7 +476,7 @@ window.addEventListener('resize', resize); resize();
 const WORLD = { w: 1800, h: 1120 };
 
 /* Buildings: academic halls (each maps to a subject) + a social hub */
-const BUILDINGS = [{"id": "anatomy", "name": "해부학관", "subj": "anatomy", "emoji": "🦴", "x": 50, "y": 80, "w": 260, "h": 155, "color": "#b0413e", "roof": "#7d2a28"}, {"id": "neuroanat", "name": "신경해부학관", "subj": "neuroanat", "emoji": "🧠", "x": 410, "y": 80, "w": 260, "h": 155, "color": "#5b6ee0", "roof": "#3a49a8"}, {"id": "neuro", "name": "신경계물리치료관", "subj": "neuro", "emoji": "🩺", "x": 770, "y": 80, "w": 260, "h": 155, "color": "#7b57c9", "roof": "#553a8f"}, {"id": "exercise", "name": "운동치료관", "subj": "exercise", "emoji": "🏋️", "x": 1130, "y": 80, "w": 260, "h": 155, "color": "#2f9e8f", "roof": "#1f6e63"}, {"id": "funcanat", "name": "기능해부·신경운동관", "subj": "funcanat", "emoji": "🚶", "x": 1490, "y": 80, "w": 260, "h": 155, "color": "#3d9a70", "roof": "#276b4c"}, {"id": "msk", "name": "근골격계물리치료관", "subj": "msk", "emoji": "🦵", "x": 50, "y": 400, "w": 260, "h": 155, "color": "#d08a2e", "roof": "#996216"}, {"id": "modality", "name": "물리적인자치료관", "subj": "modality", "emoji": "⚡", "x": 410, "y": 400, "w": 260, "h": 155, "color": "#3a72c4", "roof": "#274f8c"}, {"id": "cardio", "name": "심화호흡물리치료관", "subj": "cardio", "emoji": "🫁", "x": 770, "y": 400, "w": 260, "h": 155, "color": "#c8506a", "roof": "#8f2f47"}, {"id": "clindx", "name": "임상의사결정관", "subj": "clindx", "emoji": "🔎", "x": 1130, "y": 400, "w": 260, "h": 155, "color": "#2c8f9c", "roof": "#1c6470"}, {"id": "office", "name": "학과사무실", "subj": null, "emoji": "🏢", "x": 1490, "y": 400, "w": 260, "h": 155, "color": "#5b6472", "roof": "#3a414c", "role": "office"}, {"id": "hub", "name": "국가고시·도서관", "subj": null, "emoji": "📚", "x": 50, "y": 720, "w": 260, "h": 155, "color": "#4a8f5a", "roof": "#316b3f", "role": "hub"}, {"id": "club", "name": "전공동아리방", "subj": null, "emoji": "🎽", "x": 410, "y": 720, "w": 260, "h": 155, "color": "#c98b3a", "roof": "#8a642a", "role": "club"}, {"id": "career", "name": "대학일자리플러스센터", "subj": null, "emoji": "💼", "x": 1130, "y": 720, "w": 260, "h": 155, "color": "#2f7fb0", "roof": "#1f4f80", "role": "career"}, {"id": "council", "name": "물치 학회실", "subj": null, "emoji": "📣", "x": 1490, "y": 720, "w": 260, "h": 155, "color": "#3c8f7a", "roof": "#276b5a", "role": "council"}];
+const BUILDINGS = [{"id": "anatomy", "name": "해부학관", "subj": "anatomy", "emoji": "🦴", "x": 50, "y": 80, "w": 260, "h": 155, "color": "#b0413e", "roof": "#7d2a28"}, {"id": "neuroanat", "name": "신경해부학관", "subj": "neuroanat", "emoji": "🧠", "x": 410, "y": 80, "w": 260, "h": 155, "color": "#5b6ee0", "roof": "#3a49a8"}, {"id": "neuro", "name": "신경계물리치료관", "subj": "neuro", "emoji": "🩺", "x": 770, "y": 80, "w": 260, "h": 155, "color": "#7b57c9", "roof": "#553a8f"}, {"id": "exercise", "name": "운동치료관", "subj": "exercise", "emoji": "🏋️", "x": 1130, "y": 80, "w": 260, "h": 155, "color": "#2f9e8f", "roof": "#1f6e63"}, {"id": "funcanat", "name": "기능해부·신경운동관", "subj": "funcanat", "emoji": "🚶", "x": 1490, "y": 80, "w": 260, "h": 155, "color": "#3d9a70", "roof": "#276b4c"}, {"id": "msk", "name": "근골격계물리치료관", "subj": "msk", "emoji": "🦵", "x": 50, "y": 400, "w": 260, "h": 155, "color": "#d08a2e", "roof": "#996216"}, {"id": "modality", "name": "물리적인자치료관", "subj": "modality", "emoji": "⚡", "x": 410, "y": 400, "w": 260, "h": 155, "color": "#3a72c4", "roof": "#274f8c"}, {"id": "cardio", "name": "심화호흡물리치료관", "subj": "cardio", "emoji": "🌬️", "x": 770, "y": 400, "w": 260, "h": 155, "color": "#c8506a", "roof": "#8f2f47"}, {"id": "clindx", "name": "임상의사결정관", "subj": "clindx", "emoji": "🔎", "x": 1130, "y": 400, "w": 260, "h": 155, "color": "#2c8f9c", "roof": "#1c6470"}, {"id": "office", "name": "학과사무실", "subj": null, "emoji": "🏢", "x": 1490, "y": 400, "w": 260, "h": 155, "color": "#5b6472", "roof": "#3a414c", "role": "office"}, {"id": "hub", "name": "국가고시·도서관", "subj": null, "emoji": "📚", "x": 50, "y": 720, "w": 260, "h": 155, "color": "#4a8f5a", "roof": "#316b3f", "role": "hub"}, {"id": "club", "name": "전공동아리방", "subj": null, "emoji": "🎽", "x": 410, "y": 720, "w": 260, "h": 155, "color": "#c98b3a", "roof": "#8a642a", "role": "club"}, {"id": "career", "name": "대학일자리플러스센터", "subj": null, "emoji": "💼", "x": 1130, "y": 720, "w": 260, "h": 155, "color": "#2f7fb0", "roof": "#1f4f80", "role": "career"}, {"id": "council", "name": "물치 학회실", "subj": null, "emoji": "📣", "x": 1490, "y": 720, "w": 260, "h": 155, "color": "#3c8f7a", "roof": "#276b5a", "role": "council"}];
 function building(id){ return BUILDINGS.find(b=>b.id===id); }
 /* door (interaction point) = bottom-center, just outside */
 function doorOf(b){ return { x: b.x + b.w/2, y: b.y + b.h + 26 }; }
@@ -955,11 +955,20 @@ function neuroLinksHTML(){
   return '<div class="say" style="border-style:dashed"><span class="who">📎 신경계물리치료 학습자료</span>심경섭 교수 제작 자료입니다. <b>중요도 순</b>으로 정렬했으니 위에서부터 보세요.</div>'
     + NEURO_LINKS.map(function(L){ return jobLink(L.t, L.u, L.hl); }).join('');
 }
+
+/* 심화호흡물리치료관 전용 학습자료 */
+const CARDIO_LINKS=[
+ {t:'🌬️ 심장호흡물리치료학 — 종합 인포그래픽 가이드 (기초·평가·질환관리·재활·AI 임상지원)', u:'https://cardio-pulmonary-pt-2.vercel.app/', hl:true}
+];
+function cardioLinksHTML(){
+  return '<div class="say" style="border-style:dashed"><span class="who">📎 심화호흡물리치료 학습자료</span>심경섭 교수 제작 자료입니다. 기초·평가·질환관리·재활과 <b>AI 임상지원</b> 도구까지 한 곳에 있습니다.</div>'
+    + CARDIO_LINKS.map(function(L){ return jobLink(L.t, L.u, L.hl); }).join('');
+}
 function openHall(b){
   const p = professors.find(x=>x.subj===b.subj);
   setDialog(b.emoji, 'linear-gradient(135deg,'+b.color+',#2a3550)', b.name, SUBJ_NAME[b.subj]+' · 강의관');
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
-  body.innerHTML='<div class="say"><span class="who">'+b.name+'</span>'+b.name+'에 입장했습니다. 오늘 과목은 <b>'+SUBJ_NAME[b.subj]+'</b>. 강의를 듣거나 퀴즈로 학점을 쌓으세요.</div>'+jobLink('📘 학과 교육과정·로드맵','https://physi.ansan.ac.kr/physi/roadmap',false)+(b.subj==='neuro'?neuroLinksHTML():'');
+  body.innerHTML='<div class="say"><span class="who">'+b.name+'</span>'+b.name+'에 입장했습니다. 오늘 과목은 <b>'+SUBJ_NAME[b.subj]+'</b>. 강의를 듣거나 퀴즈로 학점을 쌓으세요.</div>'+jobLink('📘 학과 교육과정·로드맵','https://physi.ansan.ac.kr/physi/roadmap',false)+(b.subj==='neuro'?neuroLinksHTML():'')+(b.subj==='cardio'?cardioLinksHTML():'');
   foot.innerHTML='';
   addFoot('📖 강의 요약', ()=>lectureSummary(b.subj, p?p.name:b.name));
   addFoot('📝 퀴즈 시작', ()=>startQuiz(b.subj, p?p.name:b.name), true);
@@ -1257,7 +1266,7 @@ function spawnCoin(){
     const x=rnd(80,WORLD.w-80), y=rnd(120,WORLD.h-80);
     if(funInBuilding(x,y)) continue;
     if(dist(x,y,PLAZA.x,PLAZA.y)<74) continue;
-    let ic='🪙'; const r=Math.random(); if(r<0.06) ic='⭐'; else if(r<0.11) ic=choice(['🦴','🧠','🫁']);
+    let ic='🪙'; const r=Math.random(); if(r<0.06) ic='⭐'; else if(r<0.11) ic=choice(['🦴','🧠','🌬️']);
     coins.push({x,y,icon:ic,bob:rnd(0,6)}); return;
   }
 }
