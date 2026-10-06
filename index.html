@@ -956,6 +956,21 @@ function neuroLinksHTML(){
     + NEURO_LINKS.map(function(L){ return jobLink(L.t, L.u, L.hl); }).join('');
 }
 
+/* 신경해부학관 전용 학습자료 */
+const NEUROANAT_LINKS=[
+ /* ▼ 허브 주소는 고정. 챕터 추가는 허브 저장소(github.com/gssim11/neuroanat-hub)에서만 하고 여기는 손대지 않습니다. u가 비어 있으면 '준비 중'으로 표시됩니다. */
+ {t:'🧠 신경해부학 챕터별 핵심요약 — Ch01~Ch13 학습 허브', u:'https://neuroanat-hub.vercel.app/', hl:true},
+ {t:'🗺️ Neuro Atlas — 신경해부학·신경과학 강의록', u:'https://na-ns.vercel.app/', hl:false}
+];
+function neuroanatLinksHTML(){
+  let h='<div class="say" style="border-style:dashed"><span class="who">📎 신경해부학 학습자료</span>심경섭 교수 제작 자료입니다. 강의록 <b>챕터별 핵심요약·확인문제</b>를 한 곳에서 봅니다.</div>';
+  NEUROANAT_LINKS.forEach(function(L){
+    h += L.u ? jobLink(L.t, L.u, L.hl)
+             : '<div class="say" style="border-style:dashed;opacity:.7">'+L.t+' &nbsp;<b>— 준비 중</b></div>';
+  });
+  return h;
+}
+
 /* 심화호흡물리치료관 전용 학습자료 */
 const CARDIO_LINKS=[
  {t:'🌬️ 심장호흡물리치료학 — 종합 인포그래픽 가이드 (기초·평가·질환관리·재활·AI 임상지원)', u:'https://cardio-pulmonary-pt-2.vercel.app/', hl:true}
@@ -968,7 +983,7 @@ function openHall(b){
   const p = professors.find(x=>x.subj===b.subj);
   setDialog(b.emoji, 'linear-gradient(135deg,'+b.color+',#2a3550)', b.name, SUBJ_NAME[b.subj]+' · 강의관');
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
-  body.innerHTML='<div class="say"><span class="who">'+b.name+'</span>'+b.name+'에 입장했습니다. 오늘 과목은 <b>'+SUBJ_NAME[b.subj]+'</b>. 강의를 듣거나 퀴즈로 학점을 쌓으세요.</div>'+jobLink('📘 학과 교육과정·로드맵','https://physi.ansan.ac.kr/physi/roadmap',false)+(b.subj==='neuro'?neuroLinksHTML():'')+(b.subj==='cardio'?cardioLinksHTML():'');
+  body.innerHTML='<div class="say"><span class="who">'+b.name+'</span>'+b.name+'에 입장했습니다. 오늘 과목은 <b>'+SUBJ_NAME[b.subj]+'</b>. 강의를 듣거나 퀴즈로 학점을 쌓으세요.</div>'+jobLink('📘 학과 교육과정·로드맵','https://physi.ansan.ac.kr/physi/roadmap',false)+(b.subj==='neuroanat'?neuroanatLinksHTML():'')+(b.subj==='neuro'?neuroLinksHTML():'')+(b.subj==='cardio'?cardioLinksHTML():'');
   foot.innerHTML='';
   addFoot('📖 강의 요약', ()=>lectureSummary(b.subj, p?p.name:b.name));
   addFoot('📝 퀴즈 시작', ()=>startQuiz(b.subj, p?p.name:b.name), true);
