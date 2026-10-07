@@ -10,12 +10,12 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="안산대학교 물리치료학과" />
 <meta property="og:title" content="안산대학교 물리치료학과 메타버스 캠퍼스" />
-<meta property="og:description" content="신입생 아바타로 캠퍼스를 걸어다니며 강의를 듣고 국가고시 대비 퀴즈를 푸는 교육용 가상 캠퍼스." />
+<meta property="og:description" content="내 아바타로 캠퍼스를 걸어다니며 강의를 듣고 국가고시 대비 퀴즈를 푸는 교육용 가상 캠퍼스." />
 <meta property="og:image" content="https://gss-edu-v2.vercel.app/og-image-campus.png" />
 <meta property="og:url" content="https://gss-edu-v2.vercel.app/" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="안산대학교 물리치료학과 메타버스 캠퍼스" />
-<meta name="twitter:description" content="신입생 아바타로 캠퍼스를 걸어다니며 강의를 듣고 국가고시 대비 퀴즈를 푸는 교육용 가상 캠퍼스." />
+<meta name="twitter:description" content="내 아바타로 캠퍼스를 걸어다니며 강의를 듣고 국가고시 대비 퀴즈를 푸는 교육용 가상 캠퍼스." />
 <meta name="twitter:image" content="https://gss-edu-v2.vercel.app/og-image-campus.png" />
 <style>
   :root{
@@ -367,7 +367,7 @@
         <div class="card"><h4>🧠 Generative Agents (Smallville)</h4><p>스탠퍼드·구글의 유명 연구. AI 캐릭터가 <b>스스로 돌아다니고 대화하며 하루 일과</b>를 보내는 자율 시뮬레이션 — 이 캠퍼스 AI들의 방식입니다.</p></div>
         <div class="card"><h4>🗺️ Gather Town</h4><p>2D 픽셀 공간을 아바타로 걸어다니며 만나 대화하는 메타버스 — 이 캠퍼스의 <b>조작·근접 상호작용</b>입니다.</p></div>
       </div>
-      <p class="lede">신입생 아바타로 캠퍼스를 <b>직접 걸어다니며</b> 9개 교과관에서 교수 AI에게 <b>강의를 듣고 국시 기출 퀴즈</b>(과목별 문제은행에서 매 방문 무작위 최대 6문항)를 풀어 학점을 쌓으세요. 가만히 두면 AI 교수·학생이 <b>스스로 등교·수업·잡담</b>합니다.</p>
+      <p class="lede">내 아바타로 캠퍼스를 <b>직접 걸어다니며</b> 9개 교과관에서 교수 AI에게 <b>강의를 듣고 국시 기출 퀴즈</b>(과목별 문제은행에서 매 방문 무작위 최대 6문항)를 풀어 학점을 쌓으세요. 가만히 두면 AI 교수·학생이 <b>스스로 등교·수업·잡담</b>합니다.</p>
       <div class="faculty">
         <div class="fac-title">참여 교수진 <span>· 안산대학교 물리치료학과</span></div>
         <div class="fac-sub">전임교수</div>
@@ -502,7 +502,7 @@ function mkChar(o){
 }
 
 /* Player */
-const player = mkChar({ x:900, y:980, name:'나 (신입생)', color:'#4fd1c5', hair:'#2a2320', speed:235, isPlayer:true });
+const player = mkChar({ x:900, y:980, name:'나 (재학생)', color:'#4fd1c5', hair:'#2a2320', speed:235, isPlayer:true });
 
 /* Professors: stationed at their hall, occasionally pace; give lectures/quizzes */
 const PROFS = [{"key": "anatomy", "name": "김신영 교수", "color": "#b0413e", "hair": "#2b2b2b", "emoji": "👩‍🏫", "lines": ["해부학은 실습에서 완성됩니다 — 직접 만져보고 외워요.", "근골격계 중재도 결국 해부 지식이 기반이에요.", "운동생리학으로 근육의 원리를 봅니다."]}, {"key": "neuroanat", "name": "정형국 교수", "color": "#5b6ee0", "hair": "#1f1f1f", "emoji": "🧑‍🏫", "lines": ["신경해부는 경로와 교차가 핵심입니다.", "임상운동학으로 움직임을 해석해요.", "신경계 중재 실습, 이론과 손이 만나야 합니다."]}, {"key": "neuroanat", "name": "심경섭 교수", "color": "#3a49a8", "hair": "#1f1f1f", "emoji": "🧑‍🏫", "dx": 46, "lines": ["챕터별 핵심요약은 신경해부학관 학습 허브에 모아 뒀어요.", "구조를 알면 증상이 보이고, 증상을 보면 병변이 보입니다.", "교재 값과 문헌 값이 다르면, 시험은 교재 기준이에요."]}, {"key": "neuro", "name": "심경섭 교수", "color": "#7b57c9", "hair": "#1f1f1f", "emoji": "🧑‍🏫", "lines": ["신경계 중재는 과제지향·반복량·강도예요.", "지역사회로 나가면 물리치료가 삶이 됩니다.", "뇌졸중 회복, 근거로 접근합시다."]}, {"key": "exercise", "name": "신호진 교수", "color": "#2f9e8f", "hair": "#332b22", "emoji": "🧑‍🏫", "lines": ["운동치료는 생리학 위에 섭니다.", "MMT 3등급, 왜 기준일까요? 중력이죠.", "인체생리학을 알면 처방이 보입니다."]}, {"key": "msk", "name": "정호발 교수", "color": "#d08a2e", "hair": "#3a2c1a", "emoji": "🧑‍🏫", "lines": ["정형은 특수검사로 감별부터.", "근골격계 운동치료, 자세가 절반이에요.", "정형물리치료 실습, 손끝 감각입니다."]}, {"key": "modality", "name": "김동훈 교수", "color": "#3a72c4", "hair": "#232323", "emoji": "🧑‍🏫", "lines": ["급성기엔 얼음, 만성기엔 열.", "근거중심으로 인자치료를 고릅니다.", "TENS의 심장은 관문조절설이에요."]}, {"key": "cardio", "name": "심경섭 교수", "color": "#c8506a", "hair": "#1f1f1f", "emoji": "🧑‍🏫", "lines": ["호흡도 근육 훈련입니다 — IMT로 강화해요.", "급성기엔 얼음, 만성 배담은 중력이 약입니다.", "오므린 입술호흡 하나로 COPD가 편해져요."]}, {"key": "funcanat", "name": "김도현 학과장", "color": "#3d9a70", "hair": "#1f1f1f", "emoji": "🧑‍🏫", "lines": ["기능해부를 알아야 움직임이 보입니다.", "신경계 운동치료는 과제와 반복이 핵심이에요.", "학과장으로서, 여러분의 성장을 응원합니다!"]}, {"key": "clindx", "name": "이광재 교수", "color": "#2c8f9c", "hair": "#2b2620", "emoji": "🧑‍🏫", "lines": ["물리치료 진단은 임상의사결정의 출발입니다.", "평가가 정확해야 치료가 정확해요.", "문제를 정의하면 절반은 해결된 겁니다."]}];
@@ -1312,7 +1312,7 @@ const CONVO_LINES = [
  '해부학 시험 언제지?','신경계 진짜 어렵다 ㅠ','과제 다 했어?','오늘 실습 재밌었어!','도서관 갈래?',
  '커피 한 잔 하자','교수님 강의 좋더라','골든벨 도전했어?','국시 화이팅!','이번 주 축제래',
  'MMT 등급 헷갈려','오십견 케이스 봤어?','호흡재활 실습 언제야?','저 코인 다 주웠어 ㅋㅋ','같이 밥 먹자',
- '보행분석 어렵다','PNF 패턴 외웠어?','근육 이름 너무 많아','오늘 날씨 좋다','신입생이래, 인사하자!'
+ '보행분석 어렵다','PNF 패턴 외웠어?','근육 이름 너무 많아','오늘 날씨 좋다','우리 과 친구 왔다, 인사하자!'
 ];
 function agentFree(a){ return a.role==='student' && a.state!=='convo' && (a.cvCd||0)<=0 && !a.bubble; }
 function convoTick(dt){
@@ -1365,7 +1365,7 @@ function greetTick(dt){
     if(s.greetCd>0){ s.greetCd-=dt; continue; }
     if(dist(s.x,s.y,player.x,player.y)<78){
       emote(s.x, s.y-34, '👋');
-      if(Math.random()<0.5) npcSpeak(s, choice(['안녕하세요!','신입생이다!','화이팅!','반가워요~','같이 가요!']), false);
+      if(Math.random()<0.5) npcSpeak(s, choice(['안녕하세요!','우리 과 학생이다!','화이팅!','반가워요~','같이 가요!']), false);
       s.greetCd = rnd(9,16); state.talkedNpcs.add(s.name); achCheck();
     }
   }
