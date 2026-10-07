@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>안산대학교 물리치료학과 메타버스 캠퍼스</title>
 <meta name="description" content="안산대학교 물리치료학과 교육용 가상 캠퍼스. 9개 교과관에서 교수 AI에게 강의를 듣고 국가고시 대비 퀴즈를 풀며 학과를 둘러보세요." />
 <meta name="theme-color" content="#07132e" />
@@ -257,11 +257,24 @@
     background:rgba(255,255,255,.05);font-size:20px;cursor:pointer;transition:.12s}
   #emoBar button:hover{background:rgba(212,175,82,.22);transform:scale(1.08)}
   @media (max-width:560px){ #emoBtn{width:48px;height:48px;bottom:110px;right:14px} #emoBar{bottom:166px;right:14px} }
+
+/* ===== 접근성 보강 (2026-10) ===== */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.fsctl{margin-left:auto;display:flex;gap:5px;align-items:center}
+#dlg-head .x{margin-left:10px}
+.fsb{background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--cream);border-radius:8px;padding:5px 9px;font-size:13px;font-weight:700;cursor:pointer;line-height:1;font-family:inherit;white-space:nowrap}
+.fsb:hover{border-color:var(--gold)}
+html[data-fs="1"] .overlay .modal .body,html[data-fs="1"] .overlay .modal .foot{zoom:1.15}
+html[data-fs="2"] .overlay .modal .body,html[data-fs="2"] .overlay .modal .foot{zoom:1.3}
+html[data-fs="3"] .overlay .modal .body,html[data-fs="3"] .overlay .modal .foot{zoom:1.5}
+button.joblink{width:100%;font:inherit;text-align:left;cursor:pointer}
+.overlay .modal:focus{outline:none}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 </style>
 </head>
 <body>
 <div id="game">
-  <canvas id="cv"></canvas>
+  <canvas id="cv" role="img" aria-label="캠퍼스 지도 화면입니다. 건물로 바로 가려면 오른쪽 위 바로가기 버튼을 사용하세요."></canvas>
 
   <div id="hud">
     <div id="brandbadge"><span class="bb-seal"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 120 120" role="img" aria-label="AU 배지">
@@ -281,6 +294,7 @@
   </div>
 
   <div id="topright">
+    <button class="btn" id="quickBtn" title="건물·센터로 바로 가기 (키보드·화면낭독기 지원)">🧭 바로가기</button>
     <button class="btn" id="spectateBtn" title="관전 모드: 카메라가 자율 AI들을 순회합니다">👁️ 관전</button>
     <button class="btn" id="fastBtn" title="시간 배속">⏩ 1×</button>
     <button class="btn" id="mapBtn" title="캠퍼스 한눈에 보기">🗺️ 전체보기 ✨</button>
@@ -411,12 +425,13 @@
 </div>
 
 <!-- Dialog / Quiz -->
-<div class="overlay" id="dlg">
-  <div class="modal">
+<div class="overlay" id="dlg" role="dialog" aria-modal="true" aria-labelledby="dlg-name">
+  <div class="modal" tabindex="-1">
     <div class="head" id="dlg-head">
       <div class="avatar-badge" id="dlg-badge">🧑‍🏫</div>
       <div><h2 id="dlg-name">교수</h2><div class="sub" id="dlg-sub">교과</div></div>
-      <button class="x" onclick="closeDialog()">×</button>
+      <div class="fsctl" role="group" aria-label="글자 크기"><button type="button" class="fsb" onclick="fsStep(-1)" aria-label="글자 작게">가−</button><button type="button" class="fsb" onclick="fsStep(1)" aria-label="글자 크게">가+</button></div>
+      <button class="x" onclick="closeDialog()" aria-label="닫기">×</button>
     </div>
     <div class="body" id="dlg-body"></div>
     <div class="foot" id="dlg-foot"></div>
@@ -424,11 +439,11 @@
 </div>
 
 <!-- Help -->
-<div class="overlay" id="help">
+<div class="overlay" id="help" role="dialog" aria-modal="true" aria-label="도움말과 조작법">
   <div class="modal">
     <div class="head"><div class="avatar-badge" style="background:linear-gradient(135deg,#ffd166,#f0955b)">❔</div>
       <div><h2>도움말 &amp; 조작법</h2><div class="sub">캠퍼스 이용 안내</div></div>
-      <button class="x" onclick="hideEl('help')">×</button></div>
+      <button class="x" onclick="hideEl('help')" aria-label="닫기">×</button></div>
     <div class="body">
       <div class="say"><span class="who">🎮 조작</span><b>WASD</b> 또는 <b>방향키</b>로 아바타 이동 · 사람/문 앞에서 <b>E</b> 로 대화·강의 · <b>Esc</b> 로 닫기</div>
       <div class="say"><span class="who">🏛️ 강의관 (9곳) · 담당 교수</span>해부학관(김신영) · 신경해부학관(정형국·심경섭) · 신경계물리치료관(심경섭) · 운동치료관(신호진) · 기능해부·신경운동관(김도현 학과장) · 근골격계물리치료관(정호발) · 물리적인자치료관(김동훈) · 심화호흡물리치료관(심경섭) · 임상의사결정관(이광재). 문 앞이나 교수 AI에게 <b>E</b> → 강의 요약 / 퀴즈.</div>
@@ -442,11 +457,11 @@
 </div>
 
 <!-- Achievements -->
-<div class="overlay" id="ach">
+<div class="overlay" id="ach" role="dialog" aria-modal="true" aria-label="도전과제">
   <div class="modal">
     <div class="head"><div class="avatar-badge" style="background:linear-gradient(135deg,#f0d488,#c8506a)">🏆</div>
       <div><h2>도전과제</h2><div class="sub">캠퍼스 라이프 업적</div></div>
-      <button class="x" onclick="hideEl('ach')">×</button></div>
+      <button class="x" onclick="hideEl('ach')" aria-label="닫기">×</button></div>
     <div class="body" id="ach-body"></div>
     <div class="foot"><button class="btn primary" onclick="hideEl('ach')">확인</button></div>
   </div>
@@ -538,7 +553,7 @@ const keys = {};
 const MOVE_KEYS = new Set(['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d','ㅈ','ㅁ','ㄴ','ㅇ']);
 addEventListener('keydown', e=>{
   const k = e.key.toLowerCase();
-  if (MOVE_KEYS.has(k) || k===' ') { if(!anyModalOpen()) e.preventDefault(); }
+  if (MOVE_KEYS.has(k) || k===' ') { if(!anyModalOpen() && !(e.target && e.target.closest && e.target.closest('button,a,input,select,textarea'))) e.preventDefault(); }
   keys[k] = true;
   if (k==='e' && !anyModalOpen() && state.entered) tryInteract();
   if (k==='escape'){ if(isShown('dlg')) closeDialog(); else if(isShown('help')) hideEl('help'); else if(isShown('ach')) hideEl('ach'); }
@@ -2049,6 +2064,82 @@ function drawEmos(){
 cam.x = clamp(player.x-VW/2,0,Math.max(0,WORLD.w-VW));
 cam.y = clamp(player.y-VH/2,0,Math.max(0,WORLD.h-VH));
 requestAnimationFrame(loop);
+</script>
+<script>
+/* ===== 접근성 보강 (2026-10): 글자 크기 · 대화창 초점 · 건물 바로가기 · 근처 안내 ===== */
+(function(){
+  /* 근처 안내(화면낭독기용 음성 안내 영역) */
+  var live=document.createElement('div'); live.id='srLive'; live.className='sr-only';
+  live.setAttribute('role','status'); live.setAttribute('aria-live','polite'); document.body.appendChild(live);
+  function announce(t){ live.textContent=''; setTimeout(function(){ live.textContent=t; },60); }
+  window.srAnnounce=announce;
+
+  /* 글자 크기 — 대화창 본문을 4단계로 확대, 브라우저에 기억 */
+  var FS_MAX=3, fs=0;
+  try{ fs=parseInt(localStorage.getItem('aupt_fs')||'0',10)||0; }catch(e){}
+  function applyFs(){ fs=Math.max(0,Math.min(FS_MAX,fs));
+    if(fs) document.documentElement.setAttribute('data-fs',String(fs)); else document.documentElement.removeAttribute('data-fs');
+    try{ localStorage.setItem('aupt_fs',String(fs)); }catch(e){} }
+  window.fsStep=function(d){ fs+=d; applyFs(); announce('글자 크기 '+(fs+1)+'단계'); };
+  applyFs();
+
+  /* 건물 앞에 다가가면 이름을 소리로 안내 (바뀔 때만) */
+  var lastLabel='';
+  var _show=window.showPrompt, _hide=window.hidePrompt;
+  if(typeof _show==='function'){ window.showPrompt=function(label){ _show(label);
+    if(label!==lastLabel){ lastLabel=label; var t=String(label).replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu,'').trim(); announce('근처: '+t+'. E 키로 열기'); } }; }
+  if(typeof _hide==='function'){ window.hidePrompt=function(){ _hide(); lastLabel=''; }; }
+
+  /* 대화창 초점 — 열리면 대화창으로, 닫히면 원래 자리로 */
+  var overlays=['dlg','help','ach'].map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var lastFocus=null;
+  function shownOverlay(){ for(var i=0;i<overlays.length;i++){ if(overlays[i].classList.contains('show')) return overlays[i]; } return null; }
+  function focusModal(ov){ var m=ov.querySelector('.modal')||ov; if(!m.hasAttribute('tabindex')) m.setAttribute('tabindex','-1'); setTimeout(function(){ try{ m.focus({preventScroll:true}); }catch(e){ m.focus(); } },0); }
+  overlays.forEach(function(ov){
+    var was=ov.classList.contains('show');
+    new MutationObserver(function(){
+      var now=ov.classList.contains('show'); if(now===was) return; was=now;
+      if(now){ var a=document.activeElement; if(!overlays.some(function(o){ return o.contains(a); })) lastFocus=a; focusModal(ov); }
+      else if(!shownOverlay()){ var t=lastFocus; lastFocus=null; if(t && document.contains(t) && t!==document.body && t.focus){ try{ t.focus({preventScroll:true}); }catch(e){} } }
+    }).observe(ov,{attributes:true,attributeFilter:['class']});
+  });
+  /* 대화창이 열린 채 내용만 바뀔 때도 제목부터 다시 읽히게 */
+  var _sd=window.showDialog;
+  if(typeof _sd==='function'){ window.showDialog=function(){ var ov=document.getElementById('dlg'); var already=ov.classList.contains('show'); _sd.apply(this,arguments); if(already) focusModal(ov); }; }
+  /* 대화창 안에서 Tab 순환 */
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Tab') return; var ov=shownOverlay(); if(!ov) return;
+    var f=[].slice.call(ov.querySelectorAll('a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])')).filter(function(x){ return x.offsetParent!==null; });
+    if(!f.length) return; var first=f[0], last=f[f.length-1], a=document.activeElement;
+    if(e.shiftKey && (a===first || !ov.contains(a) || a===ov.querySelector('.modal'))){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && (a===last || !ov.contains(a))){ e.preventDefault(); first.focus(); }
+  });
+
+  /* 건물 바로가기 — 걷지 않고 키보드·화면낭독기로 바로 열기 */
+  var QUICK=[
+    ['gate','🏫 학과 안내·홍보 (입구)'],
+    ['anatomy'],['neuroanat'],['neuro'],['exercise'],['funcanat'],['msk'],['modality'],['cardio'],['clindx'],
+    ['career'],['hub'],['office'],['club'],['council'],['partners','🤝 협력기관 (협회·센터)']
+  ];
+  function goTo(b){ try{ var d=doorOf(b); player.x=d.x; player.y=d.y+34; player.tx=null; player.ty=null; player.moving=false; if(window.recenterCam) window.recenterCam(); }catch(e){} }
+  window.quickOpen=function(id){
+    if(id==='gate'){ openWelcome(); return; }
+    if(id==='partners'){ openPartners(); return; }
+    var b=building(id); if(!b) return; goTo(b);
+    if(b.subj){ openHall(b); return; }
+    var fn={hub:'openHub',office:'openOffice',club:'openClub',career:'openCareer',council:'openCouncil'}[b.role];
+    if(fn && typeof window[fn]==='function') window[fn]();
+  };
+  window.openQuick=function(){
+    setDialog('🧭','linear-gradient(135deg,#d4af52,#2a3550)','건물 바로가기','걷지 않고 바로 열기 · 키보드·화면낭독기 지원');
+    var body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+    var h='<div class="say"><span class="who">안내</span>원하는 곳을 고르면 그 건물 앞으로 이동해 바로 열립니다. 강의관 9곳에서는 강의 요약과 퀴즈를 이용할 수 있습니다.</div>';
+    QUICK.forEach(function(q){ var label=q[1]; if(!label){ var b=building(q[0]); if(!b) return; label=b.emoji+' '+b.name+(b.subj?' — '+SUBJ_NAME[b.subj]:''); }
+      h+='<button type="button" class="joblink" onclick="quickOpen(\''+q[0]+'\')">'+label+'<span aria-hidden="true">→</span></button>'; });
+    body.innerHTML=h; foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
+  };
+  var qb=document.getElementById('quickBtn'); if(qb) qb.onclick=function(){ window.openQuick(); };
+})();
 </script>
 </body>
 </html>
