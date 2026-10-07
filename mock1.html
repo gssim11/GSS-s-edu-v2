@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>물리치료사 국가시험 대비 모의고사 1회 (80문항 축약형)</title>
+<meta name="description" content="안산대학교 물리치료학과 국가시험 대비 원작 모의고사 1회 — 1교시 44문항, 2교시 36문항, 교시별 타이머·과목별 채점·오답 해설.">
+<script>(function(){var t=null;try{t=localStorage.getItem('aupt-mock-theme');}catch(e){}if(!t){t=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);})();</script>
+<style>
+:root{
+--c-primary:#2563eb;--c-primary-strong:#1d4ed8;--c-primary-deep:#17255a;
+--c-primary-050:#eff5ff;--c-primary-100:#dbe7fe;--c-primary-border:#cfe0fb;
+--ink:#0f172a;--ink-2:#334155;--ink-3:#64748b;--ink-4:#94a3b8;
+--bg:#eef2f8;--surface:#ffffff;--line:#e6eaf1;
+--amber:#b45309;--amber-bg:#fffbeb;--green:#15803d;--green-bg:#f0fdf4;--rose:#be123c;--rose-bg:#fff1f2;
+--r-sm:8px;--r-md:12px;--r-lg:16px;--r-pill:999px;
+--sh-sm:0 1px 2px rgba(15,23,42,.06);--sh-md:0 4px 14px rgba(15,23,42,.08);--sh-lg:0 12px 32px rgba(15,23,42,.12);
+}
+:root[data-theme="dark"]{
+--c-primary:#7aa2ff;--c-primary-strong:#9dbcff;--c-primary-deep:#d6e0ff;
+--c-primary-050:rgba(122,162,255,.12);--c-primary-100:rgba(122,162,255,.18);--c-primary-border:rgba(122,162,255,.34);
+--ink:#e9edfb;--ink-2:#c6cee7;--ink-3:#9aa4c4;--ink-4:#727c9c;
+--bg:#070a18;--surface:rgba(18,23,44,.86);--line:rgba(165,183,232,.15);
+--amber:#fbbf24;--amber-bg:rgba(245,158,11,.13);--green:#34d399;--green-bg:rgba(52,211,153,.12);--rose:#fb7185;--rose-bg:rgba(251,113,133,.12);
+--sh-sm:0 1px 2px rgba(0,0,0,.4);--sh-md:0 4px 14px rgba(0,0,0,.45);--sh-lg:0 12px 32px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;min-height:100vh}
+:root[data-theme="dark"] body{background:radial-gradient(1200px 600px at 10% -10%,rgba(91,110,255,.18),transparent 60%),radial-gradient(900px 500px at 110% 10%,rgba(168,85,247,.14),transparent 60%),var(--bg)}
+a{color:var(--c-primary)}
+.wrap{max-width:980px;margin:0 auto;padding:16px}
+header.top{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(10px)}
+header.top h1{font-size:1rem;margin:0;color:var(--c-primary-deep);font-weight:800;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{font:inherit;font-weight:700;border-radius:var(--r-md);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px 16px;cursor:pointer;box-shadow:var(--sh-sm)}
+.btn:hover{border-color:var(--c-primary-border)}
+.btn.primary{background:var(--c-primary);border-color:var(--c-primary);color:#fff}
+:root[data-theme="dark"] .btn.primary{color:#0b1020}
+.btn.ghost{background:transparent;box-shadow:none}
+.btn.sm{padding:6px 10px;font-size:.85rem}
+.btn:focus-visible,.opt:focus-visible,.nav-cell:focus-visible{outline:3px solid var(--c-primary);outline-offset:2px}
+.icon-btn{width:40px;height:40px;padding:0;display:inline-flex;align-items:center;justify-content:center}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-md);padding:20px;margin:16px 0}
+.hero h2{margin:0 0 6px;font-size:1.5rem;color:var(--c-primary-deep)}
+.muted{color:var(--ink-3)}
+.pill{display:inline-block;padding:2px 10px;border-radius:var(--r-pill);background:var(--c-primary-050);border:1px solid var(--c-primary-border);color:var(--c-primary-strong);font-size:.78rem;font-weight:700;margin:2px 4px 2px 0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.session{border:1px solid var(--line);border-radius:var(--r-md);padding:16px;background:var(--c-primary-050)}
+.session h3{margin:0 0 4px;color:var(--c-primary-deep)}
+.note{border-left:4px solid var(--amber);background:var(--amber-bg);color:var(--ink-2);padding:10px 14px;border-radius:var(--r-sm);font-size:.9rem;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left}
+th{color:var(--ink-3);font-weight:700}
+td.num,th.num{text-align:right}
+/* exam */
+.exam-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:4px;position:sticky;top:64px;z-index:15;background:var(--bg);padding:10px 0}
+#qcard{scroll-margin-top:140px}
+.timer{font-variant-numeric:tabular-nums;font-weight:800;font-size:1.15rem;padding:6px 12px;border-radius:var(--r-md);background:var(--c-primary-050);border:1px solid var(--c-primary-border);color:var(--c-primary-deep)}
+.timer.warn{background:var(--rose-bg);border-color:var(--rose);color:var(--rose)}
+.progress{flex:1;min-width:120px;height:8px;background:var(--line);border-radius:var(--r-pill);overflow:hidden}
+.progress>i{display:block;height:100%;background:var(--c-primary);width:0}
+.qhead{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.qno{font-weight:800;color:var(--c-primary-deep);font-size:1.1rem;margin-right:6px}
+.qtext{font-size:1.06rem;font-weight:600;margin:6px 0 14px;word-break:keep-all}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;cursor:pointer;word-break:keep-all}
+.opt:hover{border-color:var(--c-primary-border);background:var(--c-primary-050)}
+.opt .mk{flex:0 0 26px;height:26px;border-radius:50%;border:2px solid var(--ink-4);display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;color:var(--ink-3)}
+.opt[aria-checked="true"]{border-color:var(--c-primary);background:var(--c-primary-100)}
+.opt[aria-checked="true"] .mk{background:var(--c-primary);border-color:var(--c-primary);color:#fff}
+:root[data-theme="dark"] .opt[aria-checked="true"] .mk{color:#0b1020}
+.opt.correct{border-color:var(--green);background:var(--green-bg)}
+.opt.correct .mk{border-color:var(--green);color:var(--green)}
+.opt.wrong{border-color:var(--rose);background:var(--rose-bg)}
+.opt.wrong .mk{border-color:var(--rose);color:var(--rose)}
+.qnav{display:flex;justify-content:space-between;gap:8px;margin-top:16px;flex-wrap:wrap}
+.navgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:6px}
+.nav-cell{font:inherit;font-size:.82rem;font-weight:700;height:36px;border-radius:var(--r-sm);border:1px solid var(--line);background:transparent;color:var(--ink-2);cursor:pointer;position:relative}
+.nav-cell.ans{background:var(--c-primary-100);border-color:var(--c-primary-border);color:var(--c-primary-deep)}
+.nav-cell.cur{outline:2px solid var(--c-primary);outline-offset:1px}
+.nav-cell.flag::after{content:"";position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:var(--amber)}
+.legend{font-size:.8rem;color:var(--ink-3);margin-top:8px}
+/* results */
+.big{font-size:2.2rem;font-weight:900;color:var(--c-primary-deep);line-height:1.1}
+.verdict{display:inline-block;font-weight:800;padding:4px 12px;border-radius:var(--r-pill);margin-top:6px}
+.verdict.pass{background:var(--green-bg);color:var(--green);border:1px solid var(--green)}
+.verdict.fail{background:var(--rose-bg);color:var(--rose);border:1px solid var(--rose)}
+.bar{position:relative;height:14px;background:var(--line);border-radius:var(--r-pill);overflow:hidden;margin:4px 0 10px}
+.bar>i{display:block;height:100%;background:var(--c-primary)}
+.bar>i.low{background:var(--rose)}
+.bar .cut{position:absolute;top:0;bottom:0;width:2px;background:var(--ink)}
+.subj-row{display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:.92rem}
+.rev{border:1px solid var(--line);border-radius:var(--r-md);padding:14px;margin:10px 0}
+.rev .ex{margin-top:10px;padding:10px 12px;border-radius:var(--r-sm);background:var(--c-primary-050);border:1px solid var(--c-primary-border);color:var(--ink-2);font-size:.92rem}
+.rev .src{font-size:.8rem;color:var(--ink-3);margin-top:6px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.tabs .btn[aria-pressed="true"]{background:var(--c-primary);color:#fff;border-color:var(--c-primary)}
+:root[data-theme="dark"] .tabs .btn[aria-pressed="true"]{color:#0b1020}
+.modal-bg{position:fixed;inset:0;background:rgba(2,6,23,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal-bg.show{display:flex}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-lg);padding:20px;max-width:420px;width:100%}
+:root[data-theme="dark"] .modal{background:#121733}
+.modal h3{margin:0 0 8px;color:var(--c-primary-deep)}
+.modal .acts{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+footer{color:var(--ink-3);font-size:.8rem;text-align:center;padding:24px 16px 40px}
+[hidden]{display:none!important}
+@media (max-width:560px){.wrap{padding:12px}.card{padding:16px}.qtext{font-size:1rem}.big{font-size:1.8rem}}
+@media print{
+ :root,:root[data-theme="dark"]{--bg:#fff;--surface:#fff;--ink:#000;--ink-2:#111;--ink-3:#333;--line:#bbb;--c-primary-deep:#000;--c-primary-050:#fff;--c-primary-100:#eee;--green-bg:#fff;--rose-bg:#fff;--amber-bg:#fff}
+ body{background:#fff!important;color:#000}
+ header.top,.no-print,.qnav,.tabs{display:none!important}
+ .card,.rev{box-shadow:none;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>🩺 물리치료사 국시 대비 모의고사 1회</h1>
+  <button class="btn ghost icon-btn" id="themeBtn" aria-label="밝은/어두운 화면 전환" title="화면 테마 전환">🌓</button>
+</header>
+<div id="live" class="sr-only" aria-live="polite"></div>
+
+<main class="wrap">
+<!-- 시작 화면 -->
+<section id="home">
+  <div class="card hero">
+    <span class="pill">2026-2 · 안산대학교 물리치료학과</span><span class="pill">80문항 축약형</span><span class="pill">원작 문항</span>
+    <h2>물리치료사 국가시험 대비 모의고사 1회</h2>
+    <p class="muted">최근 국가시험의 교시·과목 구성 비율에 맞춰 문항 수를 줄인 원작 모의고사입니다. 기출문제 원문은 쓰지 않았고, 최근 기출의 출제 영역과 빈도만 설계도로 삼았습니다.</p>
+    <div class="grid2">
+      <div class="session">
+        <h3>1교시 · 44문항 · 44분</h3>
+        <div class="muted">물리치료 기초 25 · 물리치료 진단평가 19</div>
+        <div style="margin-top:10px"><button class="btn primary" data-start="1">1교시 시작</button></div>
+      </div>
+      <div class="session">
+        <h3>2교시 · 36문항 · 36분</h3>
+        <div class="muted">물리치료 중재 28 · 의료관계법규 8</div>
+        <div style="margin-top:10px"><button class="btn primary" data-start="2">2교시 시작</button></div>
+      </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" data-start="all">1·2교시 연속 응시 (80분)</button>
+      <button class="btn" id="resumeBtn" hidden>이어서 풀기</button>
+    </div>
+    <div class="note">채점 기준은 국가시험 필기 합격 기준으로 알려진 <b>과목별 40% 이상</b>과 <b>전 과목 총점 60% 이상</b>을 적용했습니다. 실제 기준과 시험 시간은 한국보건의료인국가시험원 공고로 확인하세요. 이 모의고사의 시간은 문항당 1분으로 정한 학습용 설정입니다. 의료관계법규 문항은 2026년 10월 8일 현재 시행 중인 조문을 기준으로 했으며, 법령이 바뀌면 정답이 달라질 수 있습니다.</div>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0;color:var(--c-primary-deep)">출제 설계(블루프린트)</h3>
+    <table id="bpTable"><thead><tr><th>교시</th><th>과목</th><th>세부 영역(문항 수)</th><th class="num">문항</th></tr></thead><tbody></tbody></table>
+    <p class="muted" style="font-size:.85rem;margin-bottom:0">과목 비율은 최근 국가시험 구성(1교시 기초 60·진단평가 45, 2교시 중재 65·법규 20)을 80문항으로 줄인 것입니다. 신경계 영역 일부는 학과 자체 제작 학습앱 「신경계물리치료 국시아레나」의 주제를 국시형 사례 문항으로 다시 쓴 것입니다.</p>
+  </div>
+</section>
+
+<!-- 시험 화면 -->
+<section id="exam" hidden>
+  <div class="exam-bar">
+    <strong id="sessLabel"></strong>
+    <span class="timer" id="timer" role="timer" aria-label="남은 시간">--:--</span>
+    <div class="progress" aria-hidden="true"><i id="progBar"></i></div>
+    <span class="muted" id="progTxt"></span>
+  </div>
+  <div class="card" id="qcard">
+    <div class="qhead"><span class="qno" id="qno"></span><span class="pill" id="qsubj"></span><span class="pill" id="qarea"></span></div>
+    <div class="qtext" id="qtext"></div>
+    <div class="opts" id="opts" role="radiogroup" aria-labelledby="qtext"></div>
+    <div class="qnav">
+      <button class="btn" id="prevBtn">← 이전</button>
+      <button class="btn" id="flagBtn" aria-pressed="false">☆ 다시 볼 문항 표시</button>
+      <button class="btn primary" id="nextBtn">다음 →</button>
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+      <strong>답안 표기 현황</strong>
+      <button class="btn primary" id="submitBtn">교시 제출</button>
+    </div>
+    <div class="navgrid" id="navgrid"></div>
+    <div class="legend">파란 칸 = 답 표기 · 노란 점 = 다시 볼 문항 · 키보드: 1~5 보기 선택, ←/→ 문항 이동</div>
+  </div>
+</section>
+
+<!-- 쉬는 시간 -->
+<section id="break" hidden>
+  <div class="card hero">
+    <h2>1교시 제출 완료</h2>
+    <p class="muted">준비가 되면 2교시를 시작하세요. 결과는 2교시까지 마친 뒤 함께 보여 드립니다.</p>
+    <button class="btn primary" id="go2Btn">2교시 시작</button>
+  </div>
+</section>
+
+<!-- 결과 화면 -->
+<section id="result" hidden>
+  <div class="card">
+    <div class="muted" id="resTitle"></div>
+    <div class="big" id="resScore"></div>
+    <div id="resVerdict"></div>
+    <p class="muted" id="resNote" style="font-size:.88rem"></p>
+    <div id="subjBars" style="margin-top:12px"></div>
+    <div class="no-print" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <button class="btn primary" id="retryWrongBtn">틀린 문항만 다시 풀기</button>
+      <button class="btn" id="printBtn">결과·해설 인쇄</button>
+      <button class="btn" id="homeBtn">처음으로</button>
+    </div>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0;color:var(--c-primary-deep)">세부 영역별 정답률</h3>
+    <table id="areaTable"><thead><tr><th>과목</th><th>영역</th><th class="num">정답/문항</th><th class="num">정답률</th></tr></thead><tbody></tbody></table>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0;color:var(--c-primary-deep)">문항별 해설</h3>
+    <div class="tabs" role="group" aria-label="해설 보기 범위">
+      <button class="btn sm" data-filter="wrong" aria-pressed="true">틀린 문항</button>
+      <button class="btn sm" data-filter="flag" aria-pressed="false">표시한 문항</button>
+      <button class="btn sm" data-filter="all" aria-pressed="false">전체</button>
+    </div>
+    <div id="reviewList"></div>
+  </div>
+</section>
+</main>
+
+<div class="modal-bg" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="modal">
+    <h3 id="mTitle"></h3>
+    <div id="mBody" class="muted"></div>
+    <div class="acts"><button class="btn" id="mCancel">계속 풀기</button><button class="btn primary" id="mOk">제출</button></div>
+  </div>
+</div>
+
+<footer><a href="https://gss-edu-v2.vercel.app/" class="no-print">🏫 물리치료학과 캠퍼스로 돌아가기</a><br><br>원작 문항 · 국가시험 기출문제 원문 미사용 · 학습용 자료이며 실제 시험의 난이도·합격 여부를 보장하지 않습니다.<br>안산대학교 물리치료학과 · 2026-2 · 교수 검토용 초안</footer>
+
+<script>
+var DATA=[{"n":1,"sec":"기초","area":"해부","q":"회전근띠 근육 중 위팔뼈 작은결절에 닿는 근육은?","o":["큰원근","어깨밑근","가시아래근","가시위근","작은원근"],"a":1,"ex":"어깨밑근만 작은결절에 닿아 안쪽돌림을 담당한다. 가시위근·가시아래근·작은원근은 큰결절에 닿고, 큰원근은 회전근띠가 아니며 결절사이고랑 안쪽입술에 닿는다.","src":"해부학 교과서 수준 [사실]","arena":""},{"n":2,"sec":"기초","area":"해부","q":"손목굴(수근관)을 통과하지 않는 구조물은?","o":["얕은손가락굽힘근 힘줄","깊은손가락굽힘근 힘줄","긴엄지굽힘근 힘줄","정중신경","긴손바닥근 힘줄"],"a":4,"ex":"긴손바닥근 힘줄은 굽힘근지지띠의 얕은 쪽을 지나 손바닥널힘줄로 이어지므로 손목굴 밖에 있다. 손목굴에는 정중신경과 손가락·엄지 굽힘근 힘줄 9개가 지난다.","src":"해부학 교과서 수준 [사실]","arena":""},{"n":3,"sec":"기초","area":"해부","q":"넙다리삼각(대퇴삼각)의 가쪽 경계를 이루는 구조는?","o":["샅고랑인대","긴모음근","두덩근","넙다리빗근","엉덩허리근"],"a":3,"ex":"넙다리삼각은 위쪽 샅고랑인대, 안쪽 긴모음근 안쪽모서리, 가쪽 넙다리빗근 안쪽모서리로 둘러싸인다. 두덩근과 엉덩허리근은 바닥을 이룬다.","src":"해부학 교과서 수준 [사실]","arena":""},{"n":4,"sec":"기초","area":"해부","q":"축구 경기 중 발목이 발바닥쪽굽힘·안쪽번짐 상태로 꺾였다. 가장 먼저, 가장 흔히 손상되는 인대는?","o":["뒤목말종아리인대","세모인대(삼각인대)","앞목말종아리인대","발꿈치종아리인대","발바닥발꿈치발배인대"],"a":2,"ex":"발바닥쪽굽힘+안쪽번짐 기전의 가쪽 발목 염좌에서는 앞목말종아리인대가 먼저 손상되고, 힘이 더 크면 발꿈치종아리인대가 뒤따른다. 세모인대는 가쪽번짐 손상에서 다친다.","src":"근골격 해부·스포츠의학 교과서 수준 [사실]","arena":""},{"n":5,"sec":"기초","area":"해부","q":"종아리뼈목 골절 후 발등굽힘과 발가락 폄이 약해지고 발등 피부감각이 떨어졌다. 손상된 신경은?","o":["온종아리신경","폐쇄신경","넙다리신경","정강신경","두렁신경"],"a":0,"ex":"온종아리신경은 종아리뼈목을 감아 돌며 얕은·깊은종아리신경으로 나뉜다. 이 부위 손상 시 앞칸(발등굽힘·발가락 폄)과 가쪽칸 근육이 약해져 발처짐이 생긴다. 정강신경 손상은 발바닥쪽굽힘 약화를 일으킨다.","src":"해부학 교과서 수준 [사실]","arena":""},{"n":6,"sec":"기초","area":"해부","q":"위팔뼈 외과목 골절 후 팔 벌림이 약해지고 어깨 가쪽 피부감각이 떨어졌다. 손상된 신경은?","o":["근육피부신경","어깨위신경","긴가슴신경","노신경","겨드랑신경"],"a":4,"ex":"겨드랑신경은 외과목을 감아 돌며 어깨세모근·작은원근을 지배하고 위가쪽위팔피부신경으로 어깨 가쪽 감각을 맡는다. 노신경은 위팔뼈 몸통(노신경고랑) 골절에서 다친다.","src":"해부학 교과서 수준 [사실]","arena":""},{"n":7,"sec":"기초","area":"해부","q":"가시돌기가 길고 끝이 갈라지지 않아 목 아래쪽에서 피부 위로 쉽게 만져지는 척추뼈는?","o":["일곱째 목뼈","중쇠뼈","다섯째 목뼈","셋째 등뼈","고리뼈"],"a":0,"ex":"일곱째 목뼈는 솟을뼈(vertebra prominens)라 하며 긴 가시돌기 끝이 갈라지지 않아 촉진 기준점이 된다. 셋째~여섯째 목뼈는 가시돌기 끝이 두 갈래이고 고리뼈에는 가시돌기가 없다.","src":"해부학 교과서 수준 [사실]","arena":""},{"n":8,"sec":"기초","area":"해부","q":"엉덩관절 인대 중 가장 강하며 선 자세에서 엉덩관절의 과도한 폄을 막는 인대는?","o":["넙다리뼈머리인대","엉덩넙다리인대","가로절구인대","두덩넙다리인대","궁둥넙다리인대"],"a":1,"ex":"Y인대라고도 하는 엉덩넙다리인대는 인체에서 가장 강한 인대 중 하나로, 폄을 제한해 선 자세에서 골반이 뒤로 넘어가지 않게 한다.","src":"해부학·운동학 교과서 수준 [사실]","arena":""},{"n":9,"sec":"기초","area":"생리","q":"골격근 흥분-수축 연결에서 근형질세망으로부터 나온 칼슘이온이 결합하는 단백질은?","o":["미오신","티틴","트로포닌","액틴","트로포미오신"],"a":2,"ex":"칼슘이 트로포닌 C에 결합하면 트로포미오신이 밀려나 액틴의 결합 부위가 드러나고, 미오신 머리가 교차다리를 형성한다.","src":"생리학 교과서 수준 [사실]","arena":""},{"n":10,"sec":"기초","area":"생리","q":"등척성 수축의 힘을 서서히 높일 때 운동단위가 동원되는 순서로 옳은 것은?","o":["근육 길이가 짧을수록 큰 운동단위가 먼저 동원된다","제II형 섬유가 가장 먼저 동원된다","큰 운동단위부터 작은 운동단위 순으로 동원된다","작은 운동신경세포의 운동단위부터 큰 운동단위 순으로 동원된다","모든 운동단위가 동시에 동원되고 발화빈도만 증가한다"],"a":3,"ex":"헤네만의 크기원리에 따라 역치가 낮은 작은 운동신경세포(주로 제I형 섬유 지배)가 먼저 동원되고, 힘이 커질수록 큰 운동단위(제II형)가 추가된다.","src":"Henneman 크기원리, 생리학 교과서 수준 [사실]","arena":""},{"n":11,"sec":"기초","area":"생리","q":"정맥환류가 늘어 심실의 이완기말 용적이 커지면 1회박출량이 증가하는 원리는?","o":["헨리 법칙","프랭크-스탈링 법칙","보일 법칙","푸아죄유 법칙","라플라스 법칙"],"a":1,"ex":"심근이 더 늘어나면 수축력이 커져 1회박출량이 증가한다(프랭크-스탈링 법칙). 보일 법칙은 기체 압력-부피, 헨리 법칙은 기체 용해도에 관한 것이다.","src":"생리학 교과서 수준 [사실]","arena":""},{"n":12,"sec":"기초","area":"생리","q":"단순 폐활량계(spirometer)로 직접 측정할 수 없는 폐용적은?","o":["폐활량","들숨예비량","잔기량","일회호흡량","날숨예비량"],"a":2,"ex":"잔기량은 최대 날숨 뒤에도 폐에 남는 공기여서 폐활량계로 직접 잴 수 없다. 측정에는 헬륨희석법이나 체적변동기록법이 필요하며, 잔기량을 포함하는 기능적잔기량·총폐용량도 마찬가지다.","src":"호흡생리 교과서 수준 [사실]","arena":""},{"n":13,"sec":"기초","area":"생리","q":"근육의 장력 증가를 감지하여 Ib 구심섬유를 통해 같은 근육을 억제(자가억제)하는 수용기는?","o":["골지힘줄기관","파치니소체","자유신경종말","마이스너소체","근방추"],"a":0,"ex":"골지힘줄기관은 근육-힘줄 이음부에서 장력을 감지하고 Ib 섬유와 억제성 사이신경세포를 거쳐 같은 근육을 억제한다. 근방추는 길이 변화를 감지(Ia·II)하여 신장반사를 일으킨다.","src":"신경생리 교과서 수준 [사실]","arena":"na31"},{"n":14,"sec":"기초","area":"운동학","q":"다음 중 1종 지레에 해당하는 것은?","o":["넙다리네갈래근에 의한 무릎 폄","위팔두갈래근에 의한 팔꿈치 굽힘","엉덩허리근에 의한 엉덩관절 굽힘","고리뒤통수관절을 받침점으로 목폄근이 머리의 균형을 잡는 것","어깨세모근에 의한 어깨 벌림"],"a":3,"ex":"머리 균형은 받침점(고리뒤통수관절)이 무게중심(머리)과 힘점(목폄근) 사이에 있는 1종 지레다. 나머지는 힘점이 받침점과 저항점 사이에 있는 3종 지레로, 인체에서 가장 흔하다.","src":"운동학 교과서 수준 [사실]","arena":""},{"n":15,"sec":"기초","area":"운동학","q":"앉은 자세에서 열린사슬로 무릎을 펼 때 정강뼈 관절면의 미끄럼 방향은?","o":["뒤쪽","가쪽","안쪽","미끄럼 없이 굴림만 일어난다","앞쪽"],"a":4,"ex":"오목한 정강뼈 관절면이 볼록한 넙다리뼈 위에서 움직이므로 오목-볼록 규칙에 따라 굴림과 미끄럼이 같은 방향, 즉 앞쪽으로 일어난다.","src":"관절운동학(오목-볼록 규칙) [사실]","arena":""},{"n":16,"sec":"기초","area":"운동학","q":"어깨 벌림 180° 동안 위팔오목관절과 어깨가슴관절 운동량의 비(어깨위팔리듬)는?","o":["2 : 1","1 : 1","1 : 2","3 : 1","4 : 1"],"a":0,"ex":"전체 180° 가운데 위팔오목관절이 약 120°, 어깨뼈 위쪽돌림이 약 60°를 담당해 평균 2:1이다. 운동 구간별로 비율은 달라진다.","src":"Inman 등 고전 연구, 운동학 교과서 수준 [사실]","arena":""},{"n":17,"sec":"기초","area":"운동학","q":"오른다리로 한발서기를 할 때 왼쪽 골반이 아래로 처진다. 약화가 의심되는 근육은?","o":["오른쪽 넙다리빗근","왼쪽 엉덩허리근","오른쪽 큰볼기근","왼쪽 중간볼기근","오른쪽 중간볼기근"],"a":4,"ex":"트렌델렌버그 징후는 체중을 받는 쪽 엉덩관절 벌림근(중간볼기근)이 약해 반대쪽 골반을 수평으로 유지하지 못할 때 나타난다. 오른다리 지지 시 왼쪽 골반이 처지면 오른쪽 중간볼기근 약화다.","src":"운동학·근골격 평가 교과서 수준 [사실]","arena":""},{"n":18,"sec":"기초","area":"운동학","q":"정상 보행속도에서 한 다리의 보행주기 중 입각기와 유각기의 대략적 비율은?","o":["60 : 40","50 : 50","40 : 60","70 : 30","80 : 20"],"a":0,"ex":"정상 보행속도에서 입각기는 약 60%, 유각기는 약 40%이며, 양하지 지지기가 두 번(각 약 10%) 포함된다. 속도가 빨라지면 입각기 비율이 줄어든다.","src":"Perry 보행분석 교과서 수준 [사실]","arena":""},{"n":19,"sec":"기초","area":"물리적인자","q":"피부에서 약 1~2 cm 깊이의 얕은 조직을 초음파로 가열하려 할 때 가장 적절한 주파수는?","o":["1 MHz","100 Hz","10 kHz","3 MHz","0.5 MHz"],"a":3,"ex":"주파수가 높을수록 흡수가 빨라 얕은 조직에 에너지가 집중된다. 3 MHz는 얕은 조직, 1 MHz는 깊은 조직(약 2~5 cm)에 쓴다. 10 kHz·100 Hz는 치료용 초음파 주파수가 아니다.","src":"물리적인자치료 교과서 수준 [사실]","arena":""},{"n":20,"sec":"기초","area":"물리적인자","q":"표재열(핫팩)을 적용했을 때 나타나는 생리적 효과로 옳은 것은?","o":["신경전도속도 감소","결합조직의 신장성 증가","국소 혈관수축","조직 대사율 감소","관절 내 점성 증가"],"a":1,"ex":"열은 콜라겐의 신장성을 높이고 혈관확장·대사율 증가·신경전도속도 증가를 일으킨다. 나머지 보기는 모두 한랭 적용 시 나타나는 효과다.","src":"물리적인자치료 교과서 수준 [사실]","arena":""},{"n":21,"sec":"기초","area":"물리적인자","q":"관문조절이론에 근거해 즉각적 진통을 얻으려는 일반형(conventional) TENS의 설정으로 가장 적절한 것은?","o":["낮은 주파수(1~4 Hz), 감각 역치 이하 강도","낮은 주파수(1~4 Hz), 긴 펄스폭, 운동 수준 강도","높은 주파수(약 50~100 Hz), 짧은 펄스폭, 감각 수준 강도","직류(galvanic) 연속 통전","높은 주파수(약 100 Hz), 강한 근수축이 생기는 강도로 1시간 이상"],"a":2,"ex":"일반형 TENS는 고빈도·짧은 펄스폭·편안한 감각 수준으로 굵은 Aβ 섬유를 자극해 척수 뒤뿔에서 통증 전달을 억제한다. 저빈도·운동 수준(침형) TENS는 내인성 아편유사물질 분비 기전과 연결된다.","src":"Melzack & Wall 관문조절이론, 전기치료 교과서 수준 [사실]","arena":""},{"n":22,"sec":"기초","area":"물리적인자","q":"손가락에 얼음물을 오래 적용하면 혈관수축과 일시적 혈관확장이 번갈아 나타난다. 이 반응은?","o":["레이노 현상","한랭유발 혈관확장(헌팅 반응)","삼중반응","축삭반사에 의한 발한","반동성 충혈 없는 지속적 혈관수축"],"a":1,"ex":"루이스(Lewis)가 기술한 한랭유발 혈관확장은 조직 손상을 막기 위해 혈관수축과 확장이 주기적으로 반복되는 현상으로, 손가락·발가락처럼 동정맥문합이 많은 말단에서 뚜렷하다.","src":"Lewis 헌팅 반응, 교과서 수준 [사실]","arena":""},{"n":23,"sec":"기초","area":"물리적인자","q":"말초신경 완전손상으로 탈신경된 근육을 전기자극으로 수축시키려 할 때 가장 적절한 파형은?","o":["100 Hz 일반형 TENS","4000 Hz 간섭전류","2500 Hz 러시안 전류","펄스폭 50 μs의 대칭 이상파","펄스폭이 긴(수십~수백 ms) 단상 단속 직류"],"a":4,"ex":"탈신경근은 신경이 아닌 근섬유막을 직접 흥분시켜야 해서 긴 펄스폭이 필요하다. 짧은 펄스폭 파형과 중주파 전류는 정상 신경을 통해 근육을 수축시키는 용도다.","src":"전기치료 교과서 수준 [사실]","arena":""},{"n":24,"sec":"기초","area":"공중보건","q":"어떤 만성질환의 발생률은 변하지 않았는데 유병률이 증가했다. 가장 적절한 설명은?","o":["새로운 환자 발생이 줄었다","환자가 다른 지역으로 많이 전출했다","완치율이 높아졌다","치료법 발달로 생존기간(이환기간)이 길어졌다","환자의 조기 사망이 늘었다"],"a":3,"ex":"정상 상태에서 유병률 ≈ 발생률 × 평균 이환기간이다. 발생률이 같을 때 유병률이 오르면 이환기간이 길어졌다는 뜻이다. 완치·사망·전출 증가는 유병률을 낮춘다.","src":"역학 교과서 수준 [사실]","arena":""},{"n":25,"sec":"기초","area":"공중보건","q":"뇌졸중 환자에게 기능 회복과 사회복귀를 위한 재활치료를 제공하는 것은 질병 예방 단계 중 어디에 해당하는가?","o":["예방에 해당하지 않음","2차 예방","3차 예방","1차 예방","원초적 예방"],"a":2,"ex":"1차 예방은 발병 전 위험요인 관리, 2차 예방은 조기발견·조기치료, 3차 예방은 장애 최소화와 재활이다.","src":"Leavell & Clark 예방 단계, 공중보건 교과서 수준 [사실]","arena":""},{"n":26,"sec":"진단평가","area":"근골격","q":"무릎을 20~30° 굽힌 상태에서 넙다리를 고정하고 정강뼈를 앞으로 당기자, 반대쪽보다 앞전위가 크고 끝느낌이 물렁했다. 손상이 의심되는 구조는?","o":["앞십자인대","무릎뼈인대","안쪽곁인대","뒤십자인대","가쪽곁인대"],"a":0,"ex":"라흐만 검사 양성 소견이다. 앞십자인대는 정강뼈의 앞전위를 막는 주된 구조이며, 20~30° 굽힘은 앞당김검사(90°)보다 민감도가 높다.","src":"근골격 특수검사 교과서 수준 [사실]","arena":""},{"n":27,"sec":"진단평가","area":"근골격","q":"바로 누운 환자의 무릎을 최대로 굽힌 뒤 정강뼈를 가쪽돌림하고 밖굽이(외반) 힘을 주며 펴자, 안쪽 관절선에서 딸깍 소리와 통증이 났다. 의심되는 손상은?","o":["가쪽곁인대 파열","무릎뼈 연골연화증","안쪽반달 뒤쪽 파열","가쪽반달 앞쪽 파열","앞십자인대 파열"],"a":2,"ex":"맥머레이 검사에서 정강뼈 가쪽돌림과 함께 안쪽 관절선에 증상이 나타나면 안쪽반달(특히 뒤뿔) 손상을 시사한다.","src":"McMurray 검사, 교과서 수준 [사실]","arena":""},{"n":28,"sec":"진단평가","area":"근골격","q":"옆으로 누워 위쪽 엉덩관절을 벌리고 편 뒤 놓았을 때 다리가 아래로 떨어지지 않고 벌림 위치에 머문다. 단축이 의심되는 구조는?","o":["긴모음근","넙다리곧은근","엉덩허리근","넙다리뒤근육","엉덩정강띠(넙다리근막긴장근)"],"a":4,"ex":"오버(Ober) 검사 양성이다. 엉덩정강띠와 넙다리근막긴장근이 짧으면 다리가 모음되지 않고 벌림 위치에 남는다.","src":"Ober 검사, 교과서 수준 [사실]","arena":""},{"n":29,"sec":"진단평가","area":"근골격","q":"토마스 검사에서 반대쪽 무릎을 가슴으로 당기자 검사쪽 넙다리가 침대에서 들렸고, 이때 검사쪽 무릎은 약 90° 굽힘을 유지했다. 가장 가능성 높은 해석은?","o":["넙다리곧은근 단독 단축","엉덩허리근(단관절 엉덩관절 굽힘근) 단축","넙다리뒤근육 단축","엉덩정강띠 단축","정상 소견"],"a":1,"ex":"넙다리가 들리면 엉덩관절 굽힘근 단축이다. 무릎이 정상적으로 굽혀진 채 유지되면 두관절근인 넙다리곧은근은 정상이고, 단관절근인 엉덩허리근 단축으로 해석한다. 넙다리곧은근이 짧으면 무릎이 펴진다.","src":"Thomas 검사, 교과서 수준 [사실]","arena":""},{"n":30,"sec":"진단평가","area":"근골격","q":"도수근력검사에서 중력을 거슬러 관절가동범위 전체를 움직일 수 있으나 검사자의 약한 저항도 견디지 못한다. 근력 등급은?","o":["1 (Trace)","2 (Poor)","3 (Fair)","4 (Good)","5 (Normal)"],"a":2,"ex":"중력에 대항해 전 범위를 움직이지만 저항을 견디지 못하면 3(Fair)이다. 2는 중력을 제거한 자세에서만 전 범위가 가능한 경우다.","src":"Daniels & Worthingham 도수근력검사 [사실]","arena":""},{"n":31,"sec":"진단평가","area":"근골격","q":"정상 팔꿈치를 수동으로 끝까지 폈을 때 느껴지는 끝느낌(end feel)은?","o":["부드러운(연부조직 접근) 끝느낌","단단한(관절낭·인대 신장) 끝느낌","근경련성 끝느낌","딱딱한(뼈와 뼈의 접촉) 끝느낌","빈(empty) 끝느낌"],"a":3,"ex":"팔꿈치 폄은 자뼈 팔꿈치머리가 위팔뼈 팔꿈치오목에 닿아 멈추므로 딱딱한 끝느낌이다. 부드러운 끝느낌은 팔꿈치 굽힘(근육 맞닿음), 빈 끝느낌은 통증으로 끝까지 가지 못하는 병적 소견이다.","src":"Cyriax 끝느낌 분류 [사실]","arena":""},{"n":32,"sec":"진단평가","area":"근골격","q":"바로 누운 환자의 다리를 편 채 50°까지 들자 엉덩이에서 종아리 뒤가쪽으로 퍼지는 통증이 생겼고, 이 위치에서 발목을 발등굽힘하자 통증이 더 심해졌다. 가장 적절한 해석은?","o":["넙다리뒤근육의 단순 단축","엉치엉덩관절 기능장애","엉덩관절 굽힘근 단축","허리엉치 신경뿌리(궁둥신경) 긴장에 의한 증상","무릎관절 내 장애"],"a":3,"ex":"다리곧게올리기 30~70° 범위의 방사통과, 근육 길이는 바꾸지 않고 신경만 긴장시키는 발목 발등굽힘(브라가드 검사)으로 악화되는 것은 신경뿌리 자극을 시사한다. 단순 근육 단축이라면 발등굽힘으로 증상이 달라지지 않아야 한다.","src":"SLR·Bragard 검사, 교과서 수준 [사실]","arena":""},{"n":33,"sec":"진단평가","area":"신경계","q":"두 발을 모으고 서서 눈을 뜨면 안정적이지만 눈을 감으면 크게 흔들려 넘어지려 한다. 손상이 가장 의심되는 경로는?","o":["뒤기둥-안쪽섬유띠 경로","가쪽겉질척수로","바닥핵","앞척수시상로","소뇌 벌레"],"a":0,"ex":"롬버그 양성은 시각 보상이 사라질 때 고유감각 결손이 드러나는 감각성 실조로, 뒤기둥-안쪽섬유띠 경로 손상을 시사한다. 소뇌성 실조는 눈을 뜨고도 불안정하다.","src":"신경학적 검사 교과서 수준 [사실]","arena":"as3"},{"n":34,"sec":"진단평가","area":"신경계","q":"뇌졸중 환자의 팔꿈치 굽힘근을 수동으로 신장하자 가동범위의 절반 미만에서 걸림이 나타나고, 남은 범위 내내 약한 저항이 이어졌다. Modified Ashworth Scale 등급은?","o":["0","1","1+","2","3"],"a":2,"ex":"1+는 걸림 뒤 남은 범위(절반 미만)에서 최소 저항이 이어지는 경우다. 1은 범위 끝에서만 약간의 저항 또는 걸림-풀림, 2는 대부분의 범위에서 뚜렷한 저항이 있으나 쉽게 움직이는 경우다.","src":"Bohannon & Smith(1987) MAS [사실]","arena":"st14"},{"n":35,"sec":"진단평가","area":"신경계","q":"좌측 편마비 환자가 팔의 굽힘공동운동을 스스로 일으킬 수 있으나 경직이 가장 심하고, 공동운동에서 벗어난 분리운동은 전혀 되지 않는다. 브룬스트롬 회복단계는?","o":["1단계","2단계","3단계","4단계","5단계"],"a":2,"ex":"3단계는 공동운동을 수의적으로 수행하고 경직이 최고조인 시기다. 4단계부터 손을 등 뒤로 돌리기 같은 일부 분리운동이 나타난다.","src":"Brunnstrom 회복단계 [사실]","arena":"st7"},{"n":36,"sec":"진단평가","area":"신경계","q":"외상성 척수손상 환자의 신경학적 손상 수준은 C6이다. 항문 깊은압박감과 S4-5 가벼운 촉각은 남아 있으나, 신경학적 수준 아래로 운동기능이 전혀 없다. ASIA 손상척도(AIS) 등급은?","o":["A","B","C","D","E"],"a":1,"ex":"S4-5 감각이 남아 불완전손상이지만 신경학적 수준 아래 운동기능이 없으므로 B(감각 불완전)다. 수준 아래 핵심근의 절반 이상이 3등급 미만이면서 운동이 일부 있으면 C, 절반 이상이 3등급 이상이면 D다.","src":"ISNCSCI/ASIA 손상척도 [사실]","arena":"sc10"},{"n":37,"sec":"진단평가","area":"신경계","q":"경직형 양하지마비 6세 아동이 실내외에서 보행보조기구 없이 걷지만, 고르지 않은 지면과 계단에서는 난간이 필요하고 달리기·점프가 서툴다. GMFCS 수준은?","o":["Ⅰ","Ⅱ","Ⅲ","Ⅳ","Ⅴ"],"a":1,"ex":"GMFCS Ⅱ(6~12세)는 대부분의 환경에서 걷지만 장거리·고르지 않은 지면·계단에서 제한이 있고 난간을 쓰며, 달리기·점프가 어렵다. Ⅰ은 제한 없이 걸으며 고급 운동만 서툴고, Ⅲ은 손에 드는 보행보조기구가 필요하다.","src":"GMFCS E&R(Palisano 등) [사실]","arena":"pd4"},{"n":38,"sec":"진단평가","area":"신경계","q":"손가락-코 검사에서 목표에 가까워질수록 손의 떨림이 커지고, 빠른 교대운동이 불규칙하다. 이 소견과 병변의 연결로 옳은 것은?","o":["자세떨림 – 뒤기둥","안정떨림 – 흑질","의도떨림 – 바닥핵","안정떨림 – 소뇌","의도떨림 – 소뇌"],"a":4,"ex":"목표지향 운동에서 커지는 의도떨림과 길항운동반복불능은 소뇌 병변의 특징이다. 안정떨림은 파킨슨병(흑질-줄무늬체 경로)의 특징이다.","src":"신경학적 검사 교과서 수준 [사실]","arena":"as4"},{"n":39,"sec":"진단평가","area":"신경계","q":"Berg Balance Scale(BBS)의 구성으로 옳은 것은?","o":["14개 항목, 각 0~4점, 총점 56점","12개 항목, 각 0~4점, 총점 48점","16개 항목, 각 0~4점, 총점 64점","10개 항목, 각 0~5점, 총점 50점","14개 항목, 각 0~3점, 총점 42점"],"a":0,"ex":"BBS는 앉기·서기·이동·한발서기 등 14개 과제를 0~4점으로 채점해 최대 56점이다. 점수가 낮을수록 낙상 위험이 크다.","src":"Berg 등(1989) [사실]","arena":"as1"},{"n":40,"sec":"진단평가","area":"심폐","q":"운동부하 중 보그 운동자각도(RPE 6~20)에서 환자가 13을 보고했다. 이 값의 의미는?","o":["매우 가볍다","매우 힘들다","가볍다","약간 힘들다","힘들다"],"a":3,"ex":"6~20 척도에서 13은 \"약간 힘들다(somewhat hard)\"이며, 심장재활 등에서 중등도 운동강도의 목표로 흔히 쓴다. 15는 \"힘들다\", 17은 \"매우 힘들다\"다.","src":"Borg RPE 척도 [사실]","arena":""},{"n":41,"sec":"진단평가","area":"심폐","q":"폐 청진 시 들숨 끝에 머리카락을 비비는 듯한 짧고 미세한 불연속음이 들렸다. 이 호흡음은?","o":["흉막마찰음","협착음(stridor)","천명음(wheeze)","그렁거림(rhonchi)","미세 수포음(fine crackles)"],"a":4,"ex":"미세 수포음은 닫혔던 작은 기도·폐포가 들숨 끝에 열리며 나는 불연속음으로 폐섬유증·폐부종 등에서 들린다. 천명음·그렁거림은 연속음이고, 협착음은 큰 기도 협착으로 생긴다.","src":"호흡기 청진 교과서 수준 [사실]","arena":""},{"n":42,"sec":"진단평가","area":"소아","q":"생후 9개월 아이의 머리를 오른쪽으로 돌리면 오른팔은 펴지고 왼팔은 굽혀지는 자세가 매번 나타난다. 이 반사는?","o":["비대칭성 긴장성 목반사(ATNR)","대칭성 긴장성 목반사(STNR)","모로반사","갈란트반사","긴장성 미로반사(TLR)"],"a":0,"ex":"ATNR은 얼굴을 돌린 쪽 팔다리가 펴지고 뒤통수 쪽이 굽혀지는 \"펜싱 자세\"다. 보통 생후 4~6개월에 통합되므로 9개월에도 강하게 남아 있으면 통합 지연을 의심한다.","src":"소아 반사발달 교과서 수준 [사실]","arena":"pd7"},{"n":43,"sec":"진단평가","area":"임상의사결정","q":"무릎 앞십자인대 재건술 후 환자의 문제를 ICF로 분류할 때 \"참여 제약\"에 해당하는 것은?","o":["무릎 굽힘 가동범위가 110°로 줄었다","넙다리네갈래근 근력이 4등급이다","활동 시 통증이 VAS 5점이다","계단을 내려갈 때 난간이 필요하다","주말 축구 동호회 경기에 나가지 못한다"],"a":4,"ex":"ICF에서 가동범위·근력·통증은 신체기능·구조 손상, 계단 내려가기 같은 과제 수행 어려움은 활동 제한, 사회적 역할·생활상황 관여의 어려움(동호회 경기)은 참여 제약이다.","src":"WHO ICF(2001) [사실]","arena":""},{"n":44,"sec":"진단평가","area":"임상의사결정","q":"SOAP 기록에서 O(객관적 자료)에 들어갈 내용은?","o":["5년 전 같은 쪽 무릎 염좌 과거력","각도계로 측정한 무릎 굽힘 가동범위 110°","2주 안에 난간 없이 계단 오르기 자립을 목표로 함","환자가 \"계단을 내려갈 때 무릎 앞쪽이 아프다\"고 말함","다음 주부터 닫힌사슬 운동을 추가할 계획"],"a":1,"ex":"O는 측정·관찰·검사 결과다. 환자 진술과 과거력은 S, 문제 해석은 A, 치료 계획은 P에 쓴다. 목표는 기관에 따라 A 또는 P에 적는다.","src":"물리치료 임상기록 교과서 수준 [사실]","arena":""},{"n":45,"sec":"중재","area":"근골격","q":"회전근띠(가시위근) 봉합술 후 2주 된 환자에게 가장 적절한 운동은?","o":["저항밴드를 이용한 안쪽·가쪽돌림 근력운동","벽 짚고 팔굽혀펴기","덤벨을 든 능동 어깨 벌림 운동","진자운동과 치료사에 의한 수동 관절가동운동","머리 위 던지기 동작 훈련"],"a":3,"ex":"봉합 부위가 아무는 초기(대개 수술 후 약 6주까지)에는 봉합 힘줄에 능동 수축·저항이 걸리지 않도록 진자운동과 수동 관절가동운동을 한다. 능동·저항 운동은 의사의 프로토콜에 따라 이후 단계에서 시작한다.","src":"어깨 수술 후 재활 교과서 수준 [사실] — 구체 시기는 수술 프로토콜마다 다름","arena":""},{"n":46,"sec":"중재","area":"근골격","q":"앞십자인대 재건술 후 초기 단계에서 이식건에 걸리는 부하를 줄이면서 넙다리네갈래근을 강화하는 운동으로 가장 적절한 것은?","o":["0~45° 범위의 미니 스쿼트(닫힌사슬)","발목 모래주머니를 단 마지막 30° 무릎 폄","제자리 높이뛰기","방향 전환 달리기(cutting)","앉아서 90°→0° 범위 무릎 폄 저항운동(열린사슬)"],"a":0,"ex":"닫힌사슬 운동은 넙다리뒤근육 공동수축과 관절 압박으로 정강뼈 앞전위를 줄인다. 열린사슬 무릎 폄의 마지막 범위(약 0~45°)는 정강뼈 앞전단력이 커서 초기 이식건에 부담이 된다.","src":"ACL 재활 원리(생체역학 연구, 교과서 수준) [사실]","arena":""},{"n":47,"sec":"중재","area":"근골격","q":"뒤쪽 접근법으로 엉덩관절 전치환술을 받은 환자에게 수술 초기 동안 피하도록 교육해야 할 동작은?","o":["침대에서 수술한 다리를 벌린 상태로 유지하는 것","보행보조기구를 사용해 걷는 것","낮은 의자에 앉아 다리를 꼬는 동작","누울 때 두 다리 사이에 베개를 끼우는 것","높은 변기 보조 시트를 사용하는 것"],"a":2,"ex":"뒤쪽 접근법 후에는 엉덩관절 굽힘 90° 초과·모음·안쪽돌림이 합쳐질 때 탈구 위험이 크다. 낮은 의자에서 다리를 꼬면 세 동작이 한꺼번에 일어난다.","src":"THA 후 탈구 예방 교육, 교과서 수준 [사실]","arena":""},{"n":48,"sec":"중재","area":"근골격","q":"팔꿈치 가쪽위관절융기 통증(가쪽위관절융기병증) 환자의 손목폄근에 흔히 권장되는 근력운동 방식은?","o":["손목폄근 최대 등척성 수축을 통증 유발 수준까지 반복","완전 고정 후 4주간 운동 금지","손목굽힘근 고강도 동심성 운동만 시행","손목폄근 고속 탄도(ballistic) 운동","손목폄근 원심성 운동"],"a":4,"ex":"힘줄병증에서는 통증을 견딜 수 있는 범위의 원심성 부하가 흔히 권장된다. 장기간 고정은 힘줄의 적응을 떨어뜨리고, 고속 탄도운동은 초기 부하로 부적절하다.","src":"힘줄병증 운동치료 문헌·교과서 [사실·근거 수준은 연구마다 차이]","arena":""},{"n":49,"sec":"중재","area":"근골격","q":"어깨 관절낭 단축으로 가동범위가 줄어든 환자에게 관절낭을 신장할 목적으로 적용하는 관절가동술 강도는?","o":["Kaltenborn 1등급","Kaltenborn 3등급","Kaltenborn 2등급","Maitland 2등급","Maitland 1등급"],"a":1,"ex":"Kaltenborn 3등급은 관절의 느슨함을 넘어 조직을 신장하는 강도다. Kaltenborn 1·2등급과 Maitland 1·2등급은 통증 완화나 느슨함 제거가 목적이어서 관절낭을 늘리지 못한다.","src":"Kaltenborn·Maitland 등급 체계 [사실]","arena":""},{"n":50,"sec":"중재","area":"근골격","q":"오목-볼록 규칙에 따라 어깨 벌림 가동범위를 늘리기 위한 위팔뼈머리의 미끄럼 방향은?","o":["안쪽","뒤쪽","앞쪽","아래쪽(꼬리쪽)","위쪽(머리쪽)"],"a":3,"ex":"볼록한 위팔뼈머리가 오목한 관절오목 위에서 움직이므로 굴림(위쪽)과 반대 방향인 아래쪽으로 미끄럼이 일어난다. 따라서 벌림 제한에는 아래쪽 미끄럼을 적용한다.","src":"관절운동학, 교과서 수준 [사실]","arena":""},{"n":51,"sec":"중재","area":"근골격","q":"허리 통증과 왼쪽 엉덩이·넙다리 뒤쪽 통증이 있는 환자가 엎드려 허리 폄을 반복하자 넙다리 통증이 사라지고 통증이 허리 가운데로 모였다. 가장 적절한 판단은?","o":["통증 위치가 바뀌었으므로 굽힘 운동으로 바꾼다","허리 통증이 커졌으므로 운동 강도를 높인다","중심화 현상이므로 이 방향의 반복운동을 계속한다","중심화는 신경학적 악화 신호이므로 의뢰한다","말초화 현상이므로 즉시 중단한다"],"a":2,"ex":"증상이 먼 쪽에서 몸 중심으로 이동하는 중심화는 맥켄지 접근에서 좋은 예후를 시사하며, 그 방향의 운동을 계속하는 근거가 된다. 증상이 먼 쪽으로 퍼지는 말초화가 나타나면 중단한다.","src":"McKenzie MDT, 교과서 수준 [사실]","arena":""},{"n":52,"sec":"중재","area":"근골격","q":"강직척추염 환자의 운동 프로그램으로 가장 적절한 것은?","o":["척추 폄 운동과 가슴우리 확장 호흡운동","통증이 사라질 때까지 장기간 침상안정","척추 굽힘 위주의 윌리엄스 운동","높은 베개를 베고 굽힌 자세로 수면","가슴우리를 고정하는 코르셋 상시 착용"],"a":0,"ex":"강직척추염은 척추가 굽힘 자세로 굳기 쉬우므로 폄 자세 유지·폄 운동과, 갈비척추관절 침범으로 줄어드는 가슴우리 확장을 위한 호흡운동이 핵심이다.","src":"강직척추염 재활, 교과서 수준 [사실]","arena":""},{"n":53,"sec":"중재","area":"근골격","q":"척추 골다공증이 있는 70세 여성에게 피해야 할 운동은?","o":["등 폄근 강화 운동","걷기","가벼운 계단 오르기","체중을 실은 윗몸일으키기(척추 굽힘 반복)","균형 훈련"],"a":3,"ex":"척추를 굽히는 반복 부하는 척추몸통 앞쪽에 압박을 집중시켜 압박골절 위험을 높인다. 체중부하 운동·등 폄근 강화·균형 훈련은 골밀도 유지와 낙상 예방에 권장된다.","src":"골다공증 운동 지침, 교과서 수준 [사실]","arena":""},{"n":54,"sec":"중재","area":"신경계","q":"우측 편마비 환자가 앉거나 서 있을 때 왼팔·왼다리로 바닥을 밀어 마비된 오른쪽으로 쓰러지고, 바로 세워 주려 하면 저항한다. 가장 적절한 중재는?","o":["눈을 감기고 고유감각만으로 정중선을 찾게 한다","문틀 같은 시각적 수직 단서를 보여 주며 비마비쪽으로 체중을 옮기는 연습을 한다","마비쪽으로 체중을 더 싣게 하는 연습을 반복한다","더 세게 밀지 못하도록 왼팔을 묶어 고정한다","증상이 사라질 때까지 침상에 눕혀 둔다"],"a":1,"ex":"밀기증후군은 몸의 수직 인식이 마비쪽으로 기울어 생긴다. 시각 수직 단서로 정중선을 인식시키고 비마비쪽으로 체중을 옮기는 과제를 하면 밀기가 줄어든다. 강제로 바로 세우면 저항이 커진다.","src":"Karnath 등 pusher syndrome 연구, 교과서 수준 [사실]","arena":"st9"},{"n":55,"sec":"중재","area":"신경계","q":"건측억제-유도운동치료(CIMT)의 핵심 구성요소로 옳은 것은?","o":["마비쪽 팔을 보조기로 고정하고 비마비쪽 팔의 근력을 강화","양팔을 같은 비율로 쓰는 양측 훈련만 시행","마비쪽 팔의 수동 관절가동운동을 하루 10분 시행","손목·손가락 능동 폄이 전혀 없는 환자에게 우선 적용","비마비쪽 손을 장갑 등으로 제한하고, 마비쪽 팔로 과제 난이도를 단계적으로 높이는(shaping) 집중 반복 훈련"],"a":4,"ex":"CIMT는 비마비쪽 제한, 마비쪽 집중 반복 과제(shaping), 일상 사용을 늘리는 전이 전략으로 학습된 비사용을 극복한다. 손목·손가락 능동 폄이 어느 정도 있어야 적용 대상이 된다.","src":"Taub CIMT, EXCITE 시험 [사실]","arena":"st13"},{"n":56,"sec":"중재","area":"신경계","q":"뇌졸중 환자의 앉았다 일어서기 훈련 방법으로 옳은 것은?","o":["두 발을 무릎보다 앞에 두고 몸통을 뒤로 젖혀 일어선다","비마비쪽 다리에만 체중을 싣고 일어선다","두 발을 무릎보다 뒤로 당기고 몸통을 앞으로 굽혀 체중을 발 위로 옮긴 뒤 일어선다","몸통을 세운 채 무릎만 펴서 일어선다","팔걸이를 세게 밀어 팔 힘으로만 일어선다"],"a":2,"ex":"발을 뒤로 두면 지지면이 무게중심 아래에 오고, 몸통을 앞으로 굽혀 체중을 발 위로 옮긴 뒤 엉덩관절·무릎을 펴야 효율적으로 일어선다. 마비쪽 다리에도 체중을 싣도록 유도한다.","src":"Carr & Shepherd 운동재학습, 교과서 수준 [사실]","arena":"st12"},{"n":57,"sec":"중재","area":"신경계","q":"발병 2주 된 이완기 편마비 환자의 어깨 관리로 피해야 할 것은?","o":["어깨뼈를 위쪽돌림시키며 하는 부드러운 관절가동운동","바로 누운 자세에서 베개로 마비쪽 팔 받치기","휠체어 팔걸이 판(lap tray)으로 팔 지지","머리 위 도르래를 이용한 팔 올리기 운동","이동할 때 마비쪽 팔을 잡아당기지 않기"],"a":3,"ex":"머리 위 도르래 운동은 어깨뼈 위쪽돌림 없이 위팔뼈를 올려 충돌과 통증(편마비 어깨통증)을 유발하므로 피한다. 팔 지지와 바른 자세는 아탈구 악화를 막는다.","src":"편마비 어깨 관리, 뇌졸중 재활 지침·교과서 [사실]","arena":"st10"},{"n":58,"sec":"중재","area":"신경계","q":"파킨슨병 환자가 문턱 앞에서 발이 바닥에 붙은 듯 멈추는 보행 동결을 보인다. 가장 효과적인 중재는?","o":["바닥의 가로 표시선이나 메트로놈 박자 같은 외부 단서 제공","동결 시 상체를 앞으로 세게 밀어 주기","두 가지 과제를 동시에 수행하며 걷기","발목 모래주머니를 달아 걷기","보폭을 더 줄이도록 지시"],"a":0,"ex":"바닥핵 기능이 떨어진 파킨슨병에서는 시각·청각 외부 단서가 내적 운동 개시를 대신해 보폭과 리듬을 회복시킨다. 이중과제와 등을 미는 행동은 동결과 낙상 위험을 높인다.","src":"파킨슨병 물리치료 지침(KNGF/European PD guideline) 권고 [사실]","arena":"pk3"},{"n":59,"sec":"중재","area":"신경계","q":"C6 완전 척수손상 환자의 물리치료 시 피해야 할 것은?","o":["손목을 굽힌 상태에서 손가락 관절가동운동","힘줄고정(tenodesis) 쥐기 연습","어깨 주변근 강화","손목 폄근 근력 강화","손목을 편 상태에서 손가락 굽힘근을 최대로 신장하는 것"],"a":4,"ex":"C6 손상 환자는 손목을 펴면 손가락 굽힘근이 수동으로 당겨져 물건을 쥐는 힘줄고정 쥐기를 쓴다. 손목 폄+손가락 폄으로 굽힘근을 최대로 늘리면 이 기능이 사라진다.","src":"척수손상 재활 교과서 수준 [사실]","arena":"sc5"},{"n":60,"sec":"중재","area":"신경계","q":"T4 완전 척수손상 환자가 치료 중 갑자기 심한 두통·얼굴 홍조·서맥을 보이고 혈압이 크게 올랐다. 가장 먼저 할 조치는?","o":["즉시 운동 강도를 높여 증상을 견디게 한다","상체를 세워 앉히고 방광 팽만·꽉 끼는 옷 등 유발요인을 찾아 없앤다","바로 눕히고 다리를 높인다","따뜻한 찜질팩을 배에 대어 준다","증상이 사라질 때까지 지켜보기만 한다"],"a":1,"ex":"T6 이상 손상에서 생기는 자율신경반사부전이다. 상체를 세워 혈압을 낮추고 방광 팽만·변비·꽉 끼는 옷 같은 손상 수준 아래 유해자극을 찾아 제거한다. 다리를 높이면 혈압이 더 오른다.","src":"자율신경반사부전 관리(척수손상 임상지침) [사실]","arena":"sc8"},{"n":61,"sec":"중재","area":"신경계","q":"다발경화증 환자의 운동 시 주의사항으로 옳은 것은?","o":["피로가 심해질 때까지 매일 고강도로 운동한다","뜨거운 욕조에서 수중운동을 한다","체온 상승을 피하도록 시원한 환경에서 휴식을 섞어 운동한다","증상이 악화되면 강도를 높여 적응시킨다","오후 늦게 가장 힘든 운동을 몰아서 한다"],"a":2,"ex":"다발경화증 환자는 체온이 오르면 신경전도가 일시적으로 나빠져 증상이 악화되기 쉽다(우토프 현상). 시원한 환경, 간헐적 휴식, 피로 관리를 고려한 중등도 운동이 권장된다.","src":"다발경화증 운동 권고, 교과서 수준 [사실]","arena":"pk6"},{"n":62,"sec":"중재","area":"신경계","q":"감기 후 발에서 시작해 위로 올라오는 대칭성 이완마비와 반사소실이 진행 중인 환자에게 급성기 물리치료로 가장 적절한 것은?","o":["과부하·과피로를 피하며 관절가동운동, 자세 관리, 호흡기능 관찰을 한다","근력 회복을 위해 최대 저항운동을 한다","관절가동운동을 하지 않고 완전 안정만 한다","마비 진행을 막기 위해 장거리 보행 훈련을 한다","호흡근 침범은 드물므로 호흡 평가는 생략한다"],"a":0,"ex":"길랑-바레 증후군 급성 진행기에는 과사용이 회복을 늦출 수 있어 과부하를 피한다. 구축 예방을 위한 관절가동운동과 자세 관리, 호흡근 침범 감시(폐활량 등)가 핵심이다.","src":"GBS 재활, 교과서 수준 [사실]","arena":"pk7"},{"n":63,"sec":"중재","area":"신경계","q":"오른쪽 딕스-홀파이크 검사에서 짧은 잠복기 뒤 위쪽·회전성 안진과 어지럼이 나타났다. 가장 적절한 처치는?","o":["머리 움직임을 피하도록 목보조기 착용","시선안정화 운동만 시행","목 견인 치료","바비큐 롤(Lempert) 정복술","오른쪽 뒤반고리관을 위한 에플리(Epley) 정복술"],"a":4,"ex":"딕스-홀파이크 양성은 뒤반고리관 BPPV를 시사하며 에플리 정복술이 표준 처치다. 바비큐 롤은 가쪽(수평)반고리관 BPPV용이다.","src":"AAO-HNS BPPV 임상지침 [사실]","arena":"as6"},{"n":64,"sec":"중재","area":"심폐","q":"양쪽 아래엽 뒤바닥구역에 분비물이 고였을 때 체위배액 자세로 옳은 것은?","o":["옆으로 누워 침대를 수평으로 둔다","똑바로 앉은 자세","바로 누운 자세에서 무릎 아래 베개를 넣는다","엎드린 자세에서 침대 발쪽을 높여 머리를 낮춘다","바로 누운 자세에서 침대 머리쪽을 높인다"],"a":3,"ex":"뒤바닥구역은 가장 아래 뒤쪽에 있어 엎드린 자세에서 머리를 낮춰야(약 20° 기울임) 중력으로 분비물이 큰 기도 쪽으로 흐른다. 앉은 자세는 위엽 꼭대기구역 배액 자세다.","src":"체위배액 자세표, 심폐물리치료 교과서 [사실]","arena":""},{"n":65,"sec":"중재","area":"심폐","q":"만성폐쇄폐질환 환자에게 입술 오므리기 호흡을 지도하는 주된 이유는?","o":["동맥혈 이산화탄소를 의도적으로 높이기 위해","날숨 때 기도 내압을 높여 작은 기도가 일찍 닫히는 것을 막기 위해","들숨근의 근력을 직접 강화하기 위해","날숨 시간을 짧게 하기 위해","가로막의 움직임을 줄이기 위해"],"a":1,"ex":"입술을 오므리면 날숨 저항이 생겨 기도 안 압력이 유지되므로 작은 기도의 조기 허탈과 공기걸림이 줄고, 날숨이 길어지며 호흡수가 감소한다.","src":"호흡재활 교과서 수준 [사실]","arena":""},{"n":66,"sec":"중재","area":"심폐","q":"안정시 심박수 70회/분, 최대심박수 170회/분인 환자에게 카보넨 공식으로 여유심박수 60% 강도의 목표 심박수를 구하면?","o":["102회/분","120회/분","130회/분","140회/분","150회/분"],"a":2,"ex":"목표심박수 = (최대심박수 − 안정시심박수) × 강도 + 안정시심박수 = (170 − 70) × 0.6 + 70 = 130회/분이다. 102는 최대심박수의 60%로 잘못 계산한 값이다.","src":"Karvonen 공식 [사실·계산 검산]","arena":""},{"n":67,"sec":"중재","area":"소아","q":"근긴장이 매우 낮아 바로 누우면 개구리다리 자세를 취하는 뇌성마비 아동에게 가장 적절한 중재는?","o":["근긴장을 낮추기 위한 느린 흔들기와 따뜻한 물 이완","관절 압박을 동반한 체중지지 활동으로 관절 주위 공동수축을 촉진","자세 지지 없이 바로 독립 보행 훈련","지속적 수동 신장으로 관절가동범위 확대","모든 자세에서 완전 이완 유도"],"a":1,"ex":"저긴장 아동은 자세 안정성이 부족하므로 관절 압박·체중지지·빠른 자극으로 공동수축을 촉진해 안정성을 먼저 확보한다. 이완 기법은 긴장을 더 떨어뜨린다.","src":"소아 신경발달치료 교과서 수준 [사실]","arena":"pd5"},{"n":68,"sec":"중재","area":"소아","q":"경직형 양하지마비 아동이 걸을 때 무릎이 서로 교차하는 가위보행을 보인다. 가장 우선적으로 고려할 중재는?","o":["엉덩관절 모음근 신장과 벌림 자세 유지","엉덩관절 모음근 강화 운동","넙다리근막긴장근 신장","발목 발바닥쪽굽힘근 강화","다리를 모은 자세로 앉히기"],"a":0,"ex":"가위보행은 엉덩관절 모음근(및 안쪽돌림근)의 경직·단축 때문이다. 모음근 신장, 벌림 자세 유지(벌림 쐐기 등)가 기본 중재다.","src":"소아 물리치료 교과서 수준 [사실]","arena":""},{"n":69,"sec":"중재","area":"피부·림프","q":"유방암 수술 후 팔 림프부종 환자에게 복합림프물리치료 집중기에 적용하는 압박 방법으로 옳은 것은?","o":["간헐적 공기압박 단독 치료","온열팩 적용 후 고강도 심부 마사지","긴 신장성(고탄력) 붕대 한 겹 감기","짧은 신장성(저탄력) 붕대를 이용한 다층 압박붕대","압박 없이 팔을 높이 들고 있기"],"a":3,"ex":"짧은 신장성 붕대는 안정 시 압력이 낮고 근수축 시 작업 압력이 높아 림프 흐름을 돕는다. 집중기에는 도수림프배출 후 다층 붕대를 감고, 유지기에 압박 의복으로 바꾼다. 온열과 강한 마사지는 부종을 악화시킬 수 있다.","src":"CDT(ISL Consensus) [사실]","arena":""},{"n":70,"sec":"중재","area":"피부·림프","q":"목 앞쪽에 깊은 2도 화상을 입은 환자의 구축 예방 자세로 옳은 것은?","o":["턱을 가슴에 붙인 자세","목을 한쪽으로 돌린 채 고정","편안한 자세면 어느 것이든 무방","높은 베개를 베어 목을 굽힌 자세","베개를 빼고 목을 약간 편 자세"],"a":4,"ex":"화상 구축은 대개 편안한 굽힘 자세로 생기므로 화상 부위 피부가 늘어난 자세로 둔다. 목 앞쪽 화상은 베개를 빼고(필요시 어깨 아래 수건) 목을 약간 편다.","src":"화상 재활 자세 원칙, 교과서 수준 [사실]","arena":""},{"n":71,"sec":"중재","area":"보조기·운동치료","q":"오른쪽 무릎 골관절염 환자에게 지팡이 사용법을 교육할 때 옳은 것은?","o":["양손에 번갈아 쥐고, 높이는 무릎 높이로 맞춘다","왼손으로 짚고, 지팡이 높이는 넙다리뼈 큰돌기 높이로 맞춘다","오른손으로 짚고, 지팡이 높이는 허리선에 맞춘다","오른손으로 짚고, 지팡이 높이는 큰돌기 높이로 맞춘다","왼손으로 짚고, 지팡이 높이는 겨드랑이 아래 5 cm에 맞춘다"],"a":1,"ex":"지팡이는 아프지 않은 쪽 손으로 짚고 아픈 다리와 함께 내디뎌, 아픈 쪽 엉덩관절 벌림근 부하와 관절 부하를 줄인다. 높이는 큰돌기(손목 주름) 높이로, 쥐었을 때 팔꿈치가 약 20~30° 굽혀진다.","src":"보행보조기구 교육, 교과서 수준 [사실]","arena":""},{"n":72,"sec":"중재","area":"보조기·운동치료","q":"왼쪽 정강뼈 골절로 왼다리에 체중을 전혀 실을 수 없는 환자의 목발보행으로 가장 적절한 것은?","o":["목발 없이 난간 보행","2점 보행","양쪽 다리 체중을 이용한 흔들기보행(swing-through)만 허용","4점 보행","3점 보행"],"a":4,"ex":"3점 보행은 두 목발과 체중을 싣지 않는 다리를 함께 내딛고, 그다음 건강한 다리를 내딛는 방식으로 한쪽 다리 비체중부하에 쓴다. 2점·4점 보행은 양쪽 다리에 체중을 실을 수 있어야 한다.","src":"목발보행 교육, 교과서 수준 [사실]","arena":""},{"n":73,"sec":"법규","area":"의료기사법","q":"「의료기사 등에 관한 법률」에서 정한 의료기사의 종류에 해당하지 않는 것은?","o":["임상병리사","방사선사","안경사","작업치료사","치과위생사"],"a":2,"ex":"같은 법 제2조의 의료기사는 임상병리사·방사선사·물리치료사·작업치료사·치과기공사·치과위생사 6종이다. 안경사와 보건의료정보관리사는 이 법의 적용을 받는 \"의료기사등\"에는 들지만 의료기사는 아니다.","src":"의료기사 등에 관한 법률 제1조의2·제2조(2026.9.11. 시행본에서 확인) [사실]","arena":""},{"n":74,"sec":"법규","area":"의료기사법","q":"「의료기사 등에 관한 법률」상 의료기사등이 실태와 취업상황을 신고해야 하는 시기와 신고 대상은?","o":["최초로 면허를 받은 후부터 3년마다 보건복지부장관에게","면허를 받은 해에 한 번만 보건소장에게","5년마다 소속 의료기관장에게","매년 시·도지사에게","2년마다 한국보건의료인국가시험원장에게"],"a":0,"ex":"제11조에 따라 의료기사등은 최초로 면허를 받은 후부터 3년마다 그 실태와 취업상황을 보건복지부장관에게 신고해야 한다.","src":"의료기사 등에 관한 법률 제11조(2026.9.11. 시행본에서 확인) [사실]","arena":""},{"n":75,"sec":"법규","area":"의료기사법","q":"「의료기사 등에 관한 법률」상 보건복지부장관이 의료기사등의 면허자격을 정지할 수 있는 기간은?","o":["1년 이내","2년 이내","3개월 이내","6개월 이내","1개월 이내"],"a":3,"ex":"제22조 제1항에 따라 보건복지부장관은 6개월 이내의 기간을 정하여 면허자격을 정지시킬 수 있다.","src":"의료기사 등에 관한 법률 제22조(2026.9.11. 시행본에서 확인) [사실]","arena":""},{"n":76,"sec":"법규","area":"의료기사법","q":"「의료기사 등에 관한 법률 시행규칙」상 보수교육의 \"유예\" 대상으로 옳은 것은?","o":["해당 연도에 보수교육을 이미 이수한 사람","군 복무 중인 사람(군에서 해당 업무에 종사하는 사람 제외)","대학원에서 해당 분야를 전공하고 있는 사람","해당 연도에 신규로 면허를 받은 사람","해당 연도에 보건기관·의료기관 등에서 그 업무에 종사하지 않은 기간이 6개월 이상인 사람"],"a":4,"ex":"시행규칙 제18조 제3항은 해당 연도에 업무에 종사하지 않은 기간이 6개월 이상인 사람 등을 유예 대상으로 둔다. 대학원 재학, 군 복무, 신규 면허 취득은 같은 조 제2항의 면제 대상이다.","src":"의료기사 등에 관한 법률 시행규칙 제18조(보건복지부령 제1072호, 2024.11.28. 시행본에서 확인) [사실]","arena":""},{"n":77,"sec":"법규","area":"노인복지법","q":"「노인복지법」상 재가노인복지시설에서 제공하는 서비스에 해당하지 않는 것은?","o":["방문목욕서비스","방문요양서비스","노인요양공동생활가정","단기보호서비스","주·야간보호서비스"],"a":2,"ex":"제38조의 재가노인복지시설은 방문요양·주·야간보호·단기보호·방문목욕 서비스 등을 제공한다. 노인요양공동생활가정은 제34조의 노인의료복지시설이다.","src":"노인복지법 제34조·제38조(2026.10.2. 시행본에서 확인) [사실]","arena":""},{"n":78,"sec":"법규","area":"노인복지법","q":"「노인복지법」상 노인의료복지시설에 해당하는 것은?","o":["양로시설","노인요양시설","노인공동생활가정","주·야간보호서비스 시설","노인복지관"],"a":1,"ex":"제34조의 노인의료복지시설은 노인요양시설과 노인요양공동생활가정이다. 양로시설·노인공동생활가정은 노인주거복지시설, 노인복지관은 노인여가복지시설, 주·야간보호는 재가노인복지시설이다.","src":"노인복지법 제31조·제34조·제38조(2026.10.2. 시행본에서 확인) [사실]","arena":""},{"n":79,"sec":"법규","area":"장애인복지법","q":"「장애인복지법」상 \"정신적 장애\"의 정의에 해당하는 것은?","o":["발달장애 또는 정신질환으로 발생하는 장애","외부 신체 기능의 장애","내부기관의 장애","청각·언어 기능의 장애","뇌병변으로 인한 운동기능 장애"],"a":0,"ex":"제2조에서 신체적 장애는 주요 외부 신체 기능의 장애와 내부기관의 장애, 정신적 장애는 발달장애 또는 정신질환으로 발생하는 장애를 말한다.","src":"장애인복지법 제2조(2026.10.2. 시행본에서 확인) [사실]","arena":""},{"n":80,"sec":"법규","area":"장애인복지법","q":"「장애인복지법」상 장애인의 날과 장애인 주간으로 옳은 것은?","o":["10월 15일, 이날부터 1주간","3월 20일, 이날부터 1주간","12월 3일, 이날부터 1주간","4월 20일, 이날부터 1주간","4월 20일, 이날 전 1주간"],"a":3,"ex":"제14조는 매년 4월 20일을 장애인의 날로 하고, 장애인의 날부터 1주간을 장애인 주간으로 한다. 12월 3일은 유엔이 정한 세계 장애인의 날이고, 10월 15일은 흰지팡이의 날이다.","src":"장애인복지법 제14조(2026.10.2. 시행본에서 확인) [사실]","arena":""}];
+var SUBJ={'기초':'물리치료 기초','진단평가':'물리치료 진단평가','중재':'물리치료 중재','법규':'의료관계법규'};
+var SESS={1:['기초','진단평가'],2:['중재','법규']};
+var MIN_PER_Q=60, KEY='aupt-mock1-v1';
+var circ=['①','②','③','④','⑤'];
+DATA.forEach(function(d){d.sess=(d.sec==='기초'||d.sec==='진단평가')?1:2;});
+(function(){var c={1:0,2:0};DATA.forEach(function(d){d.no=++c[d.sess];});})();
+
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function say(t){var l=$('live');l.textContent='';setTimeout(function(){l.textContent=t;},50);}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){return null;}}
+function clearSave(){try{localStorage.removeItem(KEY);}catch(e){}}
+
+/* 테마 */
+$('themeBtn').onclick=function(){var r=document.documentElement,t=r.getAttribute('data-theme')==='dark'?'light':'dark';r.setAttribute('data-theme',t);try{localStorage.setItem('aupt-mock-theme',t);}catch(e){}};
+
+/* 블루프린트 표 */
+(function(){var rows={},order=[];DATA.forEach(function(d){var k=d.sess+'|'+d.sec;if(!rows[k]){rows[k]={sess:d.sess,sec:d.sec,areas:{},n:0};order.push(k);}rows[k].n++;rows[k].areas[d.area]=(rows[k].areas[d.area]||0)+1;});
+var h='';order.forEach(function(k){var r=rows[k];h+='<tr><td>'+r.sess+'교시</td><td>'+SUBJ[r.sec]+'</td><td>'+Object.keys(r.areas).map(function(a){return esc(a)+' '+r.areas[a];}).join(' · ')+'</td><td class="num">'+r.n+'</td></tr>';});
+h+='<tr><td colspan="3"><b>합계</b></td><td class="num"><b>'+DATA.length+'</b></td></tr>';$('bpTable').querySelector('tbody').innerHTML=h;})();
+
+/* 상태 */
+var S=null, tick=null;
+function show(id){['home','exam','break','result'].forEach(function(s){$(s).hidden=(s!==id);});window.scrollTo(0,0);}
+function newState(mode,ids,timed){return{mode:mode,ids:ids,sessQueue:[],cur:0,ans:{},flag:{},timed:timed,left:0,done:{},practice:!timed};}
+function idsOf(sess){return DATA.filter(function(d){return d.sess===sess;}).map(function(d){return d.n;});}
+function start(mode){
+  clearSave();
+  if(mode==='all'){S=newState('all',idsOf(1),true);S.sessQueue=[2];S.sessNow=1;}
+  else{var s=+mode;S=newState(String(s),idsOf(s),true);S.sessNow=s;}
+  S.left=S.ids.length*MIN_PER_Q;S.allIds=S.ids.slice();
+  runExam();
+}
+function runExam(){show('exam');S.cur=Math.min(S.cur,S.ids.length-1);render();startTimer();save();}
+function startTimer(){clearInterval(tick);if(!S.timed){$('timer').textContent='시간 제한 없음';return;}paintTimer();tick=setInterval(function(){S.left--;paintTimer();if(S.left%30===0)save();if(S.left===300)say('남은 시간 5분');if(S.left<=0){clearInterval(tick);say('시간이 끝나 자동 제출합니다');submitSession();}},1000);}
+function paintTimer(){var m=Math.floor(Math.max(0,S.left)/60),s=Math.max(0,S.left)%60;var t=$('timer');t.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;t.classList.toggle('warn',S.left<=300);}
+function q(){return DATA[S.ids[S.cur]-1];}
+function render(){
+  var d=q();
+  $('sessLabel').textContent=S.practice?'오답 다시 풀기':(S.sessNow+'교시');
+  $('qno').textContent=(S.practice?(S.cur+1)+'.':d.no+'번');
+  $('qsubj').textContent=SUBJ[d.sec];$('qarea').textContent=d.area;
+  $('qtext').textContent=d.q;
+  var h='';d.o.forEach(function(o,i){var on=S.ans[d.n]===i;h+='<button type="button" class="opt" role="radio" aria-checked="'+on+'" data-i="'+i+'" tabindex="'+((on||(S.ans[d.n]==null&&i===0))?0:-1)+'"><span class="mk">'+(i+1)+'</span><span>'+esc(o)+'</span></button>';});
+  $('opts').innerHTML=h;
+  [].forEach.call($('opts').children,function(b){b.onclick=function(){pick(+b.getAttribute('data-i'));};});
+  var f=!!S.flag[d.n];$('flagBtn').setAttribute('aria-pressed',f);$('flagBtn').textContent=f?'★ 표시됨':'☆ 다시 볼 문항 표시';
+  $('prevBtn').disabled=S.cur===0;$('nextBtn').textContent=S.cur===S.ids.length-1?'마지막 문항':'다음 →';$('nextBtn').disabled=S.cur===S.ids.length-1;
+  var n=S.ids.filter(function(x){return S.ans[x]!=null;}).length;
+  $('progBar').style.width=(100*n/S.ids.length)+'%';$('progTxt').textContent=n+' / '+S.ids.length+' 표기';
+  var g='';S.ids.forEach(function(x,i){var dd=DATA[x-1];g+='<button type="button" class="nav-cell'+(S.ans[x]!=null?' ans':'')+(S.flag[x]?' flag':'')+(i===S.cur?' cur':'')+'" data-k="'+i+'" aria-label="'+(S.practice?(i+1):dd.no)+'번'+(S.ans[x]!=null?', 답 '+(S.ans[x]+1):', 미표기')+(S.flag[x]?', 표시됨':'')+'">'+(S.practice?(i+1):dd.no)+'</button>';});
+  $('navgrid').innerHTML=g;[].forEach.call($('navgrid').children,function(b){b.onclick=function(){go(+b.getAttribute('data-k'));};});
+  $('submitBtn').textContent=S.practice?'채점하기':'교시 제출';
+}
+function pick(i){var d=q();S.ans[d.n]=i;render();var b=$('opts').children[i];b&&b.focus();save();}
+function go(k){if(k<0||k>=S.ids.length)return;S.cur=k;render();$('qcard').scrollIntoView({block:'start'});}
+$('prevBtn').onclick=function(){go(S.cur-1);};$('nextBtn').onclick=function(){go(S.cur+1);};
+$('flagBtn').onclick=function(){var n=q().n;if(S.flag[n])delete S.flag[n];else S.flag[n]=1;render();save();};
+document.addEventListener('keydown',function(e){
+  if($('exam').hidden||$('modal').classList.contains('show'))return;
+  if(e.target&&/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;
+  if(/^[1-5]$/.test(e.key)){pick(+e.key-1);e.preventDefault();}
+  else if(e.key==='ArrowRight'&&!e.target.closest('.opts')){go(S.cur+1);}
+  else if(e.key==='ArrowLeft'&&!e.target.closest('.opts')){go(S.cur-1);}
+  else if((e.key==='ArrowDown'||e.key==='ArrowUp')&&e.target.closest('.opts')){var i=+e.target.getAttribute('data-i')+(e.key==='ArrowDown'?1:-1);i=(i+5)%5;pick(i);e.preventDefault();}
+});
+
+/* 제출 확인 */
+var lastFocus=null;
+function confirmBox(title,body,ok,label){lastFocus=document.activeElement;$('mOk').textContent=label||'제출';$('mTitle').textContent=title;$('mBody').innerHTML=body;$('modal').classList.add('show');$('mOk').focus();$('mOk').onclick=function(){closeBox();ok();};}
+function closeBox(){$('modal').classList.remove('show');lastFocus&&lastFocus.focus&&lastFocus.focus();}
+$('mCancel').onclick=closeBox;
+$('modal').addEventListener('keydown',function(e){if(e.key==='Escape')closeBox();if(e.key==='Tab'){var a=$('mCancel'),b=$('mOk');if(e.shiftKey&&document.activeElement===a){b.focus();e.preventDefault();}else if(!e.shiftKey&&document.activeElement===b){a.focus();e.preventDefault();}}});
+$('submitBtn').onclick=function(){
+  var miss=S.ids.filter(function(x){return S.ans[x]==null;}).length;
+  confirmBox(S.practice?'채점할까요?':S.sessNow+'교시를 제출할까요?',miss?'아직 답을 표기하지 않은 문항이 <b>'+miss+'개</b> 있습니다. 미표기 문항은 오답으로 처리됩니다.':'모든 문항에 답을 표기했습니다.',submitSession,S.practice?'채점':'제출');
+};
+function submitSession(){
+  clearInterval(tick);
+  if(S.mode==='all'&&S.sessQueue.length){S.done[S.sessNow]=1;var nx=S.sessQueue.shift();S.sessNow=nx;S.ids=idsOf(nx);S.allIds=S.allIds.concat(S.ids);S.cur=0;S.left=S.ids.length*MIN_PER_Q;S.onBreak=1;save();show('break');$('go2Btn').focus();return;}
+  S.finished=1;save();showResult();
+}
+$('go2Btn').onclick=function(){S.onBreak=0;runExam();};
+
+/* 결과 */
+var filter='wrong';
+function showResult(){
+  show('result');
+  var ids=S.allIds,tot=0,cor=0,bySec={},byArea={},order=[];
+  ids.forEach(function(x){var d=DATA[x-1],ok=S.ans[x]===d.a;tot++;if(ok)cor++;
+    (bySec[d.sec]=bySec[d.sec]||{c:0,n:0});bySec[d.sec].n++;if(ok)bySec[d.sec].c++;
+    var k=d.sec+'|'+d.area;if(!byArea[k]){byArea[k]={sec:d.sec,area:d.area,c:0,n:0};order.push(k);}byArea[k].n++;if(ok)byArea[k].c++;});
+  var pct=Math.round(1000*cor/tot)/10;
+  var secs=Object.keys(SUBJ).filter(function(s){return bySec[s];});
+  var fails=secs.filter(function(s){return bySec[s].c/bySec[s].n<0.4;});
+  var pass=!S.practice&&fails.length===0&&cor/tot>=0.6;
+  $('resTitle').textContent=S.practice?'오답 다시 풀기 결과':(S.mode==='all'?'1·2교시 전체 결과':S.mode+'교시 결과');
+  $('resScore').textContent=cor+' / '+tot+' ('+pct+'%)';
+  $('resVerdict').innerHTML=S.practice?'':'<span class="verdict '+(pass?'pass':'fail')+'">'+(pass?'합격선 도달':'합격선 미달')+'</span>';
+  $('resNote').textContent=S.practice?'다시 풀기는 합격 판정을 하지 않습니다.':(fails.length?'과락(40% 미만) 과목: '+fails.map(function(s){return SUBJ[s];}).join(', ')+'. ':'')+'판정 기준은 과목별 40% 이상, 응시한 전 과목 총점 60% 이상입니다'+(S.mode!=='all'?' (한 교시만 응시해 해당 과목만 판정)':'')+'.';
+  var b='';secs.forEach(function(s){var r=bySec[s],p=r.c/r.n*100;b+='<div class="subj-row"><span>'+SUBJ[s]+'</span><span>'+r.c+'/'+r.n+' · '+Math.round(p)+'%</span></div><div class="bar" role="img" aria-label="'+SUBJ[s]+' 정답률 '+Math.round(p)+'퍼센트, 과락선 40퍼센트"><i class="'+(p<40?'low':'')+'" style="width:'+p+'%"></i><span class="cut" style="left:40%"></span></div>';});
+  $('subjBars').innerHTML=b+'<div class="legend">세로선 = 과락선 40%</div>';
+  var t='';order.forEach(function(k){var r=byArea[k];t+='<tr><td>'+SUBJ[r.sec]+'</td><td>'+esc(r.area)+'</td><td class="num">'+r.c+'/'+r.n+'</td><td class="num">'+Math.round(100*r.c/r.n)+'%</td></tr>';});
+  $('areaTable').querySelector('tbody').innerHTML=t;
+  $('retryWrongBtn').disabled=(cor===tot);
+  renderReview();say('채점 결과: '+cor+'문항 정답, '+pct+'퍼센트');$('resScore').setAttribute('tabindex','-1');$('resScore').focus();
+}
+function renderReview(){
+  var ids=S.allIds.filter(function(x){var d=DATA[x-1];return filter==='all'||(filter==='wrong'&&S.ans[x]!==d.a)||(filter==='flag'&&S.flag[x]);});
+  if(!ids.length){$('reviewList').innerHTML='<p class="muted">해당하는 문항이 없습니다.</p>';return;}
+  $('reviewList').innerHTML=ids.map(function(x){var d=DATA[x-1],my=S.ans[x];
+    return '<div class="rev"><div class="qhead"><span class="qno">'+d.sess+'교시 '+d.no+'번</span><span class="pill">'+SUBJ[d.sec]+'</span><span class="pill">'+esc(d.area)+'</span>'+(my===d.a?'<span class="pill">정답</span>':'<span class="pill" style="color:var(--rose);border-color:var(--rose);background:var(--rose-bg)">'+(my==null?'미표기':'오답')+'</span>')+'</div>'+
+    '<div class="qtext">'+esc(d.q)+'</div><div class="opts">'+d.o.map(function(o,i){var c=i===d.a?' correct':(i===my?' wrong':'');return '<div class="opt'+c+'"><span class="mk">'+(i+1)+'</span><span>'+esc(o)+(i===d.a?' <b>(정답)</b>':'')+(i===my&&i!==d.a?' <b>(내 답)</b>':'')+'</span></div>';}).join('')+'</div>'+
+    '<div class="ex"><b>해설</b> '+esc(d.ex)+'</div><div class="src">근거: '+esc(d.src)+(d.arena?' · 국시아레나 '+esc(d.arena)+' 주제 재구성':'')+'</div></div>';}).join('');
+}
+[].forEach.call(document.querySelectorAll('[data-filter]'),function(b){b.onclick=function(){filter=b.getAttribute('data-filter');[].forEach.call(document.querySelectorAll('[data-filter]'),function(x){x.setAttribute('aria-pressed',x===b);});renderReview();};});
+$('printBtn').onclick=function(){window.print();};
+$('homeBtn').onclick=function(){show('home');checkResume();};
+$('retryWrongBtn').onclick=function(){var w=S.allIds.filter(function(x){return S.ans[x]!==DATA[x-1].a;});if(!w.length)return;S=newState('practice',w,false);S.allIds=w.slice();runExam();};
+[].forEach.call(document.querySelectorAll('[data-start]'),function(b){b.onclick=function(){var m=b.getAttribute('data-start');var old=load();if(old&&!old.finished){confirmBox('새로 시작할까요?','진행 중인 응시 기록이 있습니다. 새로 시작하면 이전 기록이 지워집니다.',function(){start(m);},'새로 시작');}else start(m);};});
+function checkResume(){var o=load();$('resumeBtn').hidden=!(o&&!o.finished);}
+$('resumeBtn').onclick=function(){S=load();if(!S)return;if(S.onBreak){show('break');return;}runExam();};
+checkResume();
+</script>
+</body>
+</html>
