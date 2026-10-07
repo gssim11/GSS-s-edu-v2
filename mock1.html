@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>물리치료사 국가시험 대비 모의고사 1회 (80문항 축약형)</title>
-<meta name="description" content="안산대학교 물리치료학과 국가시험 대비 원작 모의고사 1회 — 1교시 44문항, 2교시 36문항, 교시별 타이머·과목별 채점·오답 해설.">
+<title>물리치료사 국시 실력 점검 1회 (80문항 축약형)</title>
+<meta name="description" content="안산대학교 물리치료학과 국가시험 대비 원작 실력 점검 1회 — 1교시 44문항, 2교시 36문항, 교시별 타이머·과목별 채점·오답 해설.">
 <script>(function(){var t=null;try{t=localStorage.getItem('aupt-mock-theme');}catch(e){}if(!t){t=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}document.documentElement.setAttribute('data-theme',t);})();</script>
 <style>
 :root{
@@ -105,6 +105,7 @@ td.num,th.num{text-align:right}
 .sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 footer{color:var(--ink-3);font-size:.8rem;text-align:center;padding:24px 16px 40px}
 [hidden]{display:none!important}
+#realExam th,#realExam td{word-break:keep-all;vertical-align:top}#realExam td.num,#realExam th.num{white-space:nowrap}
 @media (max-width:560px){.wrap{padding:12px}.card{padding:16px}.qtext{font-size:1rem}.big{font-size:1.8rem}}
 @media print{
  :root,:root[data-theme="dark"]{--bg:#fff;--surface:#fff;--ink:#000;--ink-2:#111;--ink-3:#333;--line:#bbb;--c-primary-deep:#000;--c-primary-050:#fff;--c-primary-100:#eee;--green-bg:#fff;--rose-bg:#fff;--amber-bg:#fff}
@@ -116,7 +117,7 @@ footer{color:var(--ink-3);font-size:.8rem;text-align:center;padding:24px 16px 40
 </head>
 <body>
 <header class="top">
-  <h1>🩺 물리치료사 국시 대비 모의고사 1회</h1>
+  <h1>🩺 물리치료사 국시 실력 점검 1회</h1>
   <button class="btn ghost icon-btn" id="themeBtn" aria-label="밝은/어두운 화면 전환" title="화면 테마 전환">🌓</button>
 </header>
 <div id="live" class="sr-only" aria-live="polite"></div>
@@ -125,9 +126,9 @@ footer{color:var(--ink-3);font-size:.8rem;text-align:center;padding:24px 16px 40
 <!-- 시작 화면 -->
 <section id="home">
   <div class="card hero">
-    <span class="pill">2026-2 · 안산대학교 물리치료학과</span><span class="pill">80문항 축약형</span><span class="pill">원작 문항</span>
-    <h2>물리치료사 국가시험 대비 모의고사 1회</h2>
-    <p class="muted">최근 국가시험의 교시·과목 구성 비율에 맞춰 문항 수를 줄인 원작 모의고사입니다. 기출문제 원문은 쓰지 않았고, 최근 기출의 출제 영역과 빈도만 설계도로 삼았습니다.</p>
+    <span class="pill">2026-2 · 안산대학교 물리치료학과</span><span class="pill">실력 점검용 · 80문항 축약형</span><span class="pill">원작 문항</span>
+    <h2>물리치료사 국가시험 실력 점검 1회</h2>
+    <p class="muted">실제 국가시험(필기 190문항 + 실기)과 문항 수가 같은 모의고사가 아니라, <b>필기 1·2교시의 과목 비율을 그대로 유지한 채 80문항으로 줄인 실력 점검</b>입니다. 내 약한 과목과 영역을 빠르게 찾는 용도로 쓰세요. 기출문제 원문은 쓰지 않았고, 최근 기출의 출제 영역과 빈도만 설계도로 삼았습니다. 실제 시험 구성은 아래 「실제 국가시험은 이렇게 치릅니다」에 정리했습니다.</p>
     <div class="grid2">
       <div class="session">
         <h3>1교시 · 44문항 · 44분</h3>
@@ -141,10 +142,30 @@ footer{color:var(--ink-3);font-size:.8rem;text-align:center;padding:24px 16px 40
       </div>
     </div>
     <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn" data-start="all">1·2교시 연속 응시 (80분)</button>
+      <button class="btn" data-start="all">1·2교시 연속 점검 (80분)</button>
       <button class="btn" id="resumeBtn" hidden>이어서 풀기</button>
     </div>
-    <div class="note">채점 기준은 국가시험 필기 합격 기준으로 알려진 <b>과목별 40% 이상</b>과 <b>전 과목 총점 60% 이상</b>을 적용했습니다. 실제 기준과 시험 시간은 한국보건의료인국가시험원 공고로 확인하세요. 이 모의고사의 시간은 문항당 1분으로 정한 학습용 설정입니다. 의료관계법규 문항은 2026년 10월 8일 현재 시행 중인 조문을 기준으로 했으며, 법령이 바뀌면 정답이 달라질 수 있습니다.</div>
+    <div class="note">판정에는 국가시험 필기 합격 기준(<b>과목별 40% 이상</b>, <b>필기 총점 60% 이상</b>)을 그대로 적용했지만, 문항 수가 적어 한두 문항에도 정답률이 크게 움직이므로 <b>합격 가능성 예측이 아닌 참고 지표</b>로 보세요. 점검 시간은 문항당 1분으로 정한 학습용 설정입니다. 의료관계법규 문항은 2026년 10월 8일 현재 시행 중인 조문을 기준으로 했으며, 법령이 바뀌면 정답이 달라질 수 있습니다.</div>
+  </div>
+  <div class="card" id="realExam">
+    <h3 style="margin-top:0;color:var(--c-primary-deep)">실제 국가시험은 이렇게 치릅니다</h3>
+    <p class="muted" style="font-size:.9rem">물리치료사 국가시험은 한국보건의료인국가시험원이 시행하며, 필기 2개 교시(1·2교시)와 실기 1개 교시(3교시)로 이루어집니다. 필기는 보기 5개 중 가장 적합한 답 하나를 고르는 최선답형입니다.</p>
+    <table>
+      <thead><tr><th>교시</th><th>시험 과목</th><th class="num">실제</th><th class="num">점검</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="2">1교시<br><span class="muted">필기</span></td><td>물리치료 기초</td><td class="num">60</td><td class="num">25</td></tr>
+        <tr><td>물리치료 진단평가</td><td class="num">45</td><td class="num">19</td></tr>
+        <tr><td rowspan="2">2교시<br><span class="muted">필기</span></td><td>물리치료 중재</td><td class="num">65</td><td class="num">28</td></tr>
+        <tr><td>의료관계법규</td><td class="num">20</td><td class="num">8</td></tr>
+        <tr><td>3교시<br><span class="muted">실기</span></td><td>물리치료 실기</td><td class="num">공고 확인</td><td class="num">미포함</td></tr>
+        <tr><td colspan="2"><b>필기 합계</b></td><td class="num"><b>190</b></td><td class="num"><b>80</b></td></tr>
+      </tbody>
+    </table>
+    <div class="grid2" style="margin-top:12px">
+      <div class="session"><h3 style="font-size:1rem">합격 기준</h3><div class="muted" style="font-size:.9rem">필기는 <b>과목마다 만점의 40% 이상</b>이면서 <b>필기 전 과목 총점의 60% 이상</b>, 실기는 <b>만점의 60% 이상</b>이어야 합니다. 필기에서 한 과목이라도 40% 미만이면 총점과 관계없이 불합격(과락)입니다.</div></div>
+      <div class="session"><h3 style="font-size:1rem">시험 시간과 실기 문항 수</h3><div class="muted" style="font-size:.9rem">교시별 시험 시간과 실기 문항 수는 해마다 시행계획 공고로 정해집니다. 응시 전 <a href="https://www.kuksiwon.or.kr/" target="_blank" rel="noopener">한국보건의료인국가시험원</a> 공고에서 꼭 확인하세요.</div></div>
+    </div>
+    <p class="muted" style="font-size:.8rem;margin-bottom:0">근거: 필기 과목별 문항 수는 제48회(2020)~제52회(2024) 국가시험 문제지에서 확인한 구성입니다(제46·47회는 1교시 110·2교시 90문항). 합격 기준은 대한물리치료사협회 면허시험 안내에 따른 것이며, 최종 기준은 국시원 공고를 따릅니다.</p>
   </div>
   <div class="card">
     <h3 style="margin-top:0;color:var(--c-primary-deep)">출제 설계(블루프린트)</h3>
@@ -331,7 +352,7 @@ function showResult(){
   var pass=!S.practice&&fails.length===0&&cor/tot>=0.6;
   $('resTitle').textContent=S.practice?'오답 다시 풀기 결과':(S.mode==='all'?'1·2교시 전체 결과':S.mode+'교시 결과');
   $('resScore').textContent=cor+' / '+tot+' ('+pct+'%)';
-  $('resVerdict').innerHTML=S.practice?'':'<span class="verdict '+(pass?'pass':'fail')+'">'+(pass?'합격선 도달':'합격선 미달')+'</span>';
+  $('resVerdict').innerHTML=S.practice?'':'<span class="verdict '+(pass?'pass':'fail')+'">'+(pass?'필기 합격선 도달 (참고)':'필기 합격선 미달 (참고)')+'</span>';
   $('resNote').textContent=S.practice?'다시 풀기는 합격 판정을 하지 않습니다.':(fails.length?'과락(40% 미만) 과목: '+fails.map(function(s){return SUBJ[s];}).join(', ')+'. ':'')+'판정 기준은 과목별 40% 이상, 응시한 전 과목 총점 60% 이상입니다'+(S.mode!=='all'?' (한 교시만 응시해 해당 과목만 판정)':'')+'.';
   var b='';secs.forEach(function(s){var r=bySec[s],p=r.c/r.n*100;b+='<div class="subj-row"><span>'+SUBJ[s]+'</span><span>'+r.c+'/'+r.n+' · '+Math.round(p)+'%</span></div><div class="bar" role="img" aria-label="'+SUBJ[s]+' 정답률 '+Math.round(p)+'퍼센트, 과락선 40퍼센트"><i class="'+(p<40?'low':'')+'" style="width:'+p+'%"></i><span class="cut" style="left:40%"></span></div>';});
   $('subjBars').innerHTML=b+'<div class="legend">세로선 = 과락선 40%</div>';
