@@ -367,7 +367,7 @@
         <div class="card"><h4>🧠 Generative Agents (Smallville)</h4><p>스탠퍼드·구글의 유명 연구. AI 캐릭터가 <b>스스로 돌아다니고 대화하며 하루 일과</b>를 보내는 자율 시뮬레이션 — 이 캠퍼스 AI들의 방식입니다.</p></div>
         <div class="card"><h4>🗺️ Gather Town</h4><p>2D 픽셀 공간을 아바타로 걸어다니며 만나 대화하는 메타버스 — 이 캠퍼스의 <b>조작·근접 상호작용</b>입니다.</p></div>
       </div>
-      <p class="lede">내 아바타로 캠퍼스를 <b>직접 걸어다니며</b> 9개 교과관에서 교수 AI에게 <b>강의를 듣고 국시 기출 퀴즈</b>(과목별 문제은행에서 매 방문 무작위 최대 6문항)를 풀어 학점을 쌓으세요. 가만히 두면 AI 교수·학생이 <b>스스로 등교·수업·잡담</b>합니다.</p>
+      <p class="lede">내 아바타로 캠퍼스를 <b>직접 걸어다니며</b> 9개 교과관에서 교수 AI에게 <b>강의를 듣고 국시 대비 퀴즈</b>(과목별 문제은행에서 매 방문 무작위 최대 6문항)를 풀어 학점을 쌓으세요. 가만히 두면 AI 교수·학생이 <b>스스로 등교·수업·잡담</b>합니다.</p>
       <div class="faculty">
         <div class="fac-title">참여 교수진 <span>· 안산대학교 물리치료학과</span></div>
         <div class="fac-sub">전임교수</div>
@@ -514,7 +514,7 @@ const professors = PROFS.map(p=>{
 });
 
 /* Students: autonomous wanderers (Smallville-style) */
-const STUDENT_NAMES = ["유재석", "아이유", "박보검", "손예진", "정국", "제니", "차은우", "카리나", "뷔", "지수", "강호동", "아이린", "임영웅", "하니", "태연", "이영지", "박명수", "수지", "류진", "호시", "마동석", "장원영"];
+const STUDENT_NAMES = ["김도윤", "김서연", "박지호", "이하은", "정우진", "박지유", "최민재", "최수아", "강태윤", "정다은", "윤재현", "강소율", "한승민", "윤지안", "한은서", "오하린", "오준서", "서예나", "송가은", "조현우", "신동하", "임채아"];   /* 가상의 이름(실존 인물 아님) */
 const STUDENT_LINES = ["신경해부 교차 또 헷갈려…", "호흡재활 실습 오늘이지?", "뇌졸중 케이스 재밌더라", "도서관 자리 남았나?", "교수님 오늘 퀴즈 낸다던데?", "커피 한 잔 하고 가자.", "LSVT-BIG 시연 봤어?", "체위배출법 자세 어렵다", "관문조절설 시험 나온대", "SLR 검사 연습하자."];
 const students = STUDENT_NAMES.map((nm,i)=>{
   const w = WP[i % WP.length];
@@ -996,7 +996,7 @@ function openHub(){
   setDialog('📚','linear-gradient(135deg,#4a8f5a,#2a3550)','국가고시·도서관','물리치료 국가고시 준비 · 열람 공간');
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
   const around = students.filter(s=>dist(s.x,s.y,player.x,player.y)<260).map(s=>s.name);
-  body.innerHTML='<div class="say"><span class="who">🎓 국가고시 준비 · 가족회사</span>안산대학교 물리치료학과 <b>가족회사</b>가 운영하는 국가고시 학습 플랫폼입니다. 이론·문제풀이·모의고사를 한 곳에서 준비하세요.</div>'+jobLink('🎯 프로리온 ProReOn — 국시 이론·문제풀이·모의고사·360° 강의','https://proreon.ai.kr/home',true)+jobLink('🐯 국시독립 — 물리치료 국가고시 문제은행 앱','https://xn--3e0b93j8pf2qk.com/',true)+'<div class="expl"><span class="tag">참고</span>캠퍼스 각 교과관에서도 과목별 국시 기출 퀴즈를 풀 수 있습니다.</div>'+'<div class="say"><span class="who">📚 도서관·휴게</span>AI 학생들이 쉬는 시간에 모여 잡담하는 곳이기도 합니다. 지금 근처 학생: <b>'+(around.length?around.join(', '):'없음')+'</b> (👁️ 관전 모드 추천)</div>'+jobLink('📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설','https://gssim11.github.io/PT-novel/',false);
+  body.innerHTML='<div class="say"><span class="who">🎓 국가고시 준비 · 가족회사</span>안산대학교 물리치료학과 <b>가족회사</b>가 운영하는 국가고시 학습 플랫폼입니다. 이론·문제풀이·모의고사를 한 곳에서 준비하세요.</div>'+jobLink('🎯 프로리온 ProReOn — 국시 이론·문제풀이·모의고사·360° 강의','https://proreon.ai.kr/home',true)+jobLink('🐯 국시독립 — 물리치료 국가고시 문제은행 앱','https://xn--3e0b93j8pf2qk.com/',true)+'<div class="expl"><span class="tag">참고</span>캠퍼스 각 교과관에서도 과목별 국시 대비 퀴즈를 풀 수 있습니다.</div>'+'<div class="say"><span class="who">📚 도서관·휴게</span>AI 학생들이 쉬는 시간에 모여 잡담하는 곳이기도 합니다. 지금 근처 학생: <b>'+(around.length?around.join(', '):'없음')+'</b> (👁️ 관전 모드 추천)</div>'+jobLink('📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설','https://gssim11.github.io/PT-novel/',false);
   foot.innerHTML='';
   addFoot('👁️ 관전 모드 켜기', ()=>{ toggleSpectate(true); closeDialog(); });
   addFoot('닫기', closeDialog);
@@ -1801,7 +1801,7 @@ function drawFestival(){ for(var k=0;k<FESTIVAL.length;k++){ var f=FESTIVAL[k]; 
 state.overview=false;
 try{ document.getElementById('mapBtn').onclick=function(){ state.overview=!state.overview; var b=document.getElementById('mapBtn'); if(b) b.classList.toggle('on', state.overview); }; }catch(e){}
 (function(){
-  var FEM=new Set(['아이유','손예진','제니','카리나','지수','아이린','하니','태연','이영지','수지','류진','장원영']);
+  var FEM=new Set(['김서연','이하은','박지유','최수아','정다은','강소율','윤지안','한은서','오하린','서예나','송가은','임채아']);
   try{ students.forEach(function(s){ s.sex=FEM.has(s.name)?'f':'m'; }); }catch(e){}
   try{ professors.forEach(function(p){ p.sex=(p.name.indexOf('김신영')===0)?'f':'m'; }); }catch(e){}
   try{ if(typeof staff!=='undefined') staff.forEach(function(s){ s.sex='f'; }); }catch(e){}
