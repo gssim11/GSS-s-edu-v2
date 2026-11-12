@@ -1691,6 +1691,7 @@ function openCareer(){
   CAREER_LINKS.filter(function(L){return L.hl;}).concat(CAREER_LINKS.filter(function(L){return !L.hl;}))
     .forEach(function(L){ h+=jobLink(L.t, L.u, L.hl); });
   h+='<div class="expl"><span class="tag">이용 안내</span><b>AI 솔루션</b>은 자기소개서·AI면접·AI매칭 채용정보·NCS/인적성검사를 한 곳에서 제공합니다(inFACE). <b>안산대학교 SSO 계정으로 로그인</b>하면 재학생뿐 아니라 <b>교직원도 이용 가능</b>합니다.</div>';
+  h+='<div class="say" style="border-style:dashed;border-color:var(--gold)"><span class="who" style="color:var(--gold-hi)">🌏 해외 물리치료사 면허</span>미국 RPT(졸업예정자 편·졸업생 편)와 영국·호주·독일·일본·캐나다·뉴질랜드·UAE 7개국 면허 경로를 정리한 가이드북 3권입니다. 내 상황에 맞는 책을 골라 PDF로 볼 수 있습니다.</div>'+jobLink('🌏 해외 물리치료사 면허 가이드북 2026 — 미국 RPT 2권 · 7개국 1권','https://pt-overseas-license.vercel.app/',true);
   h+='<div class="say"><span class="who">🧩 직무·역량 프로그램</span>현직자 직무 특강 · 실무역량 마스터 클래스 · 기업탐방 · 온라인 멘토링 · 취업교과목 운영</div>';
   h+='<div class="expl"><span class="tag">위치·연락</span>안산대학교 안산대학로 155 · Tel 031-400-7134 · Instagram @ansan_job</div>';
   body.innerHTML=h; foot.innerHTML='';
