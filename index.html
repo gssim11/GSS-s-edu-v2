@@ -91,7 +91,7 @@
 
   .say{font-size:14.5px;line-height:1.65;color:#dde7fb;background:rgba(6,16,38,.6);border:1px solid var(--line);
     border-radius:13px;padding:14px 16px;margin-bottom:13px;white-space:pre-wrap}
-  .say .who{color:var(--gold-hi);font-weight:700;font-size:12px;display:block;margin-bottom:5px;font-family:var(--ser)}
+  .say .who{color:var(--gold-hi);font-weight:800;font-size:15.5px;letter-spacing:.01em;display:block;margin-bottom:7px;padding:0 0 6px 10px;border-left:3px solid var(--gold);border-bottom:1px solid var(--gold-line);font-family:var(--ser)}
 
   .opt{width:100%;text-align:left;background:rgba(6,16,38,.6);border:1px solid var(--line);color:var(--text);border-radius:13px;
     padding:13px 15px;font-size:14px;cursor:pointer;margin-bottom:9px;transition:.15s;display:flex;gap:11px;align-items:center;font-family:var(--san)}
@@ -1011,7 +1011,7 @@ function openHub(){
   setDialog('📚','linear-gradient(135deg,#4a8f5a,#2a3550)','국가고시·도서관','물리치료 국가고시 준비 · 열람 공간');
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
   const around = students.filter(s=>dist(s.x,s.y,player.x,player.y)<260).map(s=>s.name);
-  body.innerHTML='<div class="say"><span class="who">📝 국시 실력 점검</span>안산대학교 물리치료학과가 만든 원작 문항으로, 실제 필기시험의 과목 비율을 유지한 80문항 축약형입니다. 약한 과목을 찾는 점검용이며, 실제 국가시험의 교시·문항 수·합격 기준 안내도 함께 볼 수 있습니다.</div>'+jobLink('📝 국시 실력 점검 1회 — 80문항 축약형 · 과목별 채점·해설','https://gss-edu-v2.vercel.app/mock1.html',true)+'<div class="say"><span class="who">🎓 국가고시 준비 · 가족회사</span>안산대학교 물리치료학과 <b>가족회사</b>가 운영하는 국가고시 학습 플랫폼입니다. 이론·문제풀이·모의고사를 한 곳에서 준비하세요.</div>'+jobLink('🎯 프로리온 ProReOn — 국시 이론·문제풀이·모의고사·360° 강의','https://proreon.ai.kr/home',true)+jobLink('🐯 국시독립 — 물리치료 국가고시 문제은행 앱','https://xn--3e0b93j8pf2qk.com/',true)+'<div class="expl"><span class="tag">참고</span>캠퍼스 각 교과관에서도 과목별 국시 대비 퀴즈를 풀 수 있습니다.</div>'+'<div class="say"><span class="who">📚 도서관·휴게</span>AI 학생들이 쉬는 시간에 모여 잡담하는 곳이기도 합니다. 지금 근처 학생: <b>'+(around.length?around.join(', '):'없음')+'</b> (👁️ 관전 모드 추천)</div>'+'<div class="say"><span class="who">📰 최신 논문 브리핑</span>신경계·임상·필라테스·근거중심 물리치료 분야의 최신 PubMed 논문을 매일 아침 AI가 한국어로 요약해 올립니다. <b>AI 요약은 참고용</b>이니 공부할 때는 꼭 PubMed 원문을 함께 확인하세요.</div>'+jobLink('📰 PT 논문 브리핑 — 최신 PubMed 논문 AI 요약 (매일 갱신·참고용)','https://pt-knowledge-hub.vercel.app/',false)+jobLink('📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설','https://gssim11.github.io/PT-novel/',false);
+  body.innerHTML='<div class="say"><span class="who">📝 국시 실력 점검</span>안산대학교 물리치료학과가 만든 원작 문항으로, 실제 필기시험의 과목 비율을 유지한 80문항 축약형입니다. 약한 과목을 찾는 점검용이며, 실제 국가시험의 교시·문항 수·합격 기준 안내도 함께 볼 수 있습니다.</div>'+jobLink('📝 국시 실력 점검 1회 — 80문항 축약형 · 과목별 채점·해설','https://gss-edu-v2.vercel.app/mock1.html',true)+'<div class="say"><span class="who">🎓 국가고시 준비 · 가족회사</span>안산대학교 물리치료학과 <b>가족회사</b>가 운영하는 국가고시 학습 플랫폼입니다. 이론·문제풀이·모의고사를 한 곳에서 준비하세요.</div>'+jobLink('🎯 프로리온 ProReOn — 국시 이론·문제풀이·모의고사·360° 강의','https://proreon.ai.kr/home',true)+jobLink('🐯 국시독립 — 물리치료 국가고시 문제은행 앱','https://xn--3e0b93j8pf2qk.com/',true)+'<div class="expl"><span class="tag">참고</span>캠퍼스 각 교과관에서도 과목별 국시 대비 퀴즈를 풀 수 있습니다.</div>'+'<div class="say"><span class="who">📚 도서관·휴게</span>AI 학생들이 쉬는 시간에 모여 잡담하는 곳이기도 합니다. 지금 근처 학생: <b>'+(around.length?around.join(', '):'없음')+'</b> (👁️ 관전 모드 추천)</div>'+'<div class="say"><span class="who">📰 최신 논문 브리핑</span>신경계·임상·필라테스·근거중심 물리치료 분야의 최신 PubMed 논문을 매일 아침 AI가 한국어로 요약해 올립니다. <b>AI 요약은 참고용</b>이니 공부할 때는 꼭 PubMed 원문을 함께 확인하세요.</div>'+jobLink('📰 PT 논문 브리핑 — 최신 PubMed 논문 AI 요약 (매일 갱신·참고용)','https://pt-knowledge-hub.vercel.app/',true)+jobLink('📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설','https://pt-novel.vercel.app/',true);
   foot.innerHTML='';
   addFoot('👁️ 관전 모드 켜기', ()=>{ toggleSpectate(true); closeDialog(); });
   addFoot('닫기', closeDialog);
@@ -1632,7 +1632,7 @@ function openOffice(){
   body.innerHTML=
    '<div class="say"><span class="who">안내</span>수강·학적·증명·행정 문의는 학과사무실로 오세요. 친절한 조교 선생님들이 도와드립니다.</div>'+
    '<div class="say"><span class="who">👩‍💼 조교 선생님</span><b>정성예</b> 조교 · <b>김희연</b> 조교</div>'+
-   jobLink('🏫 물리치료학과 홈페이지 바로가기','https://physi.ansan.ac.kr/physi',false)+jobLink('📰 학과뉴스','https://physi.ansan.ac.kr/physi/board/3',false)+jobLink('📷 포토갤러리','https://physi.ansan.ac.kr/physi/board/7',false)+jobLink('💼 물리치료 채용공고 (PT-JOB)','https://pt-job.vercel.app/',false)+jobLink('📖 걷는 법을 배우는 시간 (물리치료학과 성장소설)','https://gssim11.github.io/PT-novel/',false)+'<div class="expl"><span class="tag">위치·연락</span>안산대학교 <b>성실관 205호</b> 물리치료학과 · Tel 031-363-6943 · Fax 031-363-7704</div>';
+   jobLink('🏫 물리치료학과 홈페이지 바로가기','https://physi.ansan.ac.kr/physi',false)+jobLink('📰 학과뉴스','https://physi.ansan.ac.kr/physi/board/3',false)+jobLink('📷 포토갤러리','https://physi.ansan.ac.kr/physi/board/7',false)+jobLink('💼 물리치료 채용공고 (PT-JOB)','https://pt-job.vercel.app/',false)+jobLink('📖 걷는 법을 배우는 시간 (물리치료학과 성장소설)','https://pt-novel.vercel.app/',true)+'<div class="expl"><span class="tag">위치·연락</span>안산대학교 <b>성실관 205호</b> 물리치료학과 · Tel 031-363-6943 · Fax 031-363-7704</div>';
   foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
 }
 function openStaff(ref){
@@ -1663,7 +1663,7 @@ function openCouncil(){
 
 /* ============================================================================
    대학일자리플러스센터 — 진로·취업·직무 + 「자기를 이해하기」(심경섭 교수)
-   출처: 안산대학교 대학일자리플러스센터 (job.ansan.ac.kr) · 나를 이해하기 워크시트 (gssim11.github.io/MBTI-leadership)
+   출처: 안산대학교 대학일자리플러스센터 (job.ansan.ac.kr) · 나를 이해하기 워크시트 (mbti-leadership.vercel.app)
    ========================================================================== */
 function jobLink(label,url,hl){ return '<a class="joblink'+(hl?' hl':'')+'" href="'+url+'" target="_blank" rel="noopener">'+label+'<span>↗</span></a>'; }
 
@@ -1671,8 +1671,8 @@ function jobLink(label,url,hl){ return '<a class="joblink'+(hl?' hl':'')+'" href
    새 자료는 아래 배열에 한 줄만 추가한다. 강조는 5개 이내 권장(AI 솔루션은 강조 맨 끝 — 바로 뒤 inFACE 두 항목과 붙여 두기 위함). */
 const CAREER_LINKS=[
  {t:'📘 물리치료사 첫 취업 안내서 2026 — 3학년·졸업 1년 이내', u:'https://pt-career-guide-2026.vercel.app/', hl:true},
- {t:'📚 취업준비와전략 — 2026-2 강의 안내 (물리치료학과)', u:'https://gssim11.github.io/Job-Preparation-and-Strategy/', hl:true},
- {t:'🧭 자기를 이해하기 — 「나를 이해하기」 워크시트 열기', u:'https://gssim11.github.io/MBTI-leadership/', hl:true},
+ {t:'📚 취업준비와전략 — 2026-2 강의 안내 (물리치료학과)', u:'https://job-preparation-and-strategy.vercel.app/', hl:true},
+ {t:'🧭 자기를 이해하기 — 「나를 이해하기」 워크시트 열기', u:'https://mbti-leadership.vercel.app/', hl:true},
  {t:'💼 물리치료 채용공고 (PT-JOB)', u:'https://pt-job.vercel.app/', hl:true},
  {t:'🤖 AI 솔루션 (자기소개서·면접)', u:'https://inface.ai/ansan', hl:true},
  {t:'🤝 AI매칭 채용정보', u:'https://inface.ai/ansan/loofit', hl:false},
@@ -1681,7 +1681,7 @@ const CAREER_LINKS=[
  {t:'📢 채용정보·취업매칭', u:'https://job.ansan.ac.kr/job/board/1', hl:false},
  {t:'💬 진로·취업 상담 신청', u:'https://aujob.ansan.ac.kr/aujob', hl:false},
  {t:'🎓 졸업생 특화 프로그램', u:'https://job.ansan.ac.kr/job/board/10', hl:false},
- {t:'📖 장편소설 「걷는 법을 배우는 시간」 — 스무 살, 남을 일으켜 세우는 사람이 되기까지', u:'https://gssim11.github.io/PT-novel/', hl:false}
+ {t:'📖 장편소설 「걷는 법을 배우는 시간」 — 스무 살, 남을 일으켜 세우는 사람이 되기까지', u:'https://pt-novel.vercel.app/', hl:true}
 ];
 function openCareer(){
   setDialog('💼','linear-gradient(135deg,#2f7fb0,#1f4f80)','대학일자리플러스센터','안산대학교 · 진로·취업·직무 원스톱');
@@ -1704,7 +1704,7 @@ function openSelfMap(){
   body.innerHTML=
    '<div class="say"><span class="who">심경섭 교수</span>진로의 출발점은 <b>“나를 아는 것”</b>입니다. 나의 성향·강점·가치를 돌아보고, 물리치료사로서(그리고 그 너머의) 진로·직무 방향을 스스로 설계해 봅시다.</div>'+
    '<div class="say"><span class="who">🧭 나를 이해하기 — 성향·리더십·진로 탐색 워크시트</span><b>STEP 1</b> 나의 성향 알아보기(16유형 — 이미 알면 선택, 모르면 <b>24문항·약 3분</b> 간단 검사) → <b>STEP 2</b> 내가 지향하는 리더상 고르기(그림 선택). <b>생년월일·개인정보 입력이 없고</b>, 인터넷 전송 없이 브라우저에서만 동작합니다.</div>'+'<div class="say"><span class="who">📄 결과물: 자기이해 리포트</span>두 단계를 마치면 <b>「자기이해 리포트」</b>가 만들어지고, <b>상담 요약 1장</b>으로 인쇄할 수 있어요 — 나의 성향과 지향 리더상, 강점, 일의 방향(직무·적성), 학생생활 포인트까지. 상담 시간에 지도교수·대학일자리센터 상담과 함께 활용하세요.</div>'+
-   '<div style="text-align:center;margin:6px 0 2px">'+jobLink('🧭 「나를 이해하기」 워크시트 바로가기','https://gssim11.github.io/MBTI-leadership/',true)+'</div>'+
+   '<div style="text-align:center;margin:6px 0 2px">'+jobLink('🧭 「나를 이해하기」 워크시트 바로가기','https://mbti-leadership.vercel.app/',true)+'</div>'+
    '<div class="expl"><span class="tag">참고</span>이 도구는 <b>검사·진단이 아닙니다.</b> 자기보고(성향 문항)와 그림 선호(리더십 이미지)를 바탕으로 스스로를 이해하도록 돕는 <b>교육용 워크시트</b>이며, 특정 상표 검사의 문항이 아닌 자체 제작 문항입니다. 결과는 대화의 재료일 뿐이고 <b>특정 종교·신앙과 무관</b>합니다.</div>';
   foot.innerHTML=''; addFoot('← 센터로', openCareer); addFoot('닫기', closeDialog, true);
   showDialog();
@@ -1726,7 +1726,7 @@ function openWelcome(){
   h+=jobLink('📰 학과뉴스 · 포토갤러리','https://physi.ansan.ac.kr/physi/board/3',false);
   h+=jobLink('💼 대학일자리플러스센터 (진로·취업)','https://job.ansan.ac.kr/job',false);
   h+=jobLink('💼 졸업 후 진로 — 물리치료 채용공고 (PT-JOB)','https://pt-job.vercel.app/',false);
-  h+=jobLink('📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설','https://gssim11.github.io/PT-novel/',false);
+  h+=jobLink('📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설','https://pt-novel.vercel.app/',true);
   h+=jobLink('▶ 학과 홍보영상 (YouTube)','https://www.youtube.com/watch?v=i1GJbMdRMuE',false);
   h+=jobLink('🚁 안산대 캠퍼스 VR 항공뷰','https://www.ansan.ac.kr/site/resource/ansan/vrtour/tour.html',false);
   h+='<div class="expl"><span class="tag">문의</span>안산대학교 성실관 205호 물리치료학과 · Tel 031-363-6943</div>';
