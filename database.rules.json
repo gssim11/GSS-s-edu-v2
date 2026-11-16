@@ -1,0 +1,24 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "presence": {
+      "$room": {
+        ".read": "auth != null && $room === 'main'",
+        "$uid": {
+          ".write": "auth != null && auth.uid === $uid && $room === 'main'",
+          ".validate": "newData.hasChildren(['n','c','x','y','d','t'])",
+          "n": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 8" },
+          "c": { ".validate": "newData.isString() && newData.val().matches(/^#[0-9a-fA-F]{6}$/)" },
+          "x": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4000" },
+          "y": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4000" },
+          "d": { ".validate": "newData.isString() && newData.val().matches(/^(up|down|left|right)$/)" },
+          "t": { ".validate": "newData.isNumber() && newData.val() <= now + 60000" },
+          "e": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 12" },
+          "et": { ".validate": "newData.isNumber()" },
+          "$other": { ".validate": false }
+        }
+      }
+    }
+  }
+}

@@ -329,6 +329,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
     <div class="chip"><span class="lab">📊 학점(점수)</span><b id="score">0</b> 점 · 정답 <span id="correct">0</span></div>
     <div class="chip"><span class="lab">🏛️ 이수 강의관</span><b id="visited">0</b> / 9</div>
     <div class="chip"><span class="lab">🪙 코인</span><b id="coins">0</b> 개</div>
+    <div class="chip" id="mpChip" role="button" tabindex="0" title="함께 접속한 사람 보기" style="display:none;pointer-events:auto;cursor:pointer"><span class="lab">👥 함께 접속</span><b id="mpCount">…</b> 명</div>
     <div class="chip" id="clock"><span class="lab">🕘 캠퍼스 시각</span><b id="clock-txt">09:00</b> <span id="period" style="color:var(--muted)"></span></div>
   </div>
 
@@ -865,7 +866,8 @@ function drawChar(c){
   ctx.fillStyle=isProf?'rgba(10,22,54,.94)':(c.isPlayer?'rgba(38,26,6,.92)':'rgba(8,14,30,.82)');
   drawRoundRect(x-nw/2,y+16,nw,nh,6);ctx.fill();
   if(isProf||c.isPlayer){ctx.strokeStyle='#c9a24b';ctx.lineWidth=1;drawRoundRect(x-nw/2,y+16,nw,nh,6);ctx.stroke();}
-  ctx.fillStyle=isProf?'#f4ead0':(c.isPlayer?'#ffe4a0':'#dbe6ff');
+  else if(c.remote){ctx.strokeStyle='#4fd1c5';ctx.lineWidth=1.2;drawRoundRect(x-nw/2,y+16,nw,nh,6);ctx.stroke();}
+  ctx.fillStyle=isProf?'#f4ead0':(c.isPlayer?'#ffe4a0':(c.remote?'#a8f0e8':'#dbe6ff'));
   ctx.font='bold 10px '+FSAN;ctx.fillText(nm,x,y+24);
   if(sub){ctx.fillStyle='#d4af52';ctx.font='9px '+FSAN;ctx.fillText(sub,x,y+35);}
   if(c.bubble)drawBubble(x,y-34,c.bubble,false,isProf?'#d4af52':c.color);
@@ -900,7 +902,7 @@ function render(){
   BUILDINGS.forEach(drawBuilding);
   funDrawProps();
   // entities sorted by y (painter's)
-  const ents = allChars.slice().sort((a,b)=>a.y-b.y);
+  const ents = allChars.concat(window.MP_REMOTES||[]).sort((a,b)=>a.y-b.y);
   ents.forEach(drawChar);
   funDrawTop();
   if(typeof drawGuide==='function') drawGuide();
@@ -1258,6 +1260,7 @@ function loop(now){
     }
   }
 
+  if(window.mpTick) window.mpTick(dt);
   // NPC AI
   npcs.forEach(c=>updateNPC(c,dt*(state.timeScale||1)));
   funTick(dt);
@@ -2076,6 +2079,7 @@ function drawMinimap(){
   try{ ctx.fillStyle='#f0d488'; ctx.fillRect(mx+ENTRANCE.x*sx-2, my+ENTRANCE.y*sy-2, 4, 4); }catch(e){}
   ctx.fillStyle='rgba(225,235,255,.5)';
   for(var j=0;j<npcs.length;j++){ ctx.fillRect(mx+npcs[j].x*sx-1, my+npcs[j].y*sy-1, 2, 2); }
+  var _mr=window.MP_REMOTES||[]; ctx.fillStyle='#4fd1c5'; for(var q=0;q<_mr.length;q++){ ctx.fillRect(mx+_mr[q].x*sx-1.5, my+_mr[q].y*sy-1.5, 3, 3); }
   var px=mx+player.x*sx, py=my+player.y*sy;
   ctx.fillStyle='#4fd1c5'; ctx.beginPath(); ctx.arc(px,py,3.6,0,Math.PI*2); ctx.fill();
   ctx.strokeStyle='#ffffff'; ctx.lineWidth=1.2; ctx.stroke();
@@ -2104,6 +2108,7 @@ function emoteReact(e, who){
   var c = who || player;
   window.emos.push({ x:c.x, y:c.y, e:e, t:0 });
   if(window.emos.length>30) window.emos.shift();
+  if(!who && window.mpEmote) window.mpEmote(e);
   try{ sfx('coin'); }catch(_){}
   try{ if(navigator.vibrate) navigator.vibrate(12); }catch(_){}
 }
@@ -2213,6 +2218,130 @@ requestAnimationFrame(loop);
     body.innerHTML=h+'</div>'; foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
   };
   var qb=document.getElementById('quickBtn'); if(qb) qb.onclick=function(){ window.openQuick(); };
+})();
+</script>
+<script>
+/* ============================================================================
+   함께 접속 (동시 접속) — 같은 시간에 들어온 학생의 아바타·이모지 반응을 서로 보여 준다
+   - MP_CONFIG 에 Firebase 웹 설정값을 넣으면 켜진다. null 이면 혼자 모드(지금과 동일).
+   - 시험용: 주소 뒤에 ?mp=local 을 붙이면 같은 브라우저의 창끼리만 연결된다(서버 없음).
+   - 보내는 정보: 닉네임(최대 8자)·옷 색·위치·방향·이모지. 로그인·개인정보 없음(익명 인증).
+   ========================================================================== */
+window.MP_CONFIG = null; /* ← Firebase 콘솔의 firebaseConfig 객체를 그대로 붙여 넣기 */
+(function(){
+  var ROOM='main', MAX_ONLINE=60, SEND_MS=350, BEAT_MS=15000, STALE_MS=60000;
+  var FB_VER='10.12.2';
+  var remotes={}, myId=null, tr=null, starting=false, full=false;
+  var last={x:-1,y:-1,d:'',t:0};
+  window.MP_REMOTES=[];
+
+  function cleanName(n){ n=String(n||'').replace(/[<>&"'`]/g,'').trim().slice(0,8); return n||'물치인'; }
+  function cleanColor(c){ return /^#[0-9a-fA-F]{6}$/.test(c||'')?c:'#7fb0e0'; }
+  function myName(){ var n=player.name||''; if(/^나 \(/.test(n)){ if(!window._mpNick) window._mpNick='물치인'+Math.floor(10+Math.random()*90); return window._mpNick; } return cleanName(n); }
+  function rebuild(){ window.MP_REMOTES=Object.keys(remotes).map(function(k){ return remotes[k].c; }); updateChip(); }
+
+  function onState(id, d){
+    if(!id || id===myId) return;
+    if(!d){ if(remotes[id]){ delete remotes[id]; rebuild(); } return; }
+    if(typeof d.x!=='number' || typeof d.y!=='number') return;
+    if(typeof d.t==='number' && Date.now()-d.t > STALE_MS*3) return;   /* 오래 남은 기록 무시 */
+    var r=remotes[id], fresh=!r;
+    if(fresh){ r=remotes[id]={ c:mkChar({ x:d.x, y:d.y, hair:'#2a2320', remote:true }), ex:0 }; }
+    r.tx=clamp(d.x,20,WORLD.w-20); r.ty=clamp(d.y,20,WORLD.h-20);
+    r.c.name=cleanName(d.n); r.c.color=cleanColor(d.c);
+    if(d.d==='up'||d.d==='down'||d.d==='left'||d.d==='right') r.c.dir=d.d;
+    r.seen=Date.now();
+    if(typeof d.e==='number' && d.et && d.et!==r.ex){ r.ex=d.et; if(!fresh && EMOJIS[d.e]) emoteQuiet(EMOJIS[d.e], r.c); }
+    if(fresh) rebuild();
+  }
+
+  /* ---- 연결 방식 1: Firebase 실시간 데이터베이스 ---- */
+  async function startFirebase(cfg){
+    var base='https://www.gstatic.com/firebasejs/'+FB_VER+'/';
+    var m=await Promise.all([import(base+'firebase-app.js'), import(base+'firebase-auth.js'), import(base+'firebase-database.js')]);
+    var A=m[0], AU=m[1], D=m[2];
+    var app=A.initializeApp(cfg);
+    var cred=await AU.signInAnonymously(AU.getAuth(app));
+    var db=D.getDatabase(app); myId=cred.user.uid;
+    var room=D.ref(db,'presence/'+ROOM), me=D.ref(db,'presence/'+ROOM+'/'+myId);
+    var snap=await D.get(room); var now=Date.now(), n=0;
+    if(snap.exists()){ var v=snap.val(); Object.keys(v).forEach(function(k){ if(v[k] && now-(v[k].t||0)<STALE_MS) n++; }); }
+    if(n>=MAX_ONLINE){ full=true; updateChip(); return null; }
+    await D.onDisconnect(me).remove();
+    D.onChildAdded(room,function(s){ onState(s.key,s.val()); });
+    D.onChildChanged(room,function(s){ onState(s.key,s.val()); });
+    D.onChildRemoved(room,function(s){ onState(s.key,null); });
+    return { send:function(d){ d.t=D.serverTimestamp(); return D.set(me,d); }, leave:function(){ return D.remove(me); } };
+  }
+  /* ---- 연결 방식 2: 시험용(같은 브라우저 창끼리) ---- */
+  function startLocal(){
+    var bc=new BroadcastChannel('aupt-mp-'+ROOM); myId='L'+Math.random().toString(36).slice(2,9);
+    bc.onmessage=function(ev){ var m=ev.data||{}; if(m.hello){ if(m.id!==myId) last.t=0; return; } onState(m.id, m.d); };
+    bc.postMessage({id:myId, hello:true});
+    return { send:function(d){ d.t=Date.now(); bc.postMessage({id:myId,d:d}); }, leave:function(){ bc.postMessage({id:myId,d:null}); } };
+  }
+
+  function wanted(){ return !!window.MP_CONFIG || /[?&]mp=local\b/.test(location.search); }
+  async function start(){
+    if(starting||tr||full) return; starting=true;
+    try{ tr = window.MP_CONFIG ? await startFirebase(window.MP_CONFIG) : startLocal(); }
+    catch(e){ tr=null; try{ console.warn('함께 접속 연결 실패 — 혼자 모드로 계속합니다.', e); }catch(_){} }
+    starting=false; updateChip();
+  }
+  function packet(extra){
+    var d={ n:myName(), c:cleanColor(player.color), x:Math.round(player.x), y:Math.round(player.y), d:player.dir||'down' };
+    if(window._mpEmo){ d.e=window._mpEmo.i; d.et=window._mpEmo.t; }
+    return d;
+  }
+  function sendNow(){ if(!tr) return; last={x:player.x,y:player.y,d:player.dir,t:performance.now()}; try{ tr.send(packet()); }catch(e){} }
+
+  window.mpTick=function(dt){
+    if(!state.entered || !wanted()) return;
+    if(!tr){ start(); return; }
+    var now=performance.now();
+    if(!document.hidden){
+      var moved=Math.abs(player.x-last.x)+Math.abs(player.y-last.y)>3 || player.dir!==last.d;
+      if((moved && now-last.t>SEND_MS) || now-last.t>BEAT_MS) sendNow();
+    }
+    var wall=Date.now(), gone=false;
+    Object.keys(remotes).forEach(function(k){
+      var r=remotes[k], c=r.c;
+      if(wall-r.seen>STALE_MS){ delete remotes[k]; gone=true; return; }
+      var dx=r.tx-c.x, dy=r.ty-c.y, dd=Math.hypot(dx,dy);
+      if(dd>400){ c.x=r.tx; c.y=r.ty; c.moving=false; }
+      else if(dd>1.5){ var k2=Math.min(1,dt*7); c.x+=dx*k2; c.y+=dy*k2; c.moving=true; c.walk+=dt*12; }
+      else c.moving=false;
+      if(c.bubbleT>0){ c.bubbleT-=dt; if(c.bubbleT<=0) c.bubble=null; }
+    });
+    if(gone) rebuild();
+  };
+  window.mpEmote=function(e){ var i=EMOJIS.indexOf(e); if(i<0||!tr) return; window._mpEmo={i:i,t:Date.now()}; sendNow(); };
+  addEventListener('pagehide', function(){ try{ tr&&tr.leave(); }catch(e){} });
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden && tr) sendNow(); });
+
+  /* ---- 접속 인원 표시 ---- */
+  function updateChip(){
+    var chip=document.getElementById('mpChip'); if(!chip) return;
+    if(!wanted()){ chip.style.display='none'; return; }
+    chip.style.display='';
+    var b=document.getElementById('mpCount');
+    if(full){ b.textContent='만석'; chip.title='접속 인원이 많아 혼자 모드로 진행합니다'; return; }
+    b.textContent = tr ? String(window.MP_REMOTES.length+1) : '…';
+  }
+  window.openOnline=function(){
+    var list=window.MP_REMOTES.slice().sort(function(a,b){ return a.name<b.name?-1:1; });
+    setDialog('👥','linear-gradient(135deg,#2c9c92,#2a3550)','함께 접속','지금 캠퍼스에 있는 사람');
+    var body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+    var rows=[{t:myName()+' <span style="color:var(--muted);font-weight:400">· 나</span>', c:cleanColor(player.color)}]
+      .concat(list.map(function(c){ return {t:c.name, c:c.color}; }));
+    body.innerHTML = pLead(full ? '지금은 접속 인원이 많아 <b>혼자 모드</b>로 진행 중입니다. 잠시 뒤 다시 들어오면 함께 접속됩니다.'
+        : '같은 시간에 들어온 사람은 캠퍼스에 <b>청록색 이름표</b>로 보입니다. 숫자 키 1~9나 😀 버튼의 이모지 반응도 서로 보입니다.')
+      + pSec('접속 중 '+rows.length+'명') + rowList(rows)
+      + pInfo('안내','닉네임·옷 색·위치만 주고받고, 로그인이나 개인정보는 쓰지 않습니다. 닉네임은 입장 화면에서 정합니다.');
+    foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
+  };
+  try{ var chip=document.getElementById('mpChip'); if(chip){ chip.onclick=window.openOnline; chip.onkeydown=function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); window.openOnline(); } }; } }catch(e){}
+  updateChip();
 })();
 </script>
 <script>
