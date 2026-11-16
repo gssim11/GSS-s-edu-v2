@@ -156,10 +156,34 @@
   .fac.sm i{font-size:10.5px}
   .gb-bar{height:9px;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;margin-bottom:11px}
   .gb-fill{height:100%;width:100%;background:linear-gradient(90deg,#f0d488,#c8506a)}
-  .joblink{display:flex;align-items:center;justify-content:space-between;gap:8px;text-decoration:none;background:rgba(6,16,38,.6);border:1px solid var(--line);border-radius:12px;padding:12px 15px;margin-bottom:9px;color:#dde7fb;font-size:14px;font-family:var(--san);transition:.15s}
-  .joblink:hover{border-color:var(--gold);background:rgba(27,61,122,.4);color:#fff}
-  .joblink span{color:var(--gold);font-size:12px}
-  .joblink.hl{border-color:var(--gold);background:linear-gradient(135deg,rgba(212,175,82,.18),rgba(27,61,122,.35));color:var(--cream);font-weight:700}
+  /* ---- 건물 패널 공통 디자인: 요약 → 소제목 → 목록 → 위치·연락 ---- */
+  .plead{font-size:14px;line-height:1.7;color:#dde7fb;padding:0 2px 14px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+  .psec{margin:18px 0 9px}
+  .psec-t{font-family:var(--ser);font-size:13.5px;font-weight:800;color:var(--gold-hi);letter-spacing:.03em;display:flex;align-items:center;gap:10px}
+  .psec-t:after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--gold-line),transparent)}
+  .psec-d{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:5px}
+  .plist{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:rgba(6,16,38,.55);margin-bottom:4px}
+  .joblink{display:flex;align-items:center;gap:12px;width:100%;text-decoration:none;background:rgba(6,16,38,.55);border:1px solid var(--line);
+    border-radius:14px;padding:11px 14px;margin:0;color:#e3eafa;font-size:14px;font-family:var(--san);text-align:left;transition:background .15s}
+  .plist .joblink,.plist .prow{border:none;border-radius:0;background:transparent;border-top:1px solid rgba(212,175,82,.13)}
+  .plist > :first-child{border-top:none}
+  .joblink:hover,.joblink:focus-visible{background:rgba(27,61,122,.5);color:#fff;outline:none}
+  .jl-ic{font-style:normal;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;
+    background:rgba(11,34,78,.85);border:1px solid var(--line);flex:0 0 auto}
+  .jl-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+  .jl-tx b{font-weight:600;font-size:14px;color:#e6edfb;line-height:1.4}
+  .jl-tx small{font-size:12px;color:var(--muted);line-height:1.45}
+  .jl-go{color:var(--gold);font-size:13px;opacity:.75;flex:0 0 auto}
+  .joblink.hl .jl-ic{background:linear-gradient(135deg,rgba(212,175,82,.42),rgba(212,175,82,.12));border-color:var(--gold)}
+  .joblink.hl .jl-tx b{color:var(--cream);font-weight:700}
+  .prow{display:flex;gap:12px;align-items:flex-start;padding:11px 14px;font-size:13px;line-height:1.6;color:#d3ddf3}
+  .prow .dot{width:9px;height:9px;border-radius:3px;margin-top:6px;flex:0 0 auto}
+  .prow b{color:var(--cream);font-weight:700}
+  .prow.off{color:var(--muted)}
+  .pinfo{font-size:12.5px;color:var(--muted);line-height:1.65;margin-top:16px;padding-top:12px;border-top:1px dashed var(--line)}
+  .pinfo + .pinfo{margin-top:8px;padding-top:0;border-top:none}
+  .pinfo .tag{display:inline-block;font-size:11px;font-weight:800;color:var(--gold-hi);border:1px solid var(--gold-line);border-radius:6px;padding:0 7px;margin-right:7px}
+  .pinfo b{color:#dde7fb}
   .gold{color:var(--gold-hi)}
 
   /* ---- touch controls / mobile ---- */
@@ -212,7 +236,7 @@
     #btnE{width:78px;height:78px;right:16px;bottom:22px;font-size:12px}
     .modal .head h2{font-size:15px}
     .say{font-size:13.5px}
-    .joblink{font-size:13px;padding:11px 13px}
+    .jl-tx b{font-size:13.5px} .jl-ic{width:30px;height:30px;font-size:15px} .joblink,.prow{padding:10px 12px}
   }
   /* --- 조작 안내 툴팁 + 안전영역 --- */
   #ctrlhint{position:fixed;left:50%;bottom:150px;transform:translateX(-50%) translateY(12px);z-index:40;max-width:92vw;width:max-content;
@@ -282,7 +306,7 @@
 html[data-fs="1"] .overlay .modal .body,html[data-fs="1"] .overlay .modal .foot{zoom:1.15}
 html[data-fs="2"] .overlay .modal .body,html[data-fs="2"] .overlay .modal .foot{zoom:1.3}
 html[data-fs="3"] .overlay .modal .body,html[data-fs="3"] .overlay .modal .foot{zoom:1.5}
-button.joblink{width:100%;font:inherit;text-align:left;cursor:pointer}
+button.joblink{font:inherit;cursor:pointer}
 .overlay .modal:focus{outline:none}
 button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 </style>
@@ -984,8 +1008,7 @@ const NEURO_LINKS=[
  {t:'💪 근육 성장과 손실의 과학 (머슬 메모리)', u:'https://muscle-memory-alpha.vercel.app/', hl:false}
 ];
 function neuroLinksHTML(){
-  return '<div class="say" style="border-style:dashed"><span class="who">📎 신경계물리치료 학습자료</span>심경섭 교수 제작 자료입니다. <b>중요도 순</b>으로 정렬했으니 위에서부터 보세요.</div>'
-    + NEURO_LINKS.map(function(L){ return jobLink(L.t, L.u, L.hl); }).join('');
+  return pSec('신경계물리치료 학습자료','심경섭 교수 제작 · <b>중요도 순</b>으로 위에서부터 보세요')+linkList(NEURO_LINKS);
 }
 
 /* 신경해부학관 전용 학습자료 */
@@ -995,12 +1018,7 @@ const NEUROANAT_LINKS=[
  {t:'🗺️ Neuro Atlas — 신경해부학·신경과학 강의록', u:'https://na-ns.vercel.app/', hl:false}
 ];
 function neuroanatLinksHTML(){
-  let h='<div class="say" style="border-style:dashed"><span class="who">📎 신경해부학 학습자료</span>심경섭 교수 제작 자료입니다. 강의록 <b>챕터별 핵심요약·확인문제</b>를 한 곳에서 봅니다.</div>';
-  NEUROANAT_LINKS.forEach(function(L){
-    h += L.u ? jobLink(L.t, L.u, L.hl)
-             : '<div class="say" style="border-style:dashed;opacity:.7">'+L.t+' &nbsp;<b>— 준비 중</b></div>';
-  });
-  return h;
+  return pSec('신경해부학 학습자료','심경섭 교수 제작 · 강의록 챕터별 핵심요약·확인문제')+linkList(NEUROANAT_LINKS);
 }
 
 /* 심화호흡물리치료관 전용 학습자료 */
@@ -1008,14 +1026,15 @@ const CARDIO_LINKS=[
  {t:'🌬️ 심장호흡물리치료학 — 종합 인포그래픽 가이드 (기초·평가·질환관리·재활·AI 임상지원)', u:'https://cardio-pulmonary-pt-2.vercel.app/', hl:true}
 ];
 function cardioLinksHTML(){
-  return '<div class="say" style="border-style:dashed"><span class="who">📎 심화호흡물리치료 학습자료</span>심경섭 교수 제작 자료입니다. 기초·평가·질환관리·재활과 <b>AI 임상지원</b> 도구까지 한 곳에 있습니다.</div>'
-    + CARDIO_LINKS.map(function(L){ return jobLink(L.t, L.u, L.hl); }).join('');
+  return pSec('심화호흡물리치료 학습자료','심경섭 교수 제작 · 기초·평가·질환관리·재활·AI 임상지원')+linkList(CARDIO_LINKS);
 }
 function openHall(b){
   const p = professors.find(x=>x.subj===b.subj);
   setDialog(b.emoji, 'linear-gradient(135deg,'+b.color+',#2a3550)', b.name, SUBJ_NAME[b.subj]+' · 강의관');
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
-  body.innerHTML='<div class="say"><span class="who">'+b.name+'</span>'+b.name+'에 입장했습니다. 오늘 과목은 <b>'+SUBJ_NAME[b.subj]+'</b>. 강의를 듣거나 퀴즈로 학점을 쌓으세요.</div>'+jobLink('📘 학과 교육과정·로드맵','https://physi.ansan.ac.kr/physi/roadmap',false)+(b.subj==='neuroanat'?neuroanatLinksHTML():'')+(b.subj==='neuro'?neuroLinksHTML():'')+(b.subj==='cardio'?cardioLinksHTML():'');
+  const mat = b.subj==='neuroanat'?neuroanatLinksHTML():(b.subj==='neuro'?neuroLinksHTML():(b.subj==='cardio'?cardioLinksHTML():''));
+  body.innerHTML=pLead('오늘 과목은 <b>'+SUBJ_NAME[b.subj]+'</b>입니다. 아래 <b>강의 요약</b>으로 핵심을 듣고 <b>퀴즈</b>로 학점을 쌓으세요.')
+    +mat+pSec('학과 자료')+linkList([{t:'📘 학과 교육과정 — 학년별 로드맵',u:'https://physi.ansan.ac.kr/physi/roadmap'}]);
   foot.innerHTML='';
   addFoot('📖 강의 요약', ()=>lectureSummary(b.subj, p?p.name:b.name));
   addFoot('📝 퀴즈 시작', ()=>startQuiz(b.subj, p?p.name:b.name), true);
@@ -1027,7 +1046,16 @@ function openHub(){
   setDialog('📚','linear-gradient(135deg,#4a8f5a,#2a3550)','국가고시·도서관','물리치료 국가고시 준비 · 열람 공간');
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
   const around = students.filter(s=>dist(s.x,s.y,player.x,player.y)<260).map(s=>s.name);
-  body.innerHTML='<div class="say"><span class="who">📝 국시 실력 점검</span>안산대학교 물리치료학과가 만든 원작 문항으로, 실제 필기시험의 과목 비율을 유지한 80문항 축약형입니다. 약한 과목을 찾는 점검용이며, 실제 국가시험의 교시·문항 수·합격 기준 안내도 함께 볼 수 있습니다.</div>'+jobLink('📝 국시 실력 점검 1회 — 80문항 축약형 · 과목별 채점·해설','https://gss-edu-v2.vercel.app/mock1.html',true)+'<div class="say"><span class="who">🎓 국가고시 준비 · 가족회사</span>안산대학교 물리치료학과 <b>가족회사</b>가 운영하는 국가고시 학습 플랫폼입니다. 이론·문제풀이·모의고사를 한 곳에서 준비하세요.</div>'+jobLink('🎯 프로리온 ProReOn — 국시 이론·문제풀이·모의고사·360° 강의','https://proreon.ai.kr/home',true)+jobLink('🐯 국시독립 — 물리치료 국가고시 문제은행 앱','https://xn--3e0b93j8pf2qk.com/',true)+'<div class="expl"><span class="tag">참고</span>캠퍼스 각 교과관에서도 과목별 국시 대비 퀴즈를 풀 수 있습니다.</div>'+'<div class="say"><span class="who">📚 도서관·휴게</span>NPC 학생들이 쉬는 시간에 모여 잡담하는 곳이기도 합니다. 지금 근처 학생: <b>'+(around.length?around.join(', '):'없음')+'</b> (👁️ 관전 모드 추천)</div>'+'<div class="say"><span class="who">📰 최신 논문 브리핑</span>신경계·임상·필라테스·근거중심 물리치료 분야의 최신 PubMed 논문을 매일 아침 AI가 한국어로 요약해 올립니다. <b>AI 요약은 참고용</b>이니 공부할 때는 꼭 PubMed 원문을 함께 확인하세요.</div>'+jobLink('📰 PT 논문 브리핑 — 최신 PubMed 논문 AI 요약 (매일 갱신·참고용)','https://pt-knowledge-hub.vercel.app/',true)+jobLink('📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설','https://pt-novel.vercel.app/',true);
+  body.innerHTML=pLead('국가고시 준비 자료와 읽을거리를 한 곳에 모았습니다. 각 교과관에서는 과목별 퀴즈도 풀 수 있습니다.')
+   +pSec('국시 실력 점검','학과 원작 80문항 축약형 · 실제 필기시험 과목 비율 유지 · 교시·문항 수·합격 기준 안내 포함')
+   +linkList([{t:'📝 국시 실력 점검 1회 — 80문항 · 과목별 채점·해설',u:'https://gss-edu-v2.vercel.app/mock1.html',hl:true}])
+   +pSec('국가고시 학습 플랫폼','학과 가족회사 운영 · 이론·문제풀이·모의고사')
+   +linkList([{t:'🎯 프로리온 ProReOn — 국시 이론·문제풀이·모의고사·360° 강의',u:'https://proreon.ai.kr/home'},
+              {t:'🐯 국시독립 — 물리치료 국가고시 문제은행 앱',u:'https://xn--3e0b93j8pf2qk.com/'}])
+   +pSec('읽을거리','논문 브리핑은 매일 아침 AI가 최신 PubMed 논문을 한국어로 요약 · <b>참고용</b>이니 원문과 함께 보세요')
+   +linkList([{t:'📰 PT 논문 브리핑 — 최신 PubMed 논문 AI 요약 · 매일 갱신',u:'https://pt-knowledge-hub.vercel.app/'},
+              {t:'📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설',u:'https://pt-novel.vercel.app/'}])
+   +pInfo('휴게','쉬는 시간에 NPC 학생들이 모이는 곳 · 지금 근처 학생: <b>'+(around.length?around.join(', '):'없음')+'</b>');
   foot.innerHTML='';
   addFoot('👁️ 관전 모드 켜기', ()=>{ toggleSpectate(true); closeDialog(); });
   addFoot('닫기', closeDialog);
@@ -1037,14 +1065,14 @@ function openHub(){
 function openPartners(){
   setDialog('🤝','linear-gradient(135deg,#3a72c4,#2a3550)','협력기관','학과와 연계하는 협회 · 센터');
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
-  body.innerHTML='<div class="say"><span class="who">안내</span>안산대학교 물리치료학과와 교류·연계가 활발한 협회·센터·가족회사입니다. 교육과정·자격·국가고시·현장 정보를 만나보세요.</div>'
-   +'<div class="say" style="border-style:dashed;border-color:var(--gold)"><span class="who" style="color:var(--gold-hi)">🤝 협회 · 센터</span>교육과정과 자격인증을 운영하는 연계 기관입니다.</div>'
-   +jobLink('🧘 굿얼라인재활필라테스협회 (GARP)','https://garp.kr/',true)
-   +jobLink('🏃 대한건강운동재활협회 (KAHER)','https://kaher.vercel.app/index.html',true)
-   +jobLink('🧍 웰니스포스처 — 네이버 블로그','https://blog.naver.com/newksb1004',false)
-   +'<div class="say" style="border-style:dashed;border-color:var(--gold)"><span class="who" style="color:var(--gold-hi)">🎓 가족회사 · 국가고시</span>학과 가족회사가 운영하는 국가고시 학습 플랫폼입니다.</div>'
-   +jobLink('🎯 프로리온 ProReOn — 국시 이론·문제풀이·모의고사','https://proreon.ai.kr/home',true)
-   +jobLink('🐯 국시독립 — 물리치료 국가고시 문제은행 앱','https://xn--3e0b93j8pf2qk.com/',true);
+  body.innerHTML=pLead('안산대학교 물리치료학과와 교류·연계가 활발한 협회·센터·가족회사입니다.')
+   +pSec('협회 · 센터','교육과정과 자격인증을 운영하는 연계 기관')
+   +linkList([{t:'🧘 굿얼라인재활필라테스협회 (GARP)',u:'https://garp.kr/'},
+              {t:'🏃 대한건강운동재활협회 (KAHER)',u:'https://kaher.vercel.app/index.html'},
+              {t:'🧍 웰니스포스처 — 네이버 블로그',u:'https://blog.naver.com/newksb1004'}])
+   +pSec('가족회사 · 국가고시','학과 가족회사가 운영하는 국가고시 학습 플랫폼')
+   +linkList([{t:'🎯 프로리온 ProReOn — 국시 이론·문제풀이·모의고사',u:'https://proreon.ai.kr/home'},
+              {t:'🐯 국시독립 — 물리치료 국가고시 문제은행 앱',u:'https://xn--3e0b93j8pf2qk.com/'}]);
   foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
 }
 
@@ -1645,10 +1673,15 @@ function staffTick(dt){
 function openOffice(){
   setDialog('🏢','linear-gradient(135deg,#5b6472,#2a3550)','학과사무실','안산대학교 물리치료학과');
   const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
-  body.innerHTML=
-   '<div class="say"><span class="who">안내</span>수강·학적·증명·행정 문의는 학과사무실로 오세요. 친절한 조교 선생님들이 도와드립니다.</div>'+
-   '<div class="say"><span class="who">👩‍💼 조교 선생님</span><b>정성예</b> 조교 · <b>김희연</b> 조교</div>'+
-   jobLink('🏫 물리치료학과 홈페이지 바로가기','https://physi.ansan.ac.kr/physi',false)+jobLink('📰 학과뉴스','https://physi.ansan.ac.kr/physi/board/3',false)+jobLink('📷 포토갤러리','https://physi.ansan.ac.kr/physi/board/7',false)+jobLink('💼 물리치료 채용공고 (PT-JOB)','https://pt-job.vercel.app/',false)+jobLink('📖 걷는 법을 배우는 시간 (물리치료학과 성장소설)','https://pt-novel.vercel.app/',true)+'<div class="expl"><span class="tag">위치·연락</span>안산대학교 <b>성실관 205호</b> 물리치료학과 · Tel 031-363-6943 · Fax 031-363-7704</div>';
+  body.innerHTML=pLead('수강·학적·증명·행정 문의는 학과사무실로 오세요. 조교 <b>정성예</b> · <b>김희연</b> 선생님이 도와드립니다.')
+   +pSec('학과 소식')
+   +linkList([{t:'🏫 물리치료학과 홈페이지',u:'https://physi.ansan.ac.kr/physi'},
+              {t:'📰 학과뉴스',u:'https://physi.ansan.ac.kr/physi/board/3'},
+              {t:'📷 포토갤러리',u:'https://physi.ansan.ac.kr/physi/board/7'}])
+   +pSec('진로 · 읽을거리')
+   +linkList([{t:'💼 물리치료 채용공고 (PT-JOB)',u:'https://pt-job.vercel.app/'},
+              {t:'📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설',u:'https://pt-novel.vercel.app/'}])
+   +pInfo('위치·연락','안산대학교 <b>성실관 205호</b> · Tel 031-363-6943 · Fax 031-363-7704');
   foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
 }
 function openStaff(ref){
@@ -1659,20 +1692,21 @@ function openStaff(ref){
   foot.innerHTML=''; addFoot('🏢 사무실 안내', openOffice); addFoot('닫기', closeDialog, true); showDialog();
 }
 function openClub(){
-  setDialog('🎽','linear-gradient(135deg,#c98b3a,#8a642a)','전공동아리방','안산대 물리치료학과 · 7개 전공동아리');
+  setDialog('🎽','linear-gradient(135deg,#c98b3a,#8a642a)','전공동아리방','안산대 물리치료학과 · '+CLUBS.length+'개 전공동아리');
   const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
-  let h='<div class="say" style="border-style:dashed">매 학기 초 신입 부원 모집! 관심 있는 동아리를 살펴보세요.</div>';
-  CLUBS.forEach(c=>{ h+='<div class="say"><span class="who" style="color:'+c.c+'">'+c.n+' · '+c.f+'</span>'+c.d+'</div>'; });
-  h+=jobLink('🎽 전공동아리 소개 — 학과 홈페이지','https://physi.ansan.ac.kr/physi/circle',false);
-  body.innerHTML=h; foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
+  body.innerHTML=pLead('매 학기 초 신입 부원을 모집합니다. 관심 있는 동아리를 살펴보세요.')
+   +pSec('전공동아리 '+CLUBS.length+'곳')
+   +rowList(CLUBS.map(function(c){ return {t:c.n+' <span style="color:var(--muted);font-weight:400">· '+c.f+'</span>', d:c.d, c:c.c}; }))
+   +pSec('더 보기')
+   +linkList([{t:'🎽 전공동아리 소개 — 학과 홈페이지',u:'https://physi.ansan.ac.kr/physi/circle'}]);
+  foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
 }
 function openCouncil(){
   setDialog('📣','linear-gradient(135deg,#3c8f7a,#276b5a)','물리치료학과 학회실','학생회 · 학생 자치기구');
   const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
-  body.innerHTML=
-   '<div class="say"><span class="who">물치 학생회(학회)</span>학생 대표 기구로서 학과 행사·MT·체육대회·학술제를 기획하고, 학생 복지와 선후배 교류, 국시 대비 스터디를 지원합니다.</div>'+
-   '<div class="say"><span class="who">🙌 함께해요</span>과대·집행부 모집, 행사 자원봉사 등 참여 기회가 열려 있습니다. 궁금하면 학회실로 오세요!</div>'+
-   jobLink('👥 임원소개 — 학생회·임원 보기','https://physi.ansan.ac.kr/physi/officer',false)+'<div class="expl"><span class="tag">참고</span>임원·행사 정보는 학과 「임원소개」 페이지에서 확인하세요.</div>';
+  body.innerHTML=pLead('학생 대표 기구로서 학과 행사·MT·체육대회·학술제를 기획하고, 학생 복지와 선후배 교류, 국시 대비 스터디를 지원합니다.')
+   +pSec('함께해요','과대·집행부 모집, 행사 자원봉사 등 참여 기회가 열려 있습니다. 궁금하면 학회실로 오세요.')
+   +linkList([{t:'👥 임원소개 — 학생회·임원 보기',u:'https://physi.ansan.ac.kr/physi/officer'}]);
   foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
 }
 
@@ -1681,35 +1715,50 @@ function openCouncil(){
    대학일자리플러스센터 — 진로·취업·직무 + 「자기를 이해하기」(심경섭 교수)
    출처: 안산대학교 대학일자리플러스센터 (job.ansan.ac.kr) · 나를 이해하기 워크시트 (mbti-leadership.vercel.app)
    ========================================================================== */
-function jobLink(label,url,hl){ return '<a class="joblink'+(hl?' hl':'')+'" href="'+url+'" target="_blank" rel="noopener">'+label+'<span>↗</span></a>'; }
 
-/* 대학일자리플러스센터 링크 — 강조(hl:true)가 먼저, 같은 묶음 안에서는 적힌 순서대로 나열된다.
-   새 자료는 아래 배열에 한 줄만 추가한다. 강조는 5개 이내 권장(AI 솔루션은 강조 맨 끝 — 바로 뒤 inFACE 두 항목과 붙여 두기 위함). */
+/* 링크 한 줄: 앞 이모지 → 아이콘 칸, ' — ' 뒤나 끝 괄호 → 작은 설명 */
+function jlInner(label, go){
+  var ic='', rest=label, m=label.match(/^(\S+)\s+([\s\S]*)$/);
+  if(m && !/[0-9A-Za-z가-힣「“]/.test(m[1])){ ic=m[1]; rest=m[2]; }
+  var t=rest, sub='', i=rest.indexOf(' — ');
+  if(i>0){ t=rest.slice(0,i); sub=rest.slice(i+3); }
+  else { var q=rest.match(/^(.*\S)\s+\(([^()]+)\)$/); if(q){ t=q[1]; sub=q[2]; } }
+  return '<i class="jl-ic" aria-hidden="true">'+ic+'</i><span class="jl-tx"><b>'+t+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</span><span class="jl-go" aria-hidden="true">'+(go||'↗')+'</span>';
+}
+function jobLink(label,url,hl){ return '<a class="joblink'+(hl?' hl':'')+'" href="'+url+'" target="_blank" rel="noopener">'+jlInner(label)+'</a>'; }
+function linkList(items){ return '<div class="plist">'+items.map(function(L){ return L.u ? jobLink(L.t,L.u,L.hl) : '<div class="prow off">'+L.t+' · 준비 중</div>'; }).join('')+'</div>'; }
+function rowList(rows){ return '<div class="plist">'+rows.map(function(r){ return '<div class="prow">'+(r.c?'<i class="dot" style="background:'+r.c+'"></i>':'')+'<div><b>'+r.t+'</b>'+(r.d?'<br>'+r.d:'')+'</div></div>'; }).join('')+'</div>'; }
+function pLead(html){ return '<div class="plead">'+html+'</div>'; }
+function pSec(title, desc){ return '<div class="psec"><div class="psec-t">'+title+'</div>'+(desc?'<div class="psec-d">'+desc+'</div>':'')+'</div>'; }
+function pInfo(tag, html){ return '<div class="pinfo"><span class="tag">'+tag+'</span>'+html+'</div>'; }
+
+/* 대학일자리플러스센터 링크 — g(묶음)별로 적힌 순서대로 나열된다. 새 자료는 해당 묶음에 한 줄만 추가한다.
+   g: 'dept' 학과 취업 준비 자료 · 'center' 센터 온라인 서비스 · 'read' 읽을거리. hl:true 는 아이콘 칸만 금색으로 강조(묶음당 2~3개 권장). */
 const CAREER_LINKS=[
- {t:'📘 물리치료사 첫 취업 안내서 2026 — 3학년·졸업 1년 이내', u:'https://pt-career-guide-2026.vercel.app/', hl:true},
- {t:'📚 취업준비와전략 — 2026-2 강의 안내 (물리치료학과)', u:'https://job-preparation-and-strategy.vercel.app/', hl:true},
- {t:'🧭 자기를 이해하기 — 「나를 이해하기」 워크시트 열기', u:'https://mbti-leadership.vercel.app/', hl:true},
- {t:'💼 물리치료 채용공고 (PT-JOB)', u:'https://pt-job.vercel.app/', hl:true},
- {t:'🤖 AI 솔루션 (자기소개서·면접)', u:'https://inface.ai/ansan', hl:true},
- {t:'🤝 AI매칭 채용정보', u:'https://inface.ai/ansan/loofit', hl:false},
- {t:'📝 NCS·인적성검사', u:'https://inface.ai/ansan/riings', hl:false},
- {t:'🗺️ 진로·취업 로드맵', u:'https://job.ansan.ac.kr/job/content/4', hl:false},
- {t:'📢 채용정보·취업매칭', u:'https://job.ansan.ac.kr/job/board/1', hl:false},
- {t:'💬 진로·취업 상담 신청', u:'https://aujob.ansan.ac.kr/aujob', hl:false},
- {t:'🎓 졸업생 특화 프로그램', u:'https://job.ansan.ac.kr/job/board/10', hl:false},
- {t:'📖 장편소설 「걷는 법을 배우는 시간」 — 스무 살, 남을 일으켜 세우는 사람이 되기까지', u:'https://pt-novel.vercel.app/', hl:true}
+ {g:'dept', t:'📘 물리치료사 첫 취업 안내서 2026 — 3학년·졸업 1년 이내', u:'https://pt-career-guide-2026.vercel.app/', hl:true},
+ {g:'dept', t:'📚 취업준비와전략 — 2026-2 강의 안내 (물리치료학과)', u:'https://job-preparation-and-strategy.vercel.app/', hl:true},
+ {g:'dept', t:'🧭 자기를 이해하기 — 성향·강점을 돌아보는 「나를 이해하기」 워크시트', u:'https://mbti-leadership.vercel.app/', hl:true},
+ {g:'dept', t:'💼 물리치료 채용공고 (PT-JOB)', u:'https://pt-job.vercel.app/'},
+ {g:'dept', t:'🌏 해외 물리치료사 면허 가이드북 2026 — 미국 RPT 2권 · 영국·호주 등 7개국 1권', u:'https://pt-overseas-license.vercel.app/'},
+ {g:'center', t:'🤖 AI 솔루션 (자기소개서·AI면접)', u:'https://inface.ai/ansan', hl:true},
+ {g:'center', t:'🤝 AI매칭 채용정보', u:'https://inface.ai/ansan/loofit'},
+ {g:'center', t:'📝 NCS·인적성검사', u:'https://inface.ai/ansan/riings'},
+ {g:'center', t:'🗺️ 진로·취업 로드맵', u:'https://job.ansan.ac.kr/job/content/4'},
+ {g:'center', t:'📢 채용정보·취업매칭', u:'https://job.ansan.ac.kr/job/board/1'},
+ {g:'center', t:'💬 진로·취업 상담 신청', u:'https://aujob.ansan.ac.kr/aujob'},
+ {g:'center', t:'🎓 졸업생 특화 프로그램', u:'https://job.ansan.ac.kr/job/board/10'},
+ {g:'read', t:'📖 장편소설 「걷는 법을 배우는 시간」 — 스무 살, 남을 일으켜 세우는 사람이 되기까지', u:'https://pt-novel.vercel.app/'}
 ];
 function openCareer(){
   setDialog('💼','linear-gradient(135deg,#2f7fb0,#1f4f80)','대학일자리플러스센터','안산대학교 · 진로·취업·직무 원스톱');
   const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
-  let h='<div class="say"><span class="who">안내</span>고용노동부·안산대학교·안산시가 함께 운영하는 일원화 진로·취업 지원기관. 상담·채용정보·잡매칭·프로그램으로 성공적인 사회진출을 돕습니다. <b>“나를 알아주는 대학”</b></div>';
-  h+='<div class="say" style="border-style:dashed;border-color:var(--gold)"><span class="who" style="color:var(--gold-hi)">🧭 자기를 이해하기 · 심경섭 교수</span>대학일자리플러스센터 부센터장 심경섭 교수의 진로상담 카테고리. 나의 성향·강점을 돌아보고 진로·직무 방향을 스스로 설계하는 자기이해 활동입니다.</div>';
-  CAREER_LINKS.filter(function(L){return L.hl;}).concat(CAREER_LINKS.filter(function(L){return !L.hl;}))
-    .forEach(function(L){ h+=jobLink(L.t, L.u, L.hl); });
-  h+='<div class="expl"><span class="tag">이용 안내</span><b>AI 솔루션</b>은 자기소개서·AI면접·AI매칭 채용정보·NCS/인적성검사를 한 곳에서 제공합니다(inFACE). <b>안산대학교 SSO 계정으로 로그인</b>하면 재학생뿐 아니라 <b>교직원도 이용 가능</b>합니다.</div>';
-  h+='<div class="say" style="border-style:dashed;border-color:var(--gold)"><span class="who" style="color:var(--gold-hi)">🌏 해외 물리치료사 면허</span>미국 RPT(졸업예정자 편·졸업생 편)와 영국·호주·독일·일본·캐나다·뉴질랜드·UAE 7개국 면허 경로를 정리한 가이드북 3권입니다. 내 상황에 맞는 책을 골라 PDF로 볼 수 있습니다.</div>'+jobLink('🌏 해외 물리치료사 면허 가이드북 2026 — 미국 RPT 2권 · 7개국 1권','https://pt-overseas-license.vercel.app/',true);
-  h+='<div class="say"><span class="who">🧩 직무·역량 프로그램</span>현직자 직무 특강 · 실무역량 마스터 클래스 · 기업탐방 · 온라인 멘토링 · 취업교과목 운영</div>';
-  h+='<div class="expl"><span class="tag">위치·연락</span>안산대학교 안산대학로 155 · Tel 031-400-7134 · Instagram @ansan_job</div>';
+  const G=function(g){ return CAREER_LINKS.filter(function(L){ return L.g===g; }); };
+  let h=pLead('고용노동부·안산대학교·안산시가 함께 운영하는 진로·취업 지원기관입니다. 상담·채용정보·잡매칭·프로그램으로 사회진출을 돕습니다. <b>“나를 알아주는 대학”</b>');
+  h+=pSec('학과 취업 준비 자료','심경섭 교수(센터 부센터장) 제작 · 자기이해부터 첫 취업·해외 면허까지')+linkList(G('dept'));
+  h+=pSec('센터 온라인 서비스','AI 솔루션(inFACE)은 <b>안산대 SSO 계정</b>으로 로그인 · 재학생·교직원 이용 가능')+linkList(G('center'));
+  h+=pSec('읽을거리')+linkList(G('read'));
+  h+=pInfo('프로그램','현직자 직무 특강 · 실무역량 마스터 클래스 · 기업탐방 · 온라인 멘토링 · 취업교과목');
+  h+=pInfo('위치·연락','안산대학로 155 · Tel 031-400-7134 · Instagram @ansan_job');
   body.innerHTML=h; foot.innerHTML='';
   addFoot('🧭 자기를 이해하기', openSelfMap, true); addFoot('닫기', closeDialog);
   showDialog();
@@ -1718,11 +1767,14 @@ function openCareer(){
 function openSelfMap(){
   setDialog('🧭','linear-gradient(135deg,#d4af52,#2f7fb0)','자기를 이해하기','심경섭 교수 · 성향·리더십·진로 탐색');
   const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
-  body.innerHTML=
-   '<div class="say"><span class="who">심경섭 교수</span>진로의 출발점은 <b>“나를 아는 것”</b>입니다. 나의 성향·강점·가치를 돌아보고, 물리치료사로서(그리고 그 너머의) 진로·직무 방향을 스스로 설계해 봅시다.</div>'+
-   '<div class="say"><span class="who">🧭 나를 이해하기 — 성향·리더십·진로 탐색 워크시트</span><b>STEP 1</b> 나의 성향 알아보기(16유형 — 이미 알면 선택, 모르면 <b>24문항·약 3분</b> 간단 검사) → <b>STEP 2</b> 내가 지향하는 리더상 고르기(그림 선택). <b>생년월일·개인정보 입력이 없고</b>, 인터넷 전송 없이 브라우저에서만 동작합니다.</div>'+'<div class="say"><span class="who">📄 결과물: 자기이해 리포트</span>두 단계를 마치면 <b>「자기이해 리포트」</b>가 만들어지고, <b>상담 요약 1장</b>으로 인쇄할 수 있어요 — 나의 성향과 지향 리더상, 강점, 일의 방향(직무·적성), 학생생활 포인트까지. 상담 시간에 지도교수·대학일자리센터 상담과 함께 활용하세요.</div>'+
-   '<div style="text-align:center;margin:6px 0 2px">'+jobLink('🧭 「나를 이해하기」 워크시트 바로가기','https://mbti-leadership.vercel.app/',true)+'</div>'+
-   '<div class="expl"><span class="tag">참고</span>이 도구는 <b>검사·진단이 아닙니다.</b> 자기보고(성향 문항)와 그림 선호(리더십 이미지)를 바탕으로 스스로를 이해하도록 돕는 <b>교육용 워크시트</b>이며, 특정 상표 검사의 문항이 아닌 자체 제작 문항입니다. 결과는 대화의 재료일 뿐이고 <b>특정 종교·신앙과 무관</b>합니다.</div>';
+  body.innerHTML=pLead('진로의 출발점은 <b>“나를 아는 것”</b>입니다. 나의 성향·강점·가치를 돌아보고, 물리치료사로서(그리고 그 너머의) 진로·직무 방향을 스스로 설계해 봅시다. — 심경섭 교수')
+   +pSec('진행 순서','생년월일·개인정보 입력 없음 · 인터넷 전송 없이 브라우저에서만 동작')
+   +rowList([{t:'STEP 1 · 나의 성향 알아보기',d:'16유형 — 이미 알면 선택, 모르면 24문항·약 3분 간단 검사'},
+             {t:'STEP 2 · 지향하는 리더상 고르기',d:'그림 선택'},
+             {t:'결과 · 자기이해 리포트',d:'성향·리더상·강점·일의 방향·학생생활 포인트를 상담 요약 1장으로 인쇄'}])
+   +pSec('바로가기')
+   +linkList([{t:'🧭 「나를 이해하기」 워크시트 열기',u:'https://mbti-leadership.vercel.app/',hl:true}])
+   +pInfo('참고','검사·진단이 아닌 <b>교육용 워크시트</b>입니다. 자체 제작 문항이며 특정 상표 검사·종교와 무관합니다. 결과는 상담 대화의 재료로 쓰세요.');
   foot.innerHTML=''; addFoot('← 센터로', openCareer); addFoot('닫기', closeDialog, true);
   showDialog();
 }
@@ -1734,19 +1786,22 @@ function openSelfMap(){
 function openWelcome(){
   setDialog('🏫','linear-gradient(135deg,#0e2a5e,#d4af52)','안산대학교 물리치료학과','전문의료인 물리치료사 · Since 1981');
   const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
-  let h='<div class="say"><span class="who">학과 안내 · 홍보</span>건강한 삶으로 치유하고 회복시키는 <b>전문의료인 물리치료사</b>를 양성합니다. 아래에서 학과의 다양한 정보를 만나보세요.</div>';
-  h+=jobLink('🏠 학과 홈페이지 메인','https://physi.ansan.ac.kr/physi',true);
-  h+=jobLink('📖 학과 소개 · 비전/교육목표','https://physi.ansan.ac.kr/physi/content/1',false);
-  h+=jobLink('📘 교육과정 · 로드맵','https://physi.ansan.ac.kr/physi/roadmap',false);
-  h+=jobLink('👩‍🏫 교수진 소개','https://physi.ansan.ac.kr/physi/professor',false);
-  h+=jobLink('🎽 전공동아리 소개','https://physi.ansan.ac.kr/physi/circle',false);
-  h+=jobLink('📰 학과뉴스 · 포토갤러리','https://physi.ansan.ac.kr/physi/board/3',false);
-  h+=jobLink('💼 대학일자리플러스센터 (진로·취업)','https://job.ansan.ac.kr/job',false);
-  h+=jobLink('💼 졸업 후 진로 — 물리치료 채용공고 (PT-JOB)','https://pt-job.vercel.app/',false);
-  h+=jobLink('📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설','https://pt-novel.vercel.app/',true);
-  h+=jobLink('▶ 학과 홍보영상 (YouTube)','https://www.youtube.com/watch?v=i1GJbMdRMuE',false);
-  h+=jobLink('🚁 안산대 캠퍼스 VR 항공뷰','https://www.ansan.ac.kr/site/resource/ansan/vrtour/tour.html',false);
-  h+='<div class="expl"><span class="tag">문의</span>안산대학교 성실관 205호 물리치료학과 · Tel 031-363-6943</div>';
+  let h=pLead('건강한 삶으로 치유하고 회복시키는 <b>전문의료인 물리치료사</b>를 양성합니다.');
+  h+=pSec('학과 소개')+linkList([
+    {t:'🏠 학과 홈페이지',u:'https://physi.ansan.ac.kr/physi',hl:true},
+    {t:'📖 학과 소개 — 비전·교육목표',u:'https://physi.ansan.ac.kr/physi/content/1'},
+    {t:'📘 교육과정 — 학년별 로드맵',u:'https://physi.ansan.ac.kr/physi/roadmap'},
+    {t:'👩‍🏫 교수진 소개',u:'https://physi.ansan.ac.kr/physi/professor'},
+    {t:'🎽 전공동아리 소개',u:'https://physi.ansan.ac.kr/physi/circle'},
+    {t:'📰 학과뉴스 · 포토갤러리',u:'https://physi.ansan.ac.kr/physi/board/3'}]);
+  h+=pSec('진로')+linkList([
+    {t:'💼 대학일자리플러스센터 — 진로·취업 지원',u:'https://job.ansan.ac.kr/job'},
+    {t:'💼 물리치료 채용공고 (PT-JOB)',u:'https://pt-job.vercel.app/'}]);
+  h+=pSec('보기 · 읽기')+linkList([
+    {t:'▶ 학과 홍보영상 (YouTube)',u:'https://www.youtube.com/watch?v=i1GJbMdRMuE',hl:true},
+    {t:'🚁 안산대 캠퍼스 VR 항공뷰',u:'https://www.ansan.ac.kr/site/resource/ansan/vrtour/tour.html'},
+    {t:'📖 걷는 법을 배우는 시간 — 물리치료학과 성장소설',u:'https://pt-novel.vercel.app/'}]);
+  h+=pInfo('문의','안산대학교 <b>성실관 205호</b> 물리치료학과 · Tel 031-363-6943');
   body.innerHTML=h; foot.innerHTML=''; addFoot('🚁 캠퍼스 안내(VR)', openCampusTour); addFoot('닫기', closeDialog, true); showDialog();
 }
 try{ document.getElementById('deptBtn').onclick=openWelcome; }catch(e){}
@@ -1756,12 +1811,14 @@ try{ document.getElementById('deptBtn').onclick=openWelcome; }catch(e){}
 function openCampusTour(){
   setDialog('🚁','linear-gradient(135deg,#2b6cb0,#0e2a5e)','안산대학교 캠퍼스 안내','VR 항공뷰 · ANSAN UNIVERSITY');
   const body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
-  let h='<div class="say"><span class="who">캠퍼스 안내</span>물리치료학과(성실관 205호)가 자리한 <b>안산대학교</b> 전체 캠퍼스입니다. 항공뷰(VR)로 360° 둘러보세요.</div>';
-  h+=jobLink('🚁 안산대 캠퍼스 VR 항공뷰 투어','https://www.ansan.ac.kr/site/resource/ansan/vrtour/tour.html',true);
-  h+=jobLink('🏫 안산대학교 홈페이지','https://www.ansan.ac.kr',false);
-  h+='<div class="say"><span class="who">🏛️ 교육·행정</span><b>성실관</b> — 물리치료학과(205호) · <b>대학본관</b> · 예지관 · 자유관 · 진리관 · 강석봉기념관</div>';
-  h+='<div class="say"><span class="who">📚 학생·복지</span>학생회관 · 도서관 · 채플관 · 웰니스센터 · 창업보육센터</div>';
-  h+='<div class="say"><span class="who">🌳 야외·체육</span>대학정문 · 잔디광장 · 운동장 · 농구장 · 테니스장</div>';
+  let h=pLead('물리치료학과(성실관 205호)가 자리한 <b>안산대학교</b> 전체 캠퍼스입니다. 항공뷰(VR)로 360° 둘러보세요.');
+  h+=pSec('바로가기')+linkList([
+    {t:'🚁 안산대 캠퍼스 VR 항공뷰 투어',u:'https://www.ansan.ac.kr/site/resource/ansan/vrtour/tour.html',hl:true},
+    {t:'🏫 안산대학교 홈페이지',u:'https://www.ansan.ac.kr'}]);
+  h+=pSec('주요 건물')+rowList([
+    {t:'교육·행정',d:'성실관(물리치료학과 205호) · 대학본관 · 예지관 · 자유관 · 진리관 · 강석봉기념관'},
+    {t:'학생·복지',d:'학생회관 · 도서관 · 채플관 · 웰니스센터 · 창업보육센터'},
+    {t:'야외·체육',d:'대학정문 · 잔디광장 · 운동장 · 농구장 · 테니스장'}]);
   body.innerHTML=h; foot.innerHTML=''; addFoot('← 학과 안내로', openWelcome); addFoot('닫기', closeDialog, true); showDialog();
 }
 
@@ -2150,10 +2207,10 @@ requestAnimationFrame(loop);
   window.openQuick=function(){
     setDialog('🧭','linear-gradient(135deg,#d4af52,#2a3550)','건물 바로가기','걷지 않고 바로 열기 · 키보드·화면낭독기 지원');
     var body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
-    var h='<div class="say"><span class="who">안내</span>원하는 곳을 고르면 그 건물 앞으로 이동해 바로 열립니다. 강의관 9곳에서는 강의 요약과 퀴즈를 이용할 수 있습니다.</div>';
+    var h=pLead('원하는 곳을 고르면 그 건물 앞으로 이동해 바로 열립니다. 강의관 9곳에서는 강의 요약과 퀴즈를 이용할 수 있습니다.')+'<div class="plist">';
     QUICK.forEach(function(q){ var label=q[1]; if(!label){ var b=building(q[0]); if(!b) return; label=b.emoji+' '+b.name+(b.subj?' — '+SUBJ_NAME[b.subj]:''); }
-      h+='<button type="button" class="joblink" onclick="quickOpen(\''+q[0]+'\')">'+label+'<span aria-hidden="true">→</span></button>'; });
-    body.innerHTML=h; foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
+      h+='<button type="button" class="joblink" onclick="quickOpen(\''+q[0]+'\')">'+jlInner(label,'→')+'</button>'; });
+    body.innerHTML=h+'</div>'; foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
   };
   var qb=document.getElementById('quickBtn'); if(qb) qb.onclick=function(){ window.openQuick(); };
 })();
