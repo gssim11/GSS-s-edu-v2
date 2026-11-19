@@ -2227,7 +2227,16 @@ requestAnimationFrame(loop);
    - 시험용: 주소 뒤에 ?mp=local 을 붙이면 같은 브라우저의 창끼리만 연결된다(서버 없음).
    - 보내는 정보: 닉네임(최대 8자)·옷 색·위치·방향·이모지. 로그인·개인정보 없음(익명 인증).
    ========================================================================== */
-window.MP_CONFIG = null; /* ← Firebase 콘솔의 firebaseConfig 객체를 그대로 붙여 넣기 */
+/* Firebase 웹 설정값(공개용 접속 정보, 비밀번호 아님 — 데이터 보호는 database.rules.json 규칙이 맡음) */
+window.MP_CONFIG = {
+  apiKey: "AIzaSyB4Opb3LwR_1PA8nOlhZUsXVspvULnQWvQ",
+  authDomain: "aupt-campus.firebaseapp.com",
+  databaseURL: "https://aupt-campus-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "aupt-campus",
+  storageBucket: "aupt-campus.firebasestorage.app",
+  messagingSenderId: "749834993278",
+  appId: "1:749834993278:web:3eec2d0cfed791c2f1622f"
+};
 (function(){
   var ROOM='main', MAX_ONLINE=60, SEND_MS=350, BEAT_MS=15000, STALE_MS=60000;
   var FB_VER='10.12.2';
@@ -2260,14 +2269,24 @@ window.MP_CONFIG = null; /* ← Firebase 콘솔의 firebaseConfig 객체를 그�
     var base='https://www.gstatic.com/firebasejs/'+FB_VER+'/';
     var m=await Promise.all([import(base+'firebase-app.js'), import(base+'firebase-auth.js'), import(base+'firebase-database.js')]);
     var A=m[0], AU=m[1], D=m[2];
-    var app=A.initializeApp(cfg);
-    var cred=await AU.signInAnonymously(AU.getAuth(app));
+    var app=A.getApps().length ? A.getApp() : A.initializeApp(cfg);
+    var auth=AU.getAuth(app);
+    /* 브라우저에 남은 익명 계정이 30일 자동 정리로 지워졌으면 로그아웃 후 새 익명 계정으로 들어간다 */
+    try{ if(auth.authStateReady) await auth.authStateReady(); if(auth.currentUser) await auth.currentUser.getIdToken(true); }
+    catch(e){ try{ await AU.signOut(auth); }catch(_){} }
+    var cred=await AU.signInAnonymously(auth);
     var db=D.getDatabase(app); myId=cred.user.uid;
     var room=D.ref(db,'presence/'+ROOM), me=D.ref(db,'presence/'+ROOM+'/'+myId);
     var snap=await D.get(room); var now=Date.now(), n=0;
-    if(snap.exists()){ var v=snap.val(); Object.keys(v).forEach(function(k){ if(v[k] && now-(v[k].t||0)<STALE_MS) n++; }); }
+    if(snap.exists()){ var v=snap.val(); Object.keys(v).forEach(function(k){ if(k!==myId && v[k] && now-(v[k].t||0)<STALE_MS) n++; }); }
     if(n>=MAX_ONLINE){ full=true; updateChip(); return null; }
     await D.onDisconnect(me).remove();
+    /* 잠깐 끊겼다 다시 붙으면 '창 닫힘 시 자동 삭제'를 다시 걸고 내 위치를 곧바로 다시 보낸다 */
+    var wasConnected=true;
+    D.onValue(D.ref(db,'.info/connected'), function(s){
+      if(s.val()===true){ if(!wasConnected){ D.onDisconnect(me).remove().catch(function(){}); last.t=0; } wasConnected=true; }
+      else wasConnected=false;
+    });
     D.onChildAdded(room,function(s){ onState(s.key,s.val()); });
     D.onChildChanged(room,function(s){ onState(s.key,s.val()); });
     D.onChildRemoved(room,function(s){ onState(s.key,null); });
@@ -2282,10 +2301,11 @@ window.MP_CONFIG = null; /* ← Firebase 콘솔의 firebaseConfig 객체를 그�
   }
 
   function wanted(){ return !!window.MP_CONFIG || /[?&]mp=local\b/.test(location.search); }
+  var fails=0, retryAt=0;
   async function start(){
-    if(starting||tr||full) return; starting=true;
+    if(starting||tr||full||fails>=3||performance.now()<retryAt) return; starting=true;
     try{ tr = window.MP_CONFIG ? await startFirebase(window.MP_CONFIG) : startLocal(); }
-    catch(e){ tr=null; try{ console.warn('함께 접속 연결 실패 — 혼자 모드로 계속합니다.', e); }catch(_){} }
+    catch(e){ tr=null; fails++; retryAt=performance.now()+20000*fails; try{ console.warn('함께 접속 연결 실패 — 혼자 모드로 계속합니다.', e); }catch(_){} }
     starting=false; updateChip();
   }
   function packet(extra){
