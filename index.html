@@ -236,6 +236,7 @@
     #touchpad{width:104px;height:104px;left:14px;bottom:18px}
     #touchknob{width:46px;height:46px;margin:-23px 0 0 -23px}
     #btnE{width:78px;height:78px;right:16px;bottom:22px;font-size:12px}
+    #dockQuick{height:46px;padding:0 15px;font-size:14px;bottom:calc(30px + env(safe-area-inset-bottom,0px))}
     .modal .head h2{font-size:15px}
     .say{font-size:13.5px}
     .jl-tx b{font-size:13.5px} .jl-ic{width:30px;height:30px;font-size:15px} .joblink,.prow{padding:10px 12px}
@@ -285,6 +286,28 @@
   /* --- 아바타 선택 --- */
   .pcsw{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.25);cursor:pointer;transition:.15s}
   .pcsw.on{border-color:var(--gold);transform:scale(1.14);box-shadow:0 0 0 3px rgba(212,175,82,.25)}
+  /* --- 하단 가운데 바로가기 + 격자형 바로가기 창 --- */
+  #dockQuick{position:absolute;left:50%;bottom:calc(26px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:15;display:none;
+    align-items:center;gap:7px;height:48px;padding:0 20px;border-radius:24px;cursor:pointer;
+    background:linear-gradient(135deg,rgba(11,34,78,.88),rgba(7,19,46,.88));border:1px solid var(--gold);color:#f3e6c4;
+    font-family:var(--san);font-size:15px;font-weight:800;letter-spacing:.02em;box-shadow:0 8px 22px rgba(0,0,0,.45),0 0 16px rgba(212,175,82,.16);
+    -webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  #dockQuick span{color:#f0d488}
+  #dockQuick:hover{background:linear-gradient(135deg,rgba(27,61,122,.95),rgba(11,34,78,.95))}
+  #dockQuick:active{transform:translateX(-50%) scale(.95)}
+  body.playing #dockQuick{display:flex}
+  body:not(.touch) #dockQuick{bottom:62px}
+  body.playing:not(.touch) #prompt{bottom:122px}
+  @media (max-width:560px){ #dockQuick{height:44px;padding:0 13px;gap:5px;font-size:13.5px;bottom:calc(32px + env(safe-area-inset-bottom,0px))}
+    .modal .qgrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px} .modal .qtile{min-height:76px;font-size:11.5px;padding:9px 3px} .modal .qtile i{font-size:23px} }
+  .qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px;margin-bottom:6px}
+  .qtile{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:84px;padding:10px 6px;
+    border-radius:14px;border:1px solid var(--line);background:rgba(6,16,38,.55);color:#e3eafa;cursor:pointer;
+    font-family:var(--san);font-size:12.5px;font-weight:700;line-height:1.3;text-align:center;word-break:keep-all;overflow-wrap:anywhere;min-width:0;transition:background .15s,border-color .15s}
+  .qtile i{font-style:normal;font-size:26px;line-height:1}
+  .qtile:hover,.qtile:focus-visible{background:rgba(27,61,122,.55);border-color:var(--gold);outline:none}
+  .qtile.done{border-color:rgba(79,209,197,.45)}
+  .qtile .qok{position:absolute;top:6px;right:7px;font-size:10.5px;font-weight:700;color:#7fe3d8}
   /* --- 이모지 반응 --- */
   #emoBtn{position:absolute;right:16px;bottom:120px;width:52px;height:52px;border-radius:50%;
     background:linear-gradient(135deg,rgba(11,34,78,.94),rgba(7,19,46,.94));border:1px solid var(--gold-line);
@@ -355,11 +378,12 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
   <div id="prompt"></div>
 
   <div id="controls">
-    <b>이동</b> WASD / 방향키 · <b>상호작용</b> <span style="color:var(--gold)">E</span> · <b>대화 종료</b> Esc · 🪙코인 · 🔔골든벨
+    <b>이동</b> WASD / 방향키 · <b>상호작용</b> <span style="color:var(--gold)">E</span> · <b>바로가기</b> <span style="color:var(--gold)">Q</span> · <b>대화 종료</b> Esc · 🪙코인 · 🔔골든벨
   </div>
 
   <div id="touchpad"><div id="touchknob"></div></div>
   <button id="btnE" aria-label="상호작용">E<br>상호작용</button>
+  <button id="dockQuick" type="button" aria-label="건물 바로가기 (Q)" title="건물 바로가기 (Q)">🧭<span>바로가기</span></button>
   <button id="emoBtn" aria-label="이모지 반응">😀</button>
   <div id="emoBar"></div>
   <div id="toast"></div>
@@ -2216,13 +2240,32 @@ requestAnimationFrame(loop);
     if(fn && typeof window[fn]==='function') window[fn]();
   };
   window.openQuick=function(){
-    setDialog('🧭','linear-gradient(135deg,#d4af52,#2a3550)','건물 바로가기','걷지 않고 바로 열기 · 키보드·화면낭독기 지원');
+    setDialog('🧭','linear-gradient(135deg,#d4af52,#2a3550)','바로가기','누르면 바로 이동 · 키보드 Q');
     var body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
-    var h=pLead('원하는 곳을 고르면 그 건물 앞으로 이동해 바로 열립니다. 강의관 9곳에서는 강의 요약과 퀴즈를 이용할 수 있습니다.')+'<div class="plist">';
-    QUICK.forEach(function(q){ var label=q[1]; if(!label){ var b=building(q[0]); if(!b) return; label=b.emoji+' '+b.name+(b.subj?' — '+SUBJ_NAME[b.subj]:''); }
-      h+='<button type="button" class="joblink" onclick="quickOpen(\''+q[0]+'\')">'+jlInner(label,'→')+'</button>'; });
-    body.innerHTML=h+'</div>'; foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
+    function tile(id, ic, name, done){
+      return '<button type="button" class="qtile'+(done?' done':'')+'" data-qid="'+id+'" aria-label="'+name+(done?' (이수)':'')+'">'
+        +(done?'<span class="qok">✓ 이수</span>':'')+'<i>'+ic+'</i>'+name+'</button>';
+    }
+    var halls=BUILDINGS.filter(function(b){ return b.subj; });
+    var nDone=halls.filter(function(b){ return state.visited.has(b.subj); }).length;
+    var h=pSec('강의관 9곳', '강의 요약·국시 대비 퀴즈 · 이수 '+nDone+'/9')+'<div class="qgrid">'
+      + halls.map(function(b){ return tile(b.id, b.emoji, b.name, state.visited.has(b.subj)); }).join('')+'</div>';
+    var etc=[['gate','🏫','학과 안내·홍보']];
+    ['career','hub','office','club','council'].forEach(function(id){ var b=building(id); if(b) etc.push([id,b.emoji,b.name]); });
+    etc.push(['partners','🤝','협력기관']);
+    h+=pSec('센터·시설')+'<div class="qgrid">'+etc.map(function(q){ return tile(q[0],q[1],q[2],false); }).join('')+'</div>';
+    body.innerHTML=h; foot.innerHTML='';
+    Array.prototype.forEach.call(body.querySelectorAll('.qtile'), function(b){ b.onclick=function(){ window.quickOpen(b.getAttribute('data-qid')); }; });
+    addFoot('📍 내 위치로', function(){ closeDialog(); if(window.recenterCam) window.recenterCam(); }, false);
+    addFoot('닫기', closeDialog, true); showDialog();
   };
+  var dq=document.getElementById('dockQuick'); if(dq) dq.onclick=function(ev){ ev.stopPropagation(); window.openQuick(); };
+  document.addEventListener('keydown', function(e){
+    if((e.key==='q'||e.key==='Q') && !e.ctrlKey && !e.metaKey && !e.altKey && state.entered && !anyModalOpen()){
+      var t=e.target; if(t && (t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable)) return;
+      e.preventDefault(); window.openQuick();
+    }
+  });
   var qb=document.getElementById('quickBtn'); if(qb) qb.onclick=function(){ window.openQuick(); };
 })();
 </script>
