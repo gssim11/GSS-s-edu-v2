@@ -2311,7 +2311,7 @@ window.MP_CONFIG = {
   var fails=0, retryAt=0;
   async function start(){
     if(starting||tr||full||fails>=3||performance.now()<retryAt) return; starting=true;
-    try{ tr = window.MP_CONFIG ? await startFirebase(window.MP_CONFIG) : startLocal(); }
+    try{ tr = (window.MP_CONFIG && !/[?&]mp=local\b/.test(location.search)) ? await startFirebase(window.MP_CONFIG) : startLocal(); }
     catch(e){ tr=null; fails++; retryAt=performance.now()+20000*fails; try{ console.warn('함께 접속 연결 실패 — 혼자 모드로 계속합니다.', e); }catch(_){} }
     starting=false; updateChip();
   }
