@@ -367,6 +367,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 
   <div id="topright">
     <button class="btn" id="menuBtn" aria-expanded="false" aria-controls="topright" title="메뉴 열기/닫기">☰ 메뉴</button>
+    <button class="btn more" id="renameBtn" title="다른 학생에게 보이는 내 이름 바꾸기">✏️ 이름 바꾸기</button>
     <button class="btn more" id="quickBtn" title="건물·센터로 바로 가기 (키보드·화면낭독기 지원)">🧭 바로가기</button>
     <button class="btn more" id="spectateBtn" title="관전 모드: 카메라가 자율 NPC들을 순회합니다">👁️ 관전</button>
     <button class="btn more" id="fastBtn" title="시간 배속">⏩ 1×</button>
@@ -487,7 +488,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
         <div class="faculty" style="margin-top:4px">
         <div class="fac-title">🧑‍🎓 내 아바타 <span>· 이름과 색을 골라요</span></div>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:9px">
-          <input id="pcName" type="text" maxlength="8" placeholder="이름 (예: 원곡이)" style="flex:1;min-width:150px;padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);font-size:15px">
+          <input id="pcName" type="text" maxlength="8" placeholder="이름 (비우면 익명 번호)" style="flex:1;min-width:150px;padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);font-size:15px">
           <div id="pcColors" style="display:flex;gap:8px;flex-wrap:wrap"></div>
         </div>
       </div>
@@ -2067,7 +2068,7 @@ document.addEventListener('visibilitychange', function(){ if(!document.hidden){ 
     b.innerHTML = touchDev()
       ? '🕹️ <b>이동</b> 왼쪽 조이스틱 · 👆 <b>탭</b> 그곳으로 이동·상호작용<br>🤏 <b>확대·축소</b> 두 손가락 · ✋ <b>둘러보기</b> 화면 드래그 · 📍 <b>내 위치</b>로 복귀'
       : '⌨️ <b>이동</b> WASD/화살표 · 🖱️ <b>클릭</b> 그곳으로 이동 · 🖲️ <b>휠</b> 확대·축소 · <b>E</b> 상호작용';
-    el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(function(){ el.classList.remove('show'); }, 7500); }
+    el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(function(){ el.classList.remove('show'); }, 5000); }
   function rotHint(){ if(touchDev() && window.matchMedia && window.matchMedia('(orientation:portrait)').matches){ try{ toast('📱 가로로 돌리면 더 편해요'); }catch(e){} } }
   var sb=document.getElementById('startBtn');
   if(sb) sb.addEventListener('click', function(){ setTimeout(showHint,450); setTimeout(rotHint,1700); });
@@ -2095,14 +2096,51 @@ window.pcColor = PC_COLORS[0];
     wrap.appendChild(b);
   });
 })();
+/* 익명 번호 이름: 「AU 물치 37」 — 이 기기에 저장해 다음에도 같은 번호 */
+function anonNick(taken){
+  var s=window._mpNick||'';
+  if(!s){ try{ s=localStorage.getItem('aupt_anon')||''; }catch(e){} }
+  if(!/^AU 물치 \d{2}$/.test(s) || (taken && taken[s])){
+    var pool=[]; for(var i=1;i<100;i++){ var c='AU 물치 '+(i<10?'0':'')+i; if(!(taken&&taken[c])) pool.push(c); }
+    s=pool.length?pool[Math.floor(Math.random()*pool.length)]:'AU 물치 00';
+    try{ localStorage.setItem('aupt_anon',s); }catch(e){}
+  }
+  window._mpNick=s; return s;
+}
+function isAnonName(){ return /^나 \(/.test(player.name||''); }
+function setMyName(nm){
+  nm=String(nm||'').replace(/[<>&"'`]/g,'').trim().slice(0,8);
+  player.name = nm || ('나 ('+anonNick()+')');
+  try{ localStorage.setItem('aupt_nick', nm); }catch(e){}
+  if(window.mpSendNow) window.mpSendNow();
+  return nm || anonNick();
+}
 function applyAvatar(){
   try{
     var n=document.getElementById('pcName');
-    var nm=(n&&n.value.trim())||'';
-    if(nm) player.name=nm;
+    setMyName((n&&n.value)||'');
     if(window.pcColor) player.color=window.pcColor;
   }catch(e){}
 }
+(function(){
+  var n=document.getElementById('pcName'); if(!n) return;
+  try{ n.value=localStorage.getItem('aupt_nick')||''; }catch(e){}
+  n.placeholder='이름 (비우면 '+anonNick()+')';
+})();
+window.openRename=function(){
+  setDialog('✏️','linear-gradient(135deg,#4fd1c5,#2a3550)','이름 바꾸기','다른 학생에게 보이는 이름 · 최대 8자');
+  var body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+  body.innerHTML='<input id="rnInp" type="text" maxlength="8" autocomplete="off" placeholder="'+anonNick()+'" aria-label="새 이름" '
+    +'style="width:100%;box-sizing:border-box;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);font-size:16px">'
+    +'<div class="psec-d" style="margin-top:9px">비워 두면 익명 번호 「'+anonNick()+'」로 보여요. 실명·학번은 적지 않아도 됩니다.</div>';
+  foot.innerHTML='';
+  var inp=document.getElementById('rnInp'); inp.value=isAnonName()?'':(player.name||'');
+  function ok(){ var shown=setMyName(inp.value); closeDialog(); if(typeof toast==='function') toast('✏️ 이제 「'+shown+'」(으)로 보여요'); }
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); ok(); } });
+  addFoot('익명 번호로', function(){ inp.value=''; ok(); }, false);
+  addFoot('저장', ok, true); showDialog(); setTimeout(function(){ try{ inp.focus(); }catch(e){} },60);
+};
+(function(){ var b=document.getElementById('renameBtn'); if(b) b.onclick=function(){ if(state.entered) window.openRename(); }; })();
 
 /* 사운드 토글 */
 function syncSndBtn(){
@@ -2326,9 +2364,9 @@ window.MP_CONFIG = {
   var last={x:-1,y:-1,d:'',t:0};
   window.MP_REMOTES=[];
 
-  function cleanName(n){ n=String(n||'').replace(/[<>&"'`]/g,'').trim().slice(0,8); return n||'물치인'; }
+  function cleanName(n){ n=String(n||'').replace(/[<>&"'`]/g,'').trim().slice(0,8); return n||'AU 물치'; }
   function cleanColor(c){ return /^#[0-9a-fA-F]{6}$/.test(c||'')?c:'#7fb0e0'; }
-  function myName(){ var n=player.name||''; if(/^나 \(/.test(n)){ if(!window._mpNick) window._mpNick='물치인'+Math.floor(10+Math.random()*90); return window._mpNick; } return cleanName(n); }
+  function myName(){ return isAnonName() ? anonNick() : cleanName(player.name); }
   function rebuild(){ window.MP_REMOTES=Object.keys(remotes).map(function(k){ return remotes[k].c; }); updateChip(); }
 
   function onState(id, d){
@@ -2340,6 +2378,11 @@ window.MP_CONFIG = {
     if(fresh){ r=remotes[id]={ c:mkChar({ x:d.x, y:d.y, hair:'#2a2320', remote:true }), ex:0 }; }
     r.tx=clamp(d.x,20,WORLD.w-20); r.ty=clamp(d.y,20,WORLD.h-20);
     r.c.name=cleanName(d.n); r.c.color=cleanColor(d.c);
+    if(isAnonName() && r.c.name===myName() && myId && id<myId){   /* 익명 번호가 겹치면 내 번호를 바꾼다 */
+      var taken={}; Object.keys(remotes).forEach(function(k){ taken[remotes[k].c.name]=1; });
+      window._mpNick=''; try{ localStorage.removeItem('aupt_anon'); }catch(e){}
+      var nn=anonNick(taken); player.name='나 ('+nn+')'; setTimeout(sendNow,0);
+    }
     if(d.d==='up'||d.d==='down'||d.d==='left'||d.d==='right') r.c.dir=d.d;
     r.seen=Date.now();
     if(typeof d.e==='number' && d.et && d.et!==r.ex){ r.ex=d.et; if(!fresh && EMOJIS[d.e]) emoteQuiet(EMOJIS[d.e], r.c); }
@@ -2398,6 +2441,7 @@ window.MP_CONFIG = {
     if(window._mpEmo){ d.e=window._mpEmo.i; d.et=window._mpEmo.t; }
     return d;
   }
+  window.mpSendNow=function(){ sendNow(); };
   function sendNow(){ if(!tr) return; last={x:player.x,y:player.y,d:player.dir,t:performance.now()}; try{ tr.send(packet()); }catch(e){} }
 
   window.mpTick=function(dt){
