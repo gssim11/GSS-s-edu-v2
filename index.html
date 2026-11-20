@@ -85,6 +85,8 @@
   .modal .head h2{font-size:18px;font-family:var(--ser);color:var(--cream);letter-spacing:.2px}
   .modal .head .sub{font-size:12px;color:var(--muted);margin-top:3px}
   .modal .body{padding:20px 22px}
+  #dlg-scene{display:none;border-bottom:1px solid var(--line);background:#0b1a3a}
+  #hallCv{display:block;width:100%;aspect-ratio:520/170}
   .modal .foot{padding:15px 22px;border-top:1px solid var(--line);display:flex;gap:9px;justify-content:flex-end;flex-wrap:wrap}
   .x{margin-left:auto;background:none;border:none;color:var(--muted);font-size:23px;cursor:pointer;line-height:1}
   .x:hover{color:var(--gold-hi)}
@@ -552,6 +554,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
       <div class="fsctl" role="group" aria-label="글자 크기"><button type="button" class="fsb" onclick="fsStep(-1)" aria-label="글자 작게">가−</button><button type="button" class="fsb" onclick="fsStep(1)" aria-label="글자 크게">가+</button></div>
       <button class="x" onclick="closeDialog()" aria-label="닫기">×</button>
     </div>
+    <div id="dlg-scene"><canvas id="hallCv" role="img" aria-label="강의실 장면: 칠판·교탁·교수님·학생 좌석"></canvas></div>
     <div class="body" id="dlg-body"></div>
     <div class="foot" id="dlg-foot"></div>
   </div>
@@ -891,14 +894,8 @@ function drawBuilding(b){
     ctx.fillStyle='#f6d98a';ctx.fillRect(wx,gy+84,ww,26);ctx.fillRect(wx,gy+118,ww,22);
     ctx.strokeStyle='rgba(12,33,81,.5)';ctx.lineWidth=1;ctx.strokeRect(wx,gy+84,ww,26);ctx.strokeRect(wx,gy+118,ww,22);
     ctx.beginPath();ctx.moveTo(wx+ww/2,gy+84);ctx.lineTo(wx+ww/2,gy+110);ctx.stroke();}
-  // gabled roof
-  ctx.fillStyle=b.roof;ctx.beginPath();ctx.moveTo(gx-8,gy+28);ctx.lineTo(dcx,gy-16);ctx.lineTo(gx+gw+8,gy+28);ctx.closePath();ctx.fill();
-  ctx.strokeStyle='#d4af52';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(gx-8,gy+28);ctx.lineTo(dcx,gy-16);ctx.lineTo(gx+gw+8,gy+28);ctx.stroke();
-  ctx.fillStyle='#0b1f47';ctx.fillRect(gx-8,gy+28,gw+16,12);
-  ctx.fillStyle='#d4af52';ctx.fillRect(gx-8,gy+40,gw+16,2.5);
-  // finial + pennant
-  ctx.strokeStyle='#c9a24b';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(dcx,gy-16);ctx.lineTo(dcx,gy-32);ctx.stroke();
-  ctx.fillStyle=b.color;ctx.beginPath();ctx.moveTo(dcx,gy-32);ctx.lineTo(dcx+16,gy-28);ctx.lineTo(dcx,gy-24);ctx.closePath();ctx.fill();
+  // roof (강의관마다 모양이 다름)
+  drawRoof(b, ROOF_STYLE[BUILDINGS.indexOf(b)]||'gable');
   // entrance steps + door
   ctx.fillStyle='#cdbf9c';ctx.fillRect(dcx-30,gy+gh-16,60,12);ctx.fillStyle='#c2b48c';ctx.fillRect(dcx-24,gy+gh-24,48,9);
   ctx.fillStyle='#0b1f47';drawRoundRect(dcx-18,gy+gh-50,36,42,6);ctx.fill();
@@ -909,11 +906,270 @@ function drawBuilding(b){
   ctx.strokeStyle='#c9a24b';ctx.lineWidth=1.5;drawRoundRect(dcx-98,gy+48,196,30,8);ctx.stroke();
   ctx.fillStyle='#f4ead0';ctx.font='bold 15px '+FSER;ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.fillText(b.emoji+' '+b.name,dcx,gy+63);
+  // 입구 양옆 과목 소품
+  const _pp=HALL_PROPS[b.subj||b.role]; if(_pp){ drawProp(ctx,_pp[0],dcx-78,gy+gh+8,1.35); drawProp(ctx,_pp[1],dcx+78,gy+gh+8,1.35); }
   // visited seal
   if(b.subj && state.visited.has(b.subj)){
     ctx.fillStyle='#d4af52';ctx.beginPath();ctx.arc(gx+gw-15,gy+56,12,0,Math.PI*2);ctx.fill();
     ctx.strokeStyle='#f0d488';ctx.lineWidth=1.5;ctx.stroke();
     ctx.fillStyle='#0a1a3a';ctx.font='bold 14px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('✓',gx+gw-15,gy+57);
+  }
+}
+
+/* ============================================================================
+   강의관 꾸미기 (2026-11): 지붕 모양·입구 소품(과목별) + 강의실 내부 장면
+   ========================================================================== */
+const ROOF_STYLE = ['gable','dome','flat','twin','gable','twin','flat','dome','gable','flat','twin','gable','dome','flat'];
+const HALL_PROPS = {anatomy:['skeleton','spine'], neuroanat:['brain','books'], neuro:['wheelchair','bars'], exercise:['dumbbell','ball'],
+  funcanat:['balance','foot'], msk:['spine','roller'], modality:['tens','hotpack'], cardio:['oxygen','lungs'], clindx:['easel','magnifier'],
+  office:['mailbox','planter'], hub:['bookcart','planter'], club:['ball','board'], career:['signpost','planter'], council:['megaphone','board']};
+const HALL_KEY = {anatomy:'회전근개 = SITS (극상·극하·소원·견갑하)', neuroanat:'UMN vs LMN · 신경로 교차', neuro:'과제지향 훈련 · 반복량 · 강도',
+  exercise:'MMT 0~5 · 3등급 = 중력 대항', funcanat:'운동학습: 인지 → 연합 → 자율', msk:'특수검사로 구조 병변 감별',
+  modality:'급성기 = 한랭 · 만성기 = 온열', cardio:'안정 호흡수 12~20회/분', clindx:'ICF · EBP · SOAP 기록'};
+
+function roundR(g,x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
+
+/* 소품: (x,y)=바닥 가운데, s=배율. g=그릴 캔버스 */
+function drawProp(g, kind, x, y, s){
+  g.save(); g.translate(x,y); g.scale(s,s); g.lineCap='round'; g.lineJoin='round';
+  g.fillStyle='rgba(0,0,0,.22)'; g.beginPath(); g.ellipse(0,1,15,3.5,0,0,Math.PI*2); g.fill();
+  const P = (c)=>{ g.fillStyle=c; }, S=(c,w)=>{ g.strokeStyle=c; g.lineWidth=w||1.5; };
+  switch(kind){
+    case 'skeleton':
+      P('#6b5a44'); g.fillRect(-8,-3,16,3); S('#8a7a60',2); g.beginPath(); g.moveTo(0,-3); g.lineTo(0,-46); g.stroke();
+      S('#f3ecdc',2); g.beginPath(); g.moveTo(0,-36); g.lineTo(0,-18); g.stroke();
+      for(let i=0;i<3;i++){ g.beginPath(); g.ellipse(0,-32+i*4,6-i,2,0,0,Math.PI*2); g.stroke(); }
+      g.beginPath(); g.moveTo(-5,-18); g.lineTo(5,-18); g.moveTo(-4,-17); g.lineTo(-5,-5); g.moveTo(4,-17); g.lineTo(5,-5);
+      g.moveTo(-6,-34); g.lineTo(-9,-22); g.moveTo(6,-34); g.lineTo(9,-22); g.stroke();
+      P('#f3ecdc'); g.beginPath(); g.arc(0,-42,5,0,Math.PI*2); g.fill(); P('#3a3a3a'); g.fillRect(-2.5,-43,1.6,1.6); g.fillRect(1,-43,1.6,1.6); break;
+    case 'spine':
+      P('#6b5a44'); g.fillRect(-9,-3,18,3);
+      for(let i=0;i<8;i++){ P(i%2?'#efe6cf':'#e2d6b8'); roundR(g,-4+Math.sin(i*.6)*1.5,-8-i*4.4,8,3.6,1.5); g.fill(); }
+      P('#d9cba6'); g.beginPath(); g.ellipse(0,-6,7,3,0,0,Math.PI*2); g.fill(); break;
+    case 'brain':
+      P('#7c8794'); g.fillRect(-7,-12,14,12); P('#98a3b0'); g.fillRect(-9,-14,18,3);
+      P('#f2a6b4'); g.beginPath(); g.ellipse(0,-23,12,9,0,0,Math.PI*2); g.fill();
+      S('#c86f84',1.3); g.beginPath(); g.moveTo(0,-31); g.lineTo(0,-15);
+      g.moveTo(-9,-25); g.quadraticCurveTo(-5,-29,-2,-24); g.moveTo(9,-25); g.quadraticCurveTo(5,-29,2,-24);
+      g.moveTo(-8,-19); g.quadraticCurveTo(-4,-22,-2,-18); g.moveTo(8,-19); g.quadraticCurveTo(4,-22,2,-18); g.stroke(); break;
+    case 'books':
+      [['#b0413e',-9],['#3a72c4',-4],['#d4af52',1],['#2f9e8f',6]].forEach(function(b,i){ P(b[0]); g.fillRect(b[1],-22+(i%2)*3,5,22-(i%2)*3); });
+      P('#6b5a44'); g.fillRect(-11,-1,22,2); break;
+    case 'wheelchair':
+      S('#3b4252',2.2); g.beginPath(); g.arc(-1,-9,9,0,Math.PI*2); g.stroke();
+      S('#7f8899',1); g.beginPath(); g.moveTo(-1,-18); g.lineTo(-1,0); g.moveTo(-10,-9); g.lineTo(8,-9); g.stroke();
+      S('#4a6fa5',2.4); g.beginPath(); g.moveTo(-8,-16); g.lineTo(-8,-30); g.moveTo(-8,-16); g.lineTo(7,-16); g.lineTo(9,-3); g.stroke();
+      P('#2b3a55'); g.fillRect(-8,-19,14,4); P('#3b4252'); g.beginPath(); g.arc(9,-2,2.4,0,Math.PI*2); g.fill(); break;
+    case 'bars':
+      S('#9aa4b3',2); [-12,12].forEach(function(px){ g.beginPath(); g.moveTo(px,0); g.lineTo(px,-20); g.stroke(); });
+      S('#d4af52',2.6); g.beginPath(); g.moveTo(-14,-20); g.lineTo(14,-20); g.moveTo(-14,-14); g.lineTo(14,-14); g.stroke();
+      P('#56677f'); g.fillRect(-14,-2,28,2); break;
+    case 'dumbbell':
+      P('#6b5a44'); g.fillRect(-14,-14,28,3); g.fillRect(-13,-14,2,14); g.fillRect(11,-14,2,14);
+      [[-6,'#e2574c'],[6,'#3a72c4']].forEach(function(d){ S('#888',2); g.beginPath(); g.moveTo(d[0]-4,-18); g.lineTo(d[0]+4,-18); g.stroke(); P(d[1]); g.fillRect(d[0]-6,-21,3,6); g.fillRect(d[0]+3,-21,3,6); });
+      [[-6,'#d4af52'],[6,'#2f9e8f']].forEach(function(d){ S('#888',2); g.beginPath(); g.moveTo(d[0]-4,-6); g.lineTo(d[0]+4,-6); g.stroke(); P(d[1]); g.fillRect(d[0]-6,-9,3,6); g.fillRect(d[0]+3,-9,3,6); }); break;
+    case 'ball':
+      var gr=g.createRadialGradient(-4,-17,2,0,-12,13); gr.addColorStop(0,'#ffd27a'); gr.addColorStop(1,'#e07b2e');
+      g.fillStyle=gr; g.beginPath(); g.arc(0,-12,12,0,Math.PI*2); g.fill(); S('rgba(255,255,255,.5)',1); g.beginPath(); g.arc(0,-12,8,-2.4,-1.2); g.stroke(); break;
+    case 'balance':
+      P('#2f9e8f'); g.beginPath(); g.arc(0,0,9,Math.PI,0); g.fill(); P('#d9cba6'); roundR(g,-16,-11,32,4,2); g.fill(); break;
+    case 'foot':
+      P('rgba(240,230,205,.85)'); [[-10,-2,-.3],[-3,-9,.3],[4,-3,-.3],[11,-10,.3]].forEach(function(f){ g.save(); g.translate(f[0],f[1]); g.rotate(f[2]); g.beginPath(); g.ellipse(0,0,2.6,4.4,0,0,Math.PI*2); g.fill(); g.restore(); });
+      S('#d4af52',1.5); g.beginPath(); g.moveTo(-13,-16); g.lineTo(13,-16); g.stroke(); P('#d4af52'); g.font='bold 7px sans-serif'; g.textAlign='center'; g.fillText('GAIT',0,-19); break;
+    case 'roller':
+      P('#3a72c4'); roundR(g,-14,-10,28,10,5); g.fill(); P('#5d93e0'); g.beginPath(); g.ellipse(14,-5,3,5,0,0,Math.PI*2); g.fill();
+      S('rgba(255,255,255,.35)',1); for(let i=-10;i<12;i+=5){ g.beginPath(); g.moveTo(i,-10); g.lineTo(i,0); g.stroke(); } break;
+    case 'tens':
+      P('#dfe6ef'); roundR(g,-9,-20,18,20,3); g.fill(); P('#2e7d5b'); g.fillRect(-6,-17,12,7); P('#e2574c'); g.beginPath(); g.arc(-3,-5,1.8,0,Math.PI*2); g.fill(); P('#3a72c4'); g.beginPath(); g.arc(3,-5,1.8,0,Math.PI*2); g.fill();
+      S('#e2574c',1.2); g.beginPath(); g.moveTo(-9,-8); g.quadraticCurveTo(-16,-4,-14,-1); g.stroke(); S('#3a72c4',1.2); g.beginPath(); g.moveTo(9,-8); g.quadraticCurveTo(16,-4,14,-1); g.stroke();
+      P('#bfc8d4'); g.fillRect(-17,-2,6,2); g.fillRect(11,-2,6,2); break;
+    case 'hotpack':
+      P('#d9534f'); roundR(g,-12,-9,11,9,3); g.fill(); P('#6fb7e8'); roundR(g,1,-9,11,9,3); g.fill();
+      S('rgba(255,255,255,.6)',1.2); var tt=(typeof performance!=='undefined'?performance.now():0)/500;
+      for(let i=0;i<2;i++){ g.beginPath(); g.moveTo(-9+i*5,-11); g.quadraticCurveTo(-11+i*5+Math.sin(tt+i)*2,-16,-8+i*5,-21); g.stroke(); } break;
+    case 'oxygen':
+      P('#2f8f5a'); roundR(g,-6,-30,12,30,5); g.fill(); P('#dfe6ef'); g.fillRect(-3,-35,6,6); P('#fff'); g.beginPath(); g.arc(0,-37,3,0,Math.PI*2); g.fill();
+      P('#fff'); g.font='bold 6px sans-serif'; g.textAlign='center'; g.fillText('O₂',0,-14); break;
+    case 'lungs':
+      P('#6b5a44'); g.fillRect(-1,-14,2,14); P('#0a1a3a'); roundR(g,-14,-36,28,22,4); g.fill(); S('#d4af52',1); roundR(g,-14,-36,28,22,4); g.stroke();
+      var br=1+Math.sin(((typeof performance!=='undefined')?performance.now():0)/700)*.08;
+      P('#f2a6b4'); g.beginPath(); g.ellipse(-5,-24,4.5*br,7*br,.2,0,Math.PI*2); g.fill(); g.beginPath(); g.ellipse(5,-24,4.5*br,7*br,-.2,0,Math.PI*2); g.fill();
+      S('#c86f84',1.2); g.beginPath(); g.moveTo(0,-34); g.lineTo(0,-28); g.lineTo(-3,-25); g.moveTo(0,-28); g.lineTo(3,-25); g.stroke(); break;
+    case 'easel':
+      S('#8a6a44',2); g.beginPath(); g.moveTo(-9,0); g.lineTo(-4,-30); g.moveTo(9,0); g.lineTo(4,-30); g.moveTo(0,-30); g.lineTo(2,0); g.stroke();
+      P('#f4f1e8'); g.fillRect(-11,-34,22,20); P('#2a3550'); g.font='bold 6px sans-serif'; g.textAlign='center'; ['S','O','A','P'].forEach(function(ch,i){ g.fillText(ch,-6,-29+i*4.6); });
+      S('#9aa4b3',1); for(let i=0;i<4;i++){ g.beginPath(); g.moveTo(-3,-30.5+i*4.6); g.lineTo(8,-30.5+i*4.6); g.stroke(); } break;
+    case 'magnifier':
+      P('#6b5a44'); g.fillRect(-1.5,-14,3,14); P('#0a1a3a'); g.beginPath(); g.arc(0,-26,11,0,Math.PI*2); g.fill(); S('#d4af52',1.4); g.stroke();
+      S('#e8eef8',2.2); g.beginPath(); g.arc(-2,-28,4.5,0,Math.PI*2); g.moveTo(1.5,-24.5); g.lineTo(5,-21); g.stroke(); break;
+    case 'mailbox':
+      P('#56677f'); g.fillRect(-1.5,-16,3,16); P('#c8506a'); roundR(g,-9,-26,18,11,4); g.fill(); P('#d4af52'); g.fillRect(7,-31,2,8); g.fillRect(7,-31,5,3); break;
+    case 'planter':
+      P('#8a5a3a'); g.beginPath(); g.moveTo(-8,-10); g.lineTo(8,-10); g.lineTo(6,0); g.lineTo(-6,0); g.closePath(); g.fill();
+      P('#3d8a52'); g.beginPath(); g.arc(-4,-15,6,0,Math.PI*2); g.arc(4,-16,6,0,Math.PI*2); g.arc(0,-21,6,0,Math.PI*2); g.fill();
+      P('#f0a8c0'); g.beginPath(); g.arc(-3,-19,1.6,0,Math.PI*2); g.arc(4,-14,1.6,0,Math.PI*2); g.fill(); break;
+    case 'bookcart':
+      P('#7a5a3a'); g.fillRect(-14,-18,28,2); g.fillRect(-14,-9,28,2); g.fillRect(-14,-18,2,16); g.fillRect(12,-18,2,16);
+      ['#b0413e','#3a72c4','#d4af52','#2f9e8f','#7b57c9'].forEach(function(c,i){ P(c); g.fillRect(-11+i*4.6,-26,3.6,8); g.fillRect(-10+i*4.4,-16.5,3.4,7); });
+      P('#333'); g.beginPath(); g.arc(-10,-1,2,0,Math.PI*2); g.arc(10,-1,2,0,Math.PI*2); g.fill(); break;
+    case 'board':
+      S('#8a6a44',2); g.beginPath(); g.moveTo(-10,0); g.lineTo(-10,-14); g.moveTo(10,0); g.lineTo(10,-14); g.stroke();
+      P('#c8a46a'); g.fillRect(-14,-34,28,21); [['#f6d98a',-11,-31],['#a8f0e8',-1,-30],['#f2a6b4',-9,-22],['#ffffff',2,-21]].forEach(function(n){ P(n[0]); g.fillRect(n[1],n[2],8,7); }); break;
+    case 'signpost':
+      P('#6b5a44'); g.fillRect(-1.5,-34,3,34); P('#2f7fb0'); g.beginPath(); g.moveTo(-12,-32); g.lineTo(10,-32); g.lineTo(14,-28.5); g.lineTo(10,-25); g.lineTo(-12,-25); g.closePath(); g.fill();
+      P('#d4af52'); g.beginPath(); g.moveTo(12,-22); g.lineTo(-10,-22); g.lineTo(-14,-18.5); g.lineTo(-10,-15); g.lineTo(12,-15); g.closePath(); g.fill(); break;
+    case 'megaphone':
+      P('#56677f'); g.fillRect(-1.5,-16,3,16); P('#e2574c'); g.beginPath(); g.moveTo(-8,-24); g.lineTo(8,-31); g.lineTo(8,-15); g.lineTo(-8,-21); g.closePath(); g.fill(); P('#fff'); g.fillRect(-10,-24,3,4); break;
+  }
+  g.restore();
+}
+
+/* 지붕: 강의관마다 모양을 다르게 */
+function drawRoof(b, style){
+  const gx=b.x,gy=b.y,gw=b.w,dcx=gx+gw/2;
+  ctx.fillStyle='#0b1f47';ctx.fillRect(gx-8,gy+28,gw+16,12);
+  if(style==='dome'){
+    ctx.fillStyle=b.roof;ctx.fillRect(gx-8,gy+16,gw+16,14);
+    ctx.strokeStyle='#d4af52';ctx.lineWidth=2;ctx.strokeRect(gx-8,gy+16,gw+16,14);
+    const g2=ctx.createLinearGradient(dcx-60,0,dcx+60,0); g2.addColorStop(0,b.roof); g2.addColorStop(.45,b.color); g2.addColorStop(1,b.roof);
+    ctx.fillStyle=g2;ctx.beginPath();ctx.arc(dcx,gy+16,58,Math.PI,0);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='#d4af52';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(dcx,gy+16,58,Math.PI,0);ctx.stroke();
+    ctx.strokeStyle='rgba(212,175,82,.45)';ctx.lineWidth=1.2;for(let i=-2;i<=2;i++){ctx.beginPath();ctx.ellipse(dcx,gy+16,Math.abs(i)*19+2,58,0,Math.PI,Math.PI*2);ctx.stroke();}
+    ctx.fillStyle='#efe7d3';ctx.fillRect(dcx-7,gy-54,14,14);ctx.fillStyle='#d4af52';ctx.beginPath();ctx.moveTo(dcx-9,gy-54);ctx.lineTo(dcx,gy-64);ctx.lineTo(dcx+9,gy-54);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#f6d98a';ctx.fillRect(dcx-3,gy-51,6,8);
+  } else if(style==='flat'){
+    ctx.fillStyle=b.roof;ctx.fillRect(gx-8,gy+10,gw+16,20);
+    ctx.fillStyle=b.color;for(let i=0;i<Math.floor((gw+16)/22);i++){ctx.fillRect(gx-6+i*22,gy+4,12,8);}
+    ctx.fillStyle='#efe7d3';ctx.fillRect(dcx-20,gy-30,40,42);ctx.fillStyle=b.roof;ctx.beginPath();ctx.moveTo(dcx-24,gy-30);ctx.lineTo(dcx,gy-46);ctx.lineTo(dcx+24,gy-30);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='#d4af52';ctx.lineWidth=2;ctx.stroke();
+    ctx.fillStyle='#fffaf0';ctx.beginPath();ctx.arc(dcx,gy-10,12,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#0b1f47';ctx.lineWidth=2;ctx.stroke();
+    const d=new Date(),hA=((d.getHours()%12)+d.getMinutes()/60)/12*Math.PI*2,mA=d.getMinutes()/60*Math.PI*2;
+    ctx.strokeStyle='#0b1f47';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(dcx,gy-10);ctx.lineTo(dcx+Math.sin(hA)*6,gy-10-Math.cos(hA)*6);ctx.stroke();
+    ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(dcx,gy-10);ctx.lineTo(dcx+Math.sin(mA)*9,gy-10-Math.cos(mA)*9);ctx.stroke();
+  } else if(style==='twin'){
+    [gx+gw*0.25,gx+gw*0.75].forEach(function(cx){
+      ctx.fillStyle=b.roof;ctx.beginPath();ctx.moveTo(cx-gw*0.27,gy+28);ctx.lineTo(cx,gy-6);ctx.lineTo(cx+gw*0.27,gy+28);ctx.closePath();ctx.fill();
+      ctx.strokeStyle='#d4af52';ctx.lineWidth=2.5;ctx.stroke();
+      ctx.fillStyle='#f6d98a';ctx.beginPath();ctx.arc(cx,gy+12,5,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#0b1f47';ctx.lineWidth=1;ctx.stroke();
+    });
+    ctx.fillStyle=b.color;
+    ctx.strokeStyle='#c9a24b';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(dcx,gy+10);ctx.lineTo(dcx,gy-24);ctx.stroke();
+    const wv=Math.sin(performance.now()/400)*2;ctx.beginPath();ctx.moveTo(dcx,gy-24);ctx.lineTo(dcx+18,gy-20+wv);ctx.lineTo(dcx,gy-14);ctx.closePath();ctx.fill();
+  } else {
+    ctx.fillStyle=b.roof;ctx.beginPath();ctx.moveTo(gx-8,gy+28);ctx.lineTo(dcx,gy-16);ctx.lineTo(gx+gw+8,gy+28);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='#d4af52';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(gx-8,gy+28);ctx.lineTo(dcx,gy-16);ctx.lineTo(gx+gw+8,gy+28);ctx.stroke();
+    ctx.strokeStyle='#c9a24b';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(dcx,gy-16);ctx.lineTo(dcx,gy-32);ctx.stroke();
+    const wv=Math.sin(performance.now()/400)*2;
+    ctx.fillStyle=b.color;ctx.beginPath();ctx.moveTo(dcx,gy-32);ctx.lineTo(dcx+16,gy-28+wv);ctx.lineTo(dcx,gy-24);ctx.closePath();ctx.fill();
+  }
+  ctx.fillStyle='#0b1f47';ctx.fillRect(gx-8,gy+28,gw+16,12);
+  ctx.fillStyle='#d4af52';ctx.fillRect(gx-8,gy+40,gw+16,2.5);
+}
+
+/* ---- 강의실 내부 장면 (강의관 대화창 위, 요약·퀴즈·결과 동안 유지) ---- */
+var HALL = { on:false, b:null, raf:0, title:'', board:'', boardT0:0, say:'', sayUntil:0, react:'', reactUntil:0, seats:null };
+function hallSeed(str){ let h=0; for(let i=0;i<str.length;i++) h=(h*31+str.charCodeAt(i))|0; return function(){ h=(h*1103515245+12345)|0; return ((h>>>8)&0xffff)/65536; }; }
+function hallSetup(b){
+  const r=hallSeed(b.id), cols=['#e07b5f','#5b8fd6','#58b39a','#c9a24b','#9a7bd0','#d66a8f','#6fa86b','#d08a2e'], hairs=['#1f1f1f','#3a2c1a','#2b2620','#5a3a22','#1a1a2a'];
+  const rows=[{y:122,s:.82,xs:[232,280,328,376,424,472]},{y:148,s:1,xs:[220,275,330,385,440,495]}], seats=[];
+  rows.forEach(function(row,ri){ row.xs.forEach(function(x,ci){
+    const me=(ri===1&&ci===2), empty=!me && r()<.22;
+    seats.push({x:x,y:row.y,s:row.s,me:me,empty:empty,color:me?(player.color||'#4fd1c5'):cols[Math.floor(r()*cols.length)],hair:me?(player.hair||'#2a2320'):hairs[Math.floor(r()*hairs.length)],ph:r()*6.28,hand:r()<.35});
+  }); });
+  return seats;
+}
+function hallShow(b, title, board){
+  const wrap=document.getElementById('dlg-scene'); if(!wrap||!b) return;
+  if(HALL.b!==b){ HALL.b=b; HALL.seats=hallSetup(b); }
+  HALL.title=title||b.name; if(board!==undefined && board!==HALL.board){ HALL.board=board; HALL.boardT0=performance.now(); }
+  wrap.style.display='block';
+  if(!HALL.on){ HALL.on=true; HALL.raf=requestAnimationFrame(hallFrame); }
+}
+function hallHide(){ HALL.on=false; cancelAnimationFrame(HALL.raf); const w=document.getElementById('dlg-scene'); if(w) w.style.display='none'; }
+function hallSay(t, secs){ HALL.say=t; HALL.sayUntil=performance.now()+(secs||3.2)*1000; }
+function hallReact(kind, secs){ HALL.react=kind; HALL.reactUntil=performance.now()+(secs||2.4)*1000; }
+function hallMini(g, x, y, o){   /* y=어깨선 기준 상반신 */
+  const s=o.s||1; g.save(); g.translate(x,y); g.scale(s,s);
+  g.fillStyle=o.color; roundR(g,-10,-2,20,22,6); g.fill();
+  if(o.prof){ g.fillStyle='#0f2350'; roundR(g,-10,-2,20,22,6); g.fill(); g.fillStyle=o.color; g.fillRect(-10,-2,20,4); g.fillStyle='#d4af52'; g.fillRect(-2,-2,4,22); }
+  if(o.me){ g.strokeStyle='#f0d488'; g.lineWidth=1.8; roundR(g,-10,-2,20,22,6); g.stroke(); }
+  if(o.hand){ g.strokeStyle=o.prof?'#0f2350':o.color; g.lineWidth=4.5; g.beginPath(); g.moveTo(o.handSide*8,0); g.lineTo(o.handSide*(12+o.handX),-16+o.handY); g.stroke();
+    g.fillStyle=o.skin||'#f0c9a8'; g.beginPath(); g.arc(o.handSide*(12+o.handX),-17+o.handY,3,0,Math.PI*2); g.fill(); }
+  g.fillStyle=o.skin||'#f0c9a8'; g.beginPath(); g.arc(0,-11,9,0,Math.PI*2); g.fill();
+  g.fillStyle=o.hair;
+  if(o.back){ g.beginPath(); g.arc(0,-12,9.4,0,Math.PI*2); g.fill(); }
+  else { g.beginPath(); g.arc(0,-14,9.2,Math.PI,Math.PI*2); g.fill(); g.fillRect(-9.2,-14,18.4,3.5);
+    g.fillStyle='#20242c'; g.fillRect(-4,-11,2,2.2); g.fillRect(2,-11,2,2.2);
+    g.strokeStyle='#a0524a'; g.lineWidth=1.1; g.beginPath(); g.arc(0,-7,2.6,.2,Math.PI-.2); g.stroke(); }
+  g.restore();
+}
+function hallFrame(){
+  if(!HALL.on) return;
+  HALL.raf=requestAnimationFrame(hallFrame);
+  const cv=document.getElementById('hallCv'); if(!cv || !isShown('dlg')) return;
+  const dpr=Math.min(2,window.devicePixelRatio||1), cw=cv.clientWidth||520, ch=cv.clientHeight||170;
+  if(cv.width!==Math.round(cw*dpr)||cv.height!==Math.round(ch*dpr)){ cv.width=Math.round(cw*dpr); cv.height=Math.round(ch*dpr); }
+  const g=cv.getContext('2d'), b=HALL.b, now=performance.now(), t=now/1000;
+  g.setTransform(cv.width/520,0,0,cv.height/170,0,0);
+  /* 벽·바닥 */
+  const wall=g.createLinearGradient(0,0,0,100); wall.addColorStop(0,'#1a2c56'); wall.addColorStop(1,'#24386a'); g.fillStyle=wall; g.fillRect(0,0,520,100);
+  g.fillStyle=b.color; g.globalAlpha=.18; g.fillRect(0,0,520,100); g.globalAlpha=1;
+  g.fillStyle=b.color; g.fillRect(0,92,520,5); g.fillStyle='#d4af52'; g.fillRect(0,97,520,1.5);
+  const fl=g.createLinearGradient(0,98,0,170); fl.addColorStop(0,'#7a5a3c'); fl.addColorStop(1,'#5b4029'); g.fillStyle=fl; g.fillRect(0,98,520,72);
+  g.strokeStyle='rgba(0,0,0,.18)'; g.lineWidth=1; for(let i=0;i<6;i++){ g.beginPath(); g.moveTo(0,104+i*12); g.lineTo(520,104+i*12); g.stroke(); }
+  /* 창문(구름 흐름) */
+  [[398,'#9fd0f2'],[458,'#9fd0f2']].forEach(function(w){
+    g.fillStyle='#e9dfc6'; g.fillRect(w[0]-3,15,56,64); const sk=g.createLinearGradient(0,18,0,76); sk.addColorStop(0,'#7fb9ea'); sk.addColorStop(1,'#cfe8fa'); g.fillStyle=sk; g.fillRect(w[0],18,50,58);
+    g.save(); g.beginPath(); g.rect(w[0],18,50,58); g.clip(); g.fillStyle='rgba(255,255,255,.9)';
+    const cx=w[0]+((t*6+w[0])%90)-20; g.beginPath(); g.arc(cx,36,7,0,Math.PI*2); g.arc(cx+9,33,9,0,Math.PI*2); g.arc(cx+18,37,6,0,Math.PI*2); g.fill();
+    g.fillStyle='#4f9a5c'; g.beginPath(); g.arc(w[0]+12,80,14,0,Math.PI*2); g.arc(w[0]+36,82,12,0,Math.PI*2); g.fill(); g.restore();
+    g.strokeStyle='#e9dfc6'; g.lineWidth=3; g.beginPath(); g.moveTo(w[0]+25,18); g.lineTo(w[0]+25,76); g.moveTo(w[0],47); g.lineTo(w[0]+50,47); g.stroke();
+  });
+  /* 칠판 */
+  g.fillStyle='#8a6a44'; g.fillRect(130,10,256,80); g.fillStyle='#1f3d30'; g.fillRect(135,14,246,70);
+  g.fillStyle='#8a6a44'; g.fillRect(132,86,252,4); g.fillStyle='#f4f1e8'; g.fillRect(160,84,10,2.5); g.fillStyle='#f2a6b4'; g.fillRect(176,84,8,2.5);
+  g.textAlign='center'; g.textBaseline='middle'; g.fillStyle='#f4f1e8'; g.font='bold 15px "Malgun Gothic",sans-serif'; g.fillText(HALL.title,258,32);
+  g.strokeStyle='rgba(244,241,232,.5)'; g.lineWidth=1; g.beginPath(); g.moveTo(190,43); g.lineTo(326,43); g.stroke();
+  const shown=HALL.board.slice(0,Math.max(0,Math.floor((now-HALL.boardT0)/55)));
+  g.font='12.5px "Malgun Gothic",sans-serif'; g.fillStyle='#e8f3c8';
+  let line=shown; while(g.measureText(line).width>232 && line.length>1) line=line.slice(0,-1);
+  if(line.length<shown.length){ const k=Math.max(line.lastIndexOf(' '),line.lastIndexOf('·')); if(k>line.length*0.4) line=line.slice(0,k+1); }
+  g.fillText(line.trim(),258,60); if(line.length<shown.length){ g.fillText(shown.slice(line.length).trim(),258,74); }
+  if(shown.length<HALL.board.length && Math.floor(t*3)%2===0){ g.fillStyle='#fff'; g.fillRect(258+g.measureText(line).width/2+2,54,1.6,12); }
+  /* 시계 */
+  g.fillStyle='#fffaf0'; g.beginPath(); g.arc(38,30,14,0,Math.PI*2); g.fill(); g.strokeStyle='#0b1f47'; g.lineWidth=2.4; g.stroke();
+  const d=new Date(), hA=((d.getHours()%12)+d.getMinutes()/60)/12*Math.PI*2, mA=d.getMinutes()/60*Math.PI*2;
+  g.lineWidth=2.2; g.beginPath(); g.moveTo(38,30); g.lineTo(38+Math.sin(hA)*7,30-Math.cos(hA)*7); g.stroke(); g.lineWidth=1.3; g.beginPath(); g.moveTo(38,30); g.lineTo(38+Math.sin(mA)*10,30-Math.cos(mA)*10); g.stroke();
+  /* 소품 탁자 */
+  g.fillStyle='#6b4f34'; g.fillRect(14,118,50,6); g.fillRect(18,124,4,22); g.fillRect(56,124,4,22);
+  const pr=HALL_PROPS[b.subj||b.role]||['planter']; drawProp(g,pr[0],39,118,1.15);
+  /* 교수 + 교탁 */
+  const p=professors.find(function(x){ return x.subj===b.subj; }), pc=p?p.color:b.color, ph=p?p.hair:'#1f1f1f';
+  const gest=Math.sin(t*2.2), happy=HALL.react==='clap'&&now<HALL.reactUntil;
+  hallMini(g,100,96+(happy?Math.abs(Math.sin(t*9))*-2:0),{color:pc,hair:ph,prof:true,hand:true,handSide:1,handX:gest*3+6,handY:-gest*2-2});
+  g.fillStyle='#5b4029'; g.beginPath(); g.moveTo(80,112); g.lineTo(120,112); g.lineTo(116,150); g.lineTo(84,150); g.closePath(); g.fill();
+  g.fillStyle='#d4af52'; g.fillRect(80,112,40,3); g.fillStyle='#f4ead0'; g.font='bold 8.5px "Malgun Gothic",sans-serif'; g.fillText(p?p.name:'교수',100,128);
+  /* 학생 좌석 */
+  const clap=happy, think=HALL.react==='think'&&now<HALL.reactUntil;
+  HALL.seats.forEach(function(st){
+    if(!st.empty){
+      const bob=clap?Math.abs(Math.sin(t*10+st.ph))*-3:Math.sin(t*1.3+st.ph)*.8;
+      const hand=(HALL.react==='hands'&&now<HALL.reactUntil&&st.hand&&!st.me);
+      hallMini(g,st.x,st.y-20+bob,{s:st.s,color:st.color,hair:st.hair,back:true,me:st.me,hand:hand,handSide:st.ph>3?1:-1,handX:0,handY:-4});
+      if(think && st.hand && !st.me){ g.fillStyle='#fff3cf'; g.font='bold '+(11*st.s)+'px sans-serif'; g.fillText('?',st.x+8*st.s,st.y-44*st.s+Math.sin(t*4+st.ph)*2); }
+      
+    }
+    g.fillStyle='#8a6a44'; g.fillRect(st.x-22*st.s,st.y,44*st.s,7*st.s); g.fillStyle='#6b4f34'; g.fillRect(st.x-20*st.s,st.y+7*st.s,3*st.s,12*st.s); g.fillRect(st.x+17*st.s,st.y+7*st.s,3*st.s,12*st.s);
+    if(!st.empty){ g.fillStyle='#f4f1e8'; g.fillRect(st.x-6*st.s,st.y-1.5*st.s,12*st.s,2.5*st.s); }
+    if(st.me){ g.fillStyle='rgba(38,26,6,.92)'; roundR(g,st.x-11,st.y+9,22,12,5); g.fill(); g.strokeStyle='#c9a24b'; g.lineWidth=1; roundR(g,st.x-11,st.y+9,22,12,5); g.stroke(); g.fillStyle='#ffe4a0'; g.font='bold 8.5px "Malgun Gothic",sans-serif'; g.fillText('나',st.x,st.y+15.5); }
+  });
+  /* 교수 말풍선 */
+  if(HALL.say && now<HALL.sayUntil){
+    g.font='bold 11px "Malgun Gothic",sans-serif'; const w=Math.min(200,g.measureText(HALL.say).width+16);
+    const bx=Math.max(4,Math.min(100-w/2,516-w)), by=52;
+    g.fillStyle='rgba(10,13,20,.95)'; roundR(g,bx,by,w,20,7); g.fill(); g.strokeStyle='#d4af52'; g.lineWidth=1.2; roundR(g,bx,by,w,20,7); g.stroke();
+    g.fillStyle='rgba(10,13,20,.95)'; g.beginPath(); g.moveTo(96,by+20); g.lineTo(100,by+26); g.lineTo(104,by+20); g.closePath(); g.fill();
+    g.fillStyle='#fff3cf'; g.fillText(HALL.say,bx+w/2,by+10.5);
   }
 }
 
@@ -1055,13 +1311,14 @@ function tryInteract(){
 
 /* --- Dialog engine --- */
 function setDialog(badge, badgeColor, name, sub){
+  hallHide();
   document.getElementById('dlg-badge').textContent = badge;
   document.getElementById('dlg-badge').style.background = badgeColor;
   document.getElementById('dlg-name').textContent = name;
   document.getElementById('dlg-sub').textContent = sub;
 }
 function showDialog(){ document.getElementById('dlg').classList.add('show'); }
-function closeDialog(){ document.getElementById('dlg').classList.remove('show'); quizCtx=null; gb=null; }
+function closeDialog(){ hallHide(); document.getElementById('dlg').classList.remove('show'); quizCtx=null; gb=null; }
 
 let quizCtx = null;
 
@@ -1112,6 +1369,7 @@ function cardioLinksHTML(){
 function openHall(b){
   const p = professors.find(x=>x.subj===b.subj);
   setDialog(b.emoji, 'linear-gradient(135deg,'+b.color+',#2a3550)', b.name, SUBJ_NAME[b.subj]+' · 강의관');
+  hallShow(b, SUBJ_NAME[b.subj], '오늘의 키워드 · '+(HALL_KEY[b.subj]||'')); hallSay('어서 와요! 자리에 앉으세요 🙂', 3.5);
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
   const mat = b.subj==='neuroanat'?neuroanatLinksHTML():(b.subj==='neuro'?neuroLinksHTML():(b.subj==='cardio'?cardioLinksHTML():''));
   body.innerHTML=pLead('오늘 과목은 <b>'+SUBJ_NAME[b.subj]+'</b>입니다. 아래 <b>강의 요약</b>으로 핵심을 듣고 <b>퀴즈</b>로 학점을 쌓으세요.')
@@ -1166,6 +1424,7 @@ function addFoot(label, fn, primary){
 /* --- Lecture summaries (offline; LLM-enhanced if enabled) --- */
 const LECTURE = {"anatomy": "해부학은 인체의 뼈·근육·관절·신경을 구조로 이해하는 과목입니다. 핵심은 “이름이 곧 기능” — 회전근개(SITS: 극상·극하·소원·견갑하근)는 어깨의 동적 안정자입니다. (안산대 물리치료학과 · 김신영 교수 담당: 해부학및실습·운동생리학)", "neuroanat": "신경해부학·신경과학은 뉴런·시냅스에서 감각·운동 경로, 소뇌·바닥핵, 뇌신경, 뇌줄기, 자율신경, 통증까지 “구조가 곧 기능”으로 잇습니다. 핵심 감별은 UMN(반대쪽·경직·과반사) vs LMN(같은쪽·이완·위축), 신경로 교차 위치입니다. (안산대 물리치료학과 · 정형국 교수 담당: 신경해부학·임상운동학 · 콘텐츠는 심경섭 「신경해부학 강의록·시험문항」 기반)", "neuro": "신경계물리치료는 뇌졸중·파킨슨·소뇌실조·ALS·SCI·MS·GBS 등 신경계 손상 환자의 회복을 다룹니다. 최신 근거는 과제지향 훈련·충분한 반복량·치료 강도를 우선합니다. (안산대 물리치료학과 · 심경섭 교수 담당: 신경계물리치료중재학·지역사회물리치료학 · 「NeuroPT-3」 국시 정리 기반)", "exercise": "운동치료학은 ROM·근력·지구력·협응을 회복시키는 치료적 운동을 설계합니다. MMT로 근력을 0~5로 등급화하며 3등급(중력 대항 full ROM)이 임상 기준입니다. 등척·구심·원심 수축과 PNF를 상황에 맞게 적용합니다. (안산대 물리치료학과 · 신호진 교수 담당: 운동치료학·인체생리학)", "funcanat": "기능해부·신경계운동치료는 움직임의 해부학적 기반과 신경계 운동 재교육을 다룹니다. 운동단위·크기원리·운동학습 단계(인지-연합-자율)·견갑상완리듬·닫힌/열린사슬·보행주기 같은 기능적 원리를 임상 운동치료로 연결합니다. (안산대 물리치료학과 · 김도현 학과장 담당: 신경계운동치료실습·기능해부학 및 실습)", "msk": "근골격계·정형물리치료는 요통·회전근개·오십견·염좌 등 정형 질환을 평가·치료합니다. 특수검사(SLR, Lachman, McMurray, Cozen 등)로 구조적 병변을 감별하고 도수치료·운동·교육으로 통증과 기능을 관리합니다. (안산대 물리치료학과 · 정호발 교수 담당: 정형물리치료실습·근골격계운동치료실습)", "modality": "물리적인자치료는 열·냉·전기·초음파·광선 등 물리적 에너지를 활용합니다. 급성기엔 한랭(혈관수축·부종감소), 만성기엔 온열(혈류·유연성↑). TENS 진통은 관문조절설로, 초음파 열 효과는 지속파로 극대화됩니다. (안산대 물리치료학과 · 김동훈 교수 담당: 물리적인자치료실습·근거중심신경계물리치료학)", "cardio": "심화호흡(심장호흡)물리치료는 가슴우리·호흡근·환기/관류에서 폐렴·COPD 등 호흡질환과 호흡재활을 다룹니다. 정상 안정 호흡수 12~20회/분, 바깥호흡=허파꽈리–모세혈관 가스교환. 가로막호흡·IMT·강화폐활량호흡·오므린 입술호흡·체위배출법으로 분비물 배출·환기를 개선합니다. (안산대 물리치료학과 · 심경섭 교수 담당: 심화호흡물리치료학 · 「심장호흡물리치료 2판」 기반)", "clindx": "임상의사결정·물리치료진단은 환자의 주관적·객관적 정보를 수집·해석해 ‘움직임 문제’를 규정하고(ICF 틀), 근거기반(EBP: 연구근거+임상전문성+환자가치)으로 목표·중재를 정한 뒤 재평가로 순환하는 임상추론 과정입니다. SOAP 기록과 가설연역적 추론이 핵심 도구입니다. (안산대 물리치료학과 · 이광재 교수 담당: 물리치료진단학·물리치료진단실습·임상의사결정)"};
 async function lectureSummary(subj, who){
+  const hb=building(subj); if(hb){ hallShow(hb, '강의 요약', HALL_KEY[subj]||''); hallSay('핵심만 짚어 볼게요', 3); }
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
   body.innerHTML='<div class="say"><span class="who">'+who+'</span>'+LECTURE[subj]+'</div>'+
     '<div class="expl"><span class="tag">사실</span>물리치료 표준 교과서 수준의 확립된 내용입니다.</div>';
@@ -1185,6 +1444,7 @@ function renderQuestion(){
   const {subj, who, order, i} = quizCtx;
   const qi = order[i]; const item = QUIZ[subj][qi];
   setDialog('📝','linear-gradient(135deg,#7c9cff,#4fd1c5)', SUBJ_NAME[subj]+' 퀴즈', who+' 출제 · '+(i+1)+'/'+order.length);
+  const hb=building(subj); if(hb){ hallShow(hb, '퀴즈 '+(i+1)+' / '+order.length, '정답 시 +10점 · 첫 시도에 맞혀 보세요'); hallSay(i===0?'자, 퀴즈 시작합니다!':'다음 문제예요', 2.4); hallReact('hands', 2); }
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
   let html='<div class="qmeta"><span>문항 '+(i+1)+' / '+order.length+'</span><span>정답 시 +10점</span></div>';
   html+='<div class="say" style="font-weight:600">'+item.q+'</div>';
@@ -1205,9 +1465,10 @@ function answer(idx){
   const first = (quizCtx['ans_'+i]===undefined);
   quizCtx['ans_'+i]=idx;
   if (idx===correct){
-    if (first){ state.score+=10; state.correct+=1; quizCtx.gotFirstTry++; toast('정답! +10점 🎉'); }
-    else toast('정답입니다 ✓');
-  } else { toast('오답 — 해설을 확인하세요'); }
+    if (first){ state.score+=10; state.correct+=1; quizCtx.gotFirstTry++; toast('정답! +10점 🎉'); hallSay('정답이에요! 👏', 2.6); }
+    else { toast('정답입니다 ✓'); hallSay('맞아요, 잘 고쳤어요', 2.6); }
+    hallReact('clap', 2.2);
+  } else { toast('오답 — 해설을 확인하세요'); hallSay('아쉬워요, 해설을 함께 봐요', 3); hallReact('think', 2.6); }
   const body=document.getElementById('dlg-body');
   const ex=document.createElement('div'); ex.className='expl';
   ex.innerHTML='<span class="tag">해설</span>'+item.e;
@@ -1226,6 +1487,7 @@ function finishQuiz(){
   setDialog('🏁','linear-gradient(135deg,#ffd166,#4fd1c5)', SUBJ_NAME[subj]+' 이수 결과', who+' 출제');
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');
   let grade = pct>=90?'A+':pct>=80?'A':pct>=70?'B+':pct>=60?'B':pct>=40?'C':'D';
+  const hb=building(subj); if(hb){ hallShow(hb, '이수 완료 🎓', '이번 강의 학점 · '+grade+' (성취도 '+pct+'%)'); hallSay('수고했어요!', 4); hallReact('clap', 4); }
   body.innerHTML='<div class="say" style="text-align:center;font-size:16px"><span class="who" style="text-align:center;display:block">수고했어요!</span>'+
     '첫 시도 정답 <b style="color:var(--gold)">'+gotFirstTry+' / '+order.length+'</b> · 성취도 <b>'+pct+'%</b><br><br>'+
     '<span style="font-size:30px">🎓</span><br>이번 강의 학점: <b style="color:var(--accent);font-size:22px">'+grade+'</b></div>'+
