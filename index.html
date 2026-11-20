@@ -248,7 +248,10 @@
     box-shadow:0 10px 30px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease}
   #ctrlhint.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
   #ctrlhint .ch-title{font-weight:700;color:#f0d488;margin-bottom:4px;font-size:12px}
-  #ctrlhint #ctrlhint-x{position:absolute;top:5px;right:9px;background:none;border:none;color:#9fb0d0;font-size:19px;cursor:pointer;line-height:1}
+  #ctrlhint #ctrlhint-x{position:absolute;top:0;right:0;width:44px;height:40px;display:flex;align-items:flex-start;justify-content:flex-end;padding:4px 10px 0 0;
+    background:none;border:none;color:#c3cfe6;font-size:22px;cursor:pointer;line-height:1;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+  #ctrlhint #ctrlhint-x:hover{color:#fff}
+  #ctrlhint .ch-title{padding-right:30px}
   #ctrlhint b{color:#fff}
   @supports(padding:env(safe-area-inset-top)){
     #hud{top:calc(14px + env(safe-area-inset-top,0px));left:calc(14px + env(safe-area-inset-left,0px))}
@@ -2068,7 +2071,12 @@ document.addEventListener('visibilitychange', function(){ if(!document.hidden){ 
   function rotHint(){ if(touchDev() && window.matchMedia && window.matchMedia('(orientation:portrait)').matches){ try{ toast('📱 가로로 돌리면 더 편해요'); }catch(e){} } }
   var sb=document.getElementById('startBtn');
   if(sb) sb.addEventListener('click', function(){ setTimeout(showHint,450); setTimeout(rotHint,1700); });
-  var x=document.getElementById('ctrlhint-x'); if(x) x.addEventListener('click', function(){ var el=document.getElementById('ctrlhint'); if(el) el.classList.remove('show'); });
+  /* 닫기: × 버튼, 안내창 자체, 캠퍼스 화면 등 어디를 눌러도 바로 닫힘(캡처 단계라 다른 터치 처리기가 막아도 동작) · Esc */
+  function hideHint(){ var el=document.getElementById('ctrlhint'); if(el && el.classList.contains('show')){ el.classList.remove('show'); clearTimeout(el._t); } }
+  document.addEventListener('pointerdown', hideHint, true);
+  document.addEventListener('touchstart', hideHint, {capture:true, passive:true});
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') hideHint(); });
+  var x=document.getElementById('ctrlhint-x'); if(x) x.addEventListener('click', hideHint);
 })();
 
 /* ===== UX 업그레이드: 미니맵 · 사운드 토글 · 아바타 커스터마이즈 ===== */
