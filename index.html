@@ -328,6 +328,42 @@
     background:rgba(255,255,255,.05);font-size:20px;cursor:pointer;transition:.12s}
   #emoBar button:hover{background:rgba(212,175,82,.22);transform:scale(1.08)}
   @media (max-width:560px){ #emoBtn{width:48px;height:48px;bottom:110px;right:14px} #emoBar{bottom:166px;right:14px} }
+  /* --- 수업 채팅 (교수님이 켠 동안만) --- */
+  #chatBtn{position:absolute;right:16px;bottom:182px;width:52px;height:52px;border-radius:50%;display:none;
+    background:linear-gradient(135deg,#1f6f68,#0b2a4e);border:1px solid rgba(79,209,197,.7);color:#fff;font-size:22px;z-index:12;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.45)}
+  body.playing.chat-on #chatBtn{display:block}
+  body.chat-on #emoBar{bottom:244px}
+  #chatBadge{position:absolute;top:-4px;right:-4px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:#e2574c;color:#fff;font-size:11.5px;font-weight:700;line-height:20px;display:none}
+  #chatBadge.show{display:block}
+  #chatPanel{position:absolute;right:80px;bottom:120px;width:min(340px,calc(100vw - 112px));height:300px;z-index:14;display:none;flex-direction:column;
+    background:linear-gradient(135deg,rgba(11,34,78,.97),rgba(7,19,46,.97));border:1px solid rgba(79,209,197,.55);border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.55);overflow:hidden}
+  #chatPanel.show{display:flex}
+  #chatPanel .cp-head{display:flex;align-items:center;gap:8px;padding:9px 8px 8px 13px;border-bottom:1px solid rgba(255,255,255,.08);font-size:13.5px;font-weight:700;color:#eaf1ff}
+  #chatPanel .cp-head small{font-weight:400;color:var(--muted);font-size:11px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #chatX{width:36px;height:32px;border:0;background:none;color:#cfd8ee;font-size:20px;cursor:pointer;touch-action:manipulation}
+  #chatLog{flex:1;overflow-y:auto;padding:8px 12px;font-size:13.5px;line-height:1.45;color:#e3eafa}
+  #chatLog .cm{margin:3px 0;word-break:break-all}
+  #chatLog .cm b{font-weight:700;margin-right:5px}
+  #chatLog .cm i{font-style:normal;color:var(--muted);font-size:10.5px;margin-left:5px}
+  #chatLog .cm.prof{background:rgba(212,175,82,.14);border-left:3px solid var(--gold);padding:3px 7px;border-radius:6px}
+  #chatLog .cm.prof b{color:var(--gold)}
+  #chatLog .cm.sys{color:var(--muted);font-size:12px;text-align:center}
+  #chatForm{display:flex;gap:6px;padding:8px;border-top:1px solid rgba(255,255,255,.08)}
+  #chatInp{flex:1;min-width:0;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--text);font-size:16px}
+  #chatForm button{padding:0 13px;border-radius:10px;border:1px solid rgba(79,209,197,.6);background:rgba(79,209,197,.2);color:#c9f5ef;font-weight:700;cursor:pointer;white-space:nowrap}
+  #profNotice{position:absolute;left:50%;top:70px;transform:translateX(-50%);z-index:15;max-width:min(560px,calc(100vw - 32px));display:none;
+    background:linear-gradient(135deg,rgba(60,46,10,.96),rgba(20,24,40,.96));border:1px solid var(--gold);border-radius:14px;padding:10px 16px;color:#fff3cf;font-size:14.5px;box-shadow:0 10px 28px rgba(0,0,0,.5);word-break:break-all}
+  #profNotice.show{display:block}
+  .prof-list{max-height:240px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;padding:6px 8px;margin-top:8px;font-size:13px}
+  .prof-list div{display:flex;gap:6px;align-items:center;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  .prof-list span{flex:1;word-break:break-all}
+  .prof-list button{padding:2px 9px;border-radius:9px;border:1px solid rgba(226,87,76,.6);background:rgba(226,87,76,.14);color:#ffc9c3;font-size:12px;cursor:pointer}
+  @media (max-width:560px){
+    #chatBtn{width:48px;height:48px;bottom:166px;right:14px}
+    body.chat-on #emoBar{bottom:222px}
+    #chatPanel{right:12px;left:12px;width:auto;top:calc(104px + env(safe-area-inset-top,0px));bottom:auto;height:min(300px,40vh)}
+    #profNotice{top:calc(110px + env(safe-area-inset-top,0px));font-size:13.5px}
+  }
 
 /* ===== 접근성 보강 (2026-10) ===== */
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
@@ -377,6 +413,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
     <button class="btn more" id="sndBtn" title="소리 켜기/끄기">🔊 소리</button>
     <button class="btn more" id="achBtn">🏆 도전과제</button>
     <button class="btn more" id="helpBtn">❔ 도움말</button>
+    <button class="btn more" id="profBtn" style="display:none" title="수업 채팅 켜기·끄기, 글 지우기">👩‍🏫 교수 모드</button>
   </div>
 
   <div id="prompt"></div>
@@ -389,6 +426,13 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
   <button id="btnE" aria-label="상호작용">E<br>상호작용</button>
   <button id="dockQuick" type="button" aria-label="건물 바로가기 (Q)" title="건물 바로가기 (Q)">🧭<span>바로가기</span></button>
   <button id="emoBtn" aria-label="이모지 반응">😀</button>
+  <button id="chatBtn" type="button" aria-label="수업 채팅 열기" title="수업 채팅 (Enter)">💬<b id="chatBadge"></b></button>
+  <div id="chatPanel" role="dialog" aria-label="수업 채팅">
+    <div class="cp-head">💬 수업 채팅 <small>교수님이 켜 둔 동안만 열려요</small><button id="chatX" type="button" aria-label="채팅 닫기">×</button></div>
+    <div id="chatLog" aria-live="polite"></div>
+    <form id="chatForm" autocomplete="off"><input id="chatInp" type="text" maxlength="40" placeholder="메시지 (40자 이내)" aria-label="채팅 메시지"><button type="submit">보내기</button></form>
+  </div>
+  <div id="profNotice" role="status" aria-live="polite"></div>
   <div id="emoBar"></div>
   <div id="toast"></div>
 <div id="ctrlhint"><button id="ctrlhint-x" aria-label="닫기">×</button><div class="ch-title">🎮 조작 안내</div><div class="ch-body"></div></div>
@@ -628,6 +672,7 @@ const keys = {};
 const MOVE_KEYS = new Set(['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d','ㅈ','ㅁ','ㄴ','ㅇ']);
 addEventListener('keydown', e=>{
   const k = e.key.toLowerCase();
+  if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName) && k!=='escape') return;   /* 채팅·이름 입력 중엔 이동 안 함 */
   if (MOVE_KEYS.has(k) || k===' ') { if(!anyModalOpen() && !(e.target && e.target.closest && e.target.closest('button,a,input,select,textarea'))) e.preventDefault(); }
   keys[k] = true;
   if (k==='e' && !anyModalOpen() && state.entered) tryInteract();
@@ -2202,6 +2247,7 @@ window.emos = [];   // {x,y,e,t}
   }, true);
   document.addEventListener('keydown', function(e){
     var k=e.key; if(!state.entered || anyModalOpen()) return;
+    if(e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
     if(k>='1' && k<='9'){ var i=parseInt(k,10)-1; if(EMOJIS[i]) emoteReact(EMOJIS[i]); }
   });
 })();
@@ -2357,6 +2403,8 @@ window.MP_CONFIG = {
   messagingSenderId: "749834993278",
   appId: "1:749834993278:web:3eec2d0cfed791c2f1622f"
 };
+/* 교수 모드 관리자(구글 로그인 계정의 Firebase 사용자 ID). database.rules.json 의 관리자 ID와 같아야 함 */
+window.MP_ADMINS = [];
 (function(){
   var ROOM='main', MAX_ONLINE=90, SEND_MS=600, BEAT_MS=15000, STALE_MS=60000;
   var FB_VER='10.12.2';
@@ -2416,23 +2464,52 @@ window.MP_CONFIG = {
     D.onChildAdded(room,function(s){ onState(s.key,s.val()); });
     D.onChildChanged(room,function(s){ onState(s.key,s.val()); });
     D.onChildRemoved(room,function(s){ onState(s.key,null); });
+    /* 수업 채팅: 켜짐 여부는 누구나 읽고, 글은 켜진 동안만 읽고 쓴다(규칙이 강제) */
+    var chatOffs=[];
+    D.onValue(D.ref(db,'config/chat'), function(s){ chatCfg(s.val()); }, function(){ chatCfg(null); });
     return { send:function(d){ d.t=D.serverTimestamp(); return D.set(me,d); }, leave:function(){ return D.remove(me); },
-             phrase:function(i){ return D.update(me,{q:i, qt:Date.now()}); } };
+             phrase:function(i){ return D.update(me,{q:i, qt:Date.now()}); },
+             chatListen:function(){
+               if(chatOffs.length) return;
+               var q=D.query(D.ref(db,'chat/'+ROOM), D.limitToLast(50));
+               chatOffs.push(D.onChildAdded(q,function(s){ chatAdd(s.key,s.val()); },function(){ chatOffs=[]; }));
+               chatOffs.push(D.onChildRemoved(q,function(s){ chatRemove(s.key); },function(){}));
+             },
+             chatUnlisten:function(){ chatOffs.forEach(function(f){ try{ f(); }catch(e){} }); chatOffs=[]; },
+             chatSend:function(text){
+               var k=D.push(D.ref(db,'chat/'+ROOM)).key, u={};
+               u['chat/'+ROOM+'/'+k]={u:myId, n:myName(), m:text, t:D.serverTimestamp()};
+               u['chatLast/'+myId]=D.serverTimestamp();
+               return D.update(D.ref(db),u);
+             } };
   }
   /* ---- 연결 방식 2: 시험용(같은 브라우저 창끼리) ---- */
   function startLocal(){
     var bc=new BroadcastChannel('aupt-mp-'+ROOM); myId='L'+Math.random().toString(36).slice(2,9);
     bc.onmessage=function(ev){ var m=ev.data||{}; if(m.hello){ if(m.id!==myId) last.t=0; return; } onState(m.id, m.d); };
     bc.postMessage({id:myId, hello:true});
+    var cbc=new BroadcastChannel('aupt-chat-'+ROOM);
+    cbc.onmessage=function(ev){ var m=ev.data||{}; if('cfg' in m) chatCfg(m.cfg); else if(m.del==='*') chatClear(); else if(m.del) chatRemove(m.del); else if(m.msg) chatAdd(m.id,m.msg); };
+    setTimeout(function(){ var c=null; try{ c=JSON.parse(localStorage.getItem('aupt_lchat')||'null'); }catch(e){} chatCfg(c); },0);
+    function lsend(msg){ var id='m'+Date.now()+Math.random().toString(36).slice(2,6); cbc.postMessage({id:id,msg:msg}); chatAdd(id,msg); }
+    LOCAL_ADMIN={
+      setOn:function(on){ var c={on:!!on,t:Date.now()}; try{ localStorage.setItem('aupt_lchat',JSON.stringify(c)); }catch(e){} cbc.postMessage({cfg:c}); chatCfg(c); return Promise.resolve(); },
+      del:function(id){ cbc.postMessage({del:id}); chatRemove(id); return Promise.resolve(); },
+      clear:function(){ cbc.postMessage({del:'*'}); chatClear(); return Promise.resolve(); },
+      send:function(text){ lsend({u:'prof',n:'교수님',m:text,t:Date.now(),a:true}); return Promise.resolve(); }
+    };
     return { send:function(d){ d.t=Date.now(); bc.postMessage({id:myId,d:d}); }, leave:function(){ bc.postMessage({id:myId,d:null}); },
-             phrase:function(i){ var d=packet(); d.q=i; d.qt=Date.now(); d.t=Date.now(); bc.postMessage({id:myId,d:d}); } };
+             phrase:function(i){ var d=packet(); d.q=i; d.qt=Date.now(); d.t=Date.now(); bc.postMessage({id:myId,d:d}); },
+             chatListen:function(){}, chatUnlisten:function(){},
+             chatSend:function(text){ lsend({u:myId,n:myName(),m:text,t:Date.now()}); return Promise.resolve(); } };
   }
 
   function wanted(){ return !!window.MP_CONFIG || /[?&]mp=local\b/.test(location.search); }
   var fails=0, retryAt=0;
   async function start(){
     if(starting||tr||full||fails>=3||performance.now()<retryAt) return; starting=true;
-    try{ tr = (window.MP_CONFIG && !/[?&]mp=local\b/.test(location.search)) ? await startFirebase(window.MP_CONFIG) : startLocal(); }
+    try{ tr = (window.MP_CONFIG && !/[?&]mp=local\b/.test(location.search)) ? await startFirebase(window.MP_CONFIG) : startLocal();
+         if(tr && CHAT.on && tr.chatListen) tr.chatListen(); }
     catch(e){ tr=null; fails++; retryAt=performance.now()+20000*fails; try{ console.warn('함께 접속 연결 실패 — 혼자 모드로 계속합니다.', e); }catch(_){} }
     starting=false; updateChip();
   }
@@ -2505,6 +2582,181 @@ window.MP_CONFIG = {
       if(d<bd){ bd=d; best=b; } });
     return (best && bd<140) ? best.name+' 앞' : '캠퍼스 광장';
   }
+
+  /* ---- 수업 채팅: 교수님이 켠 동안만, 40자·3초 간격·금칙어·전화번호 차단 ---- */
+  var CHAT={on:false, since:0, msgs:[], unread:0, lastSend:0}, LOCAL_ADMIN=null;
+  var BAD=['씨발','시발','씨바','ㅅㅂ','ㅆㅂ','병신','븅신','ㅂㅅ','좆','존나','졸라','ㅈㄴ','개새','새끼','쌔끼','지랄','ㅈㄹ','닥쳐','꺼져',
+           '미친놈','미친년','미친새','ㅁㅊ','엠창','느금','니애미','니엄마','애미','애비','찐따','한남','김치녀','메갈','일베','섹스','야동','뒤져','뒈져','fuck','shit','bitch'];
+  function cleanMsg(t){ return String(t||'').replace(/[\u0000-\u001f\u007f<>]/g,'').replace(/\s+/g,' ').trim().slice(0,40); }
+  function badMsg(t){
+    var n=String(t).toLowerCase().replace(/[\s0-9_.,!?~\-*·'"`^()\[\]{}]/g,'');
+    if(BAD.some(function(w){ return n.indexOf(w)>=0; })) return '사용할 수 없는 표현이 들어 있어요';
+    if(/01[016789][\s.\-]?\d{3,4}[\s.\-]?\d{4}/.test(t)) return '전화번호는 채팅에 올릴 수 없어요';
+    return '';
+  }
+  function chatOpen(){ var p=document.getElementById('chatPanel'); return !!(p && p.classList.contains('show')); }
+  function hhmm(t){ var d=new Date(t||Date.now()); return (d.getHours()<10?'0':'')+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes(); }
+  function renderChat(){
+    var log=document.getElementById('chatLog'); if(!log) return;
+    var atBottom=log.scrollHeight-log.scrollTop-log.clientHeight<40;
+    log.innerHTML='';
+    if(!CHAT.msgs.length){ var e=document.createElement('div'); e.className='cm sys'; e.textContent='아직 대화가 없어요. 첫 인사를 남겨 보세요.'; log.appendChild(e); }
+    CHAT.msgs.forEach(function(m){
+      var d=document.createElement('div'); d.className='cm'+(m.a?' prof':'');
+      var b=document.createElement('b'); b.textContent=(m.a?'📢 ':'')+m.n+(m.u===myId?' (나)':'');
+      if(!m.a){ var r=remotes[m.u]; b.style.color=m.u===myId?cleanColor(player.color):(r?r.c.color:'#9fd8ff'); }
+      var sp=document.createElement('span'); sp.textContent=badMsg(m.m)?'(가려진 메시지)':m.m;
+      var i=document.createElement('i'); i.textContent=hhmm(m.t);
+      d.appendChild(b); d.appendChild(sp); d.appendChild(i); log.appendChild(d);
+    });
+    if(atBottom || CHAT.forceScroll){ log.scrollTop=log.scrollHeight; CHAT.forceScroll=false; }
+    var bd=document.getElementById('chatBadge');
+    if(bd){ bd.textContent=CHAT.unread>9?'9+':String(CHAT.unread); bd.classList.toggle('show',CHAT.unread>0 && !chatOpen()); }
+    if(window.profRender) window.profRender();
+  }
+  function chatCfg(c){
+    var on=!!(c && c.on===true), was=CHAT.on;
+    CHAT.on=on; CHAT.since=(c && typeof c.t==='number')?c.t:0; window.MP_CHAT=CHAT;
+    document.body.classList.toggle('chat-on',on);
+    if(on && !was){ CHAT.msgs=[]; CHAT.unread=0; if(tr && tr.chatListen) tr.chatListen(); if(state.entered) try{ toast('💬 교수님이 수업 채팅을 열었어요'); }catch(e){} }
+    if(!on && was){ if(tr && tr.chatUnlisten) tr.chatUnlisten(); CHAT.msgs=[]; CHAT.unread=0; closeChat(); if(state.entered) try{ toast('💬 수업 채팅이 닫혔어요'); }catch(e){} }
+    renderChat();
+  }
+  function chatAdd(id,m){
+    if(!m || typeof m.m!=='string') return;
+    var t=typeof m.t==='number'?m.t:Date.now();
+    if(CHAT.since && t<CHAT.since-5000) return;   /* 이번에 켜기 전의 글은 숨김 */
+    if(CHAT.msgs.some(function(x){ return x.id===id; })) return;
+    var msg={id:id, u:String(m.u||''), n:m.a?'교수님':cleanName(m.n), m:cleanMsg(m.m), t:t, a:m.a===true};
+    CHAT.msgs.push(msg); CHAT.msgs.sort(function(a,b){ return a.t-b.t; }); while(CHAT.msgs.length>60) CHAT.msgs.shift();
+    var live=Math.abs(Date.now()-t)<15000, hidden=!!badMsg(msg.m);
+    if(live && !hidden){
+      if(msg.a) profNotice(msg.m);
+      else if(msg.u===myId){ player.bubble=msg.m; player.bubbleT=5; }
+      else if(remotes[msg.u]){ var c=remotes[msg.u].c; c.bubble=msg.m; c.bubbleT=5; }
+      if(msg.u!==myId && !chatOpen()) CHAT.unread++;
+    }
+    renderChat();
+  }
+  function chatRemove(id){ var n=CHAT.msgs.length; CHAT.msgs=CHAT.msgs.filter(function(x){ return x.id!==id; }); if(n!==CHAT.msgs.length) renderChat(); }
+  function chatClear(){ CHAT.msgs=[]; CHAT.unread=0; renderChat(); }
+  function profNotice(t){
+    var el=document.getElementById('profNotice'); if(!el || chatOpen()) return;   /* 채팅창이 열려 있으면 목록에 강조 표시로 충분 */
+    el.textContent='📢 교수님 · '+t; el.classList.add('show'); clearTimeout(el._t);
+    el._t=setTimeout(function(){ el.classList.remove('show'); },8000);
+    try{ sfx('coin'); }catch(e){}
+  }
+  function openChat(){
+    var p=document.getElementById('chatPanel'); if(!p||!CHAT.on) return;
+    p.classList.add('show'); CHAT.unread=0; CHAT.forceScroll=true; renderChat();
+    var inp=document.getElementById('chatInp');
+    if(inp && !document.body.classList.contains('touch')) setTimeout(function(){ try{ inp.focus(); }catch(e){} },30);
+  }
+  function closeChat(){ var p=document.getElementById('chatPanel'); if(p) p.classList.remove('show'); var inp=document.getElementById('chatInp'); if(inp) inp.blur(); renderChat(); }
+  window.mpChatSend=function(text){
+    text=cleanMsg(text); if(!text) return Promise.resolve(false);
+    var why=badMsg(text); if(why){ try{ toast('⚠️ '+why); }catch(e){} return Promise.resolve(false); }
+    if(!CHAT.on || !tr || !tr.chatSend){ try{ toast('채팅이 아직 열리지 않았어요'); }catch(e){} return Promise.resolve(false); }
+    var now=Date.now(); if(now-CHAT.lastSend<3000){ try{ toast('조금 천천히 보내 주세요 (3초 간격)'); }catch(e){} return Promise.resolve(false); }
+    CHAT.lastSend=now;
+    return Promise.resolve(tr.chatSend(text)).then(function(){ return true; }, function(e){ try{ console.warn('채팅 전송 실패',e); toast('보내지 못했어요. 잠시 뒤 다시 해 주세요'); }catch(_){} return false; });
+  };
+  (function(){
+    var btn=document.getElementById('chatBtn'), x=document.getElementById('chatX'), f=document.getElementById('chatForm'), inp=document.getElementById('chatInp');
+    if(btn) btn.onclick=function(ev){ ev.stopPropagation(); chatOpen()?closeChat():openChat(); };
+    if(x) x.onclick=function(ev){ ev.stopPropagation(); closeChat(); };
+    if(f) f.onsubmit=function(ev){ ev.preventDefault(); var v=inp.value; window.mpChatSend(v).then(function(ok){ if(ok) inp.value=''; }); };
+    if(inp) inp.addEventListener('keydown',function(e){ if(e.key==='Escape'){ e.stopPropagation(); closeChat(); } });
+    document.addEventListener('keydown',function(e){
+      if(e.key==='Enter' && CHAT.on && state.entered && !anyModalOpen() && !chatOpen()){
+        var t=e.target; if(t && /^(INPUT|TEXTAREA|BUTTON|A|SELECT)$/.test(t.tagName)) return;
+        e.preventDefault(); openChat(); }
+    });
+  })();
+
+  /* ---- 교수 모드: 구글 로그인(학생용 익명 연결과 별도) → 채팅 켜기·끄기, 공지, 글 지우기 ---- */
+  var PROF={ready:false, user:null, admin:false, on:false, list:[], api:null};
+  function isLocal(){ return !window.MP_CONFIG || /[?&]mp=local\b/.test(location.search); }
+  async function profLogin(){
+    if(isLocal()){ PROF.ready=true; PROF.admin=true; PROF.user={uid:'local'}; PROF.api=LOCAL_ADMIN; PROF.on=CHAT.on; return; }
+    var base='https://www.gstatic.com/firebasejs/'+FB_VER+'/';
+    var m=await Promise.all([import(base+'firebase-app.js'), import(base+'firebase-auth.js'), import(base+'firebase-database.js')]);
+    var A=m[0], AU=m[1], D=m[2];
+    var app=A.getApps().filter(function(a){ return a.name==='prof'; })[0] || A.initializeApp(window.MP_CONFIG,'prof');
+    var auth=AU.getAuth(app); if(auth.authStateReady) await auth.authStateReady();
+    if(!auth.currentUser || auth.currentUser.isAnonymous) await AU.signInWithPopup(auth, new AU.GoogleAuthProvider());
+    var u=auth.currentUser; PROF.user={uid:u.uid}; PROF.ready=true;
+    PROF.admin=(window.MP_ADMINS||[]).indexOf(u.uid)>=0;
+    PROF.signOut=function(){ return AU.signOut(auth); };
+    if(!PROF.admin) return;
+    var db=D.getDatabase(app);
+    D.onValue(D.ref(db,'config/chat'), function(s){ var v=s.val(); PROF.on=!!(v&&v.on); window.profRender(); }, function(){});
+    D.onValue(D.query(D.ref(db,'chat/'+ROOM), D.limitToLast(50)), function(s){
+      var v=s.val()||{};
+      PROF.list=Object.keys(v).map(function(k){ var x=v[k]||{}; return {id:k, n:x.a?'교수님':cleanName(x.n), m:cleanMsg(x.m), t:x.t||0}; }).sort(function(a,b){ return a.t-b.t; });
+      window.profRender(); }, function(){});
+    PROF.api={
+      setOn:function(on){ return D.set(D.ref(db,'config/chat'),{on:!!on, t:D.serverTimestamp()}); },
+      del:function(id){ return D.remove(D.ref(db,'chat/'+ROOM+'/'+id)); },
+      clear:function(){ return D.remove(D.ref(db,'chat/'+ROOM)); },
+      send:function(text){ var k=D.push(D.ref(db,'chat/'+ROOM)).key, x={};
+        x['chat/'+ROOM+'/'+k]={u:u.uid, n:'교수님', m:text, t:D.serverTimestamp(), a:true}; x['chatLast/'+u.uid]=D.serverTimestamp();
+        return D.update(D.ref(db),x); }
+    };
+  }
+  window.profRender=function(){
+    var host=document.getElementById('profBody'); if(!host || !isShown('dlg')) return;
+    if(isLocal()){ PROF.on=CHAT.on; PROF.list=CHAT.msgs; }
+    var st=document.getElementById('profState'); if(st) st.textContent=PROF.on?'🟢 채팅 열림':'⚪ 채팅 닫힘';
+    var tg=document.getElementById('profToggle'); if(tg) tg.textContent=PROF.on?'채팅 닫기':'채팅 열기';
+    var ls=document.getElementById('profList'); if(!ls) return;
+    ls.innerHTML='';
+    if(!PROF.list.length){ var e=document.createElement('div'); e.textContent='글이 없습니다.'; ls.appendChild(e); }
+    PROF.list.slice().reverse().forEach(function(m){
+      var d=document.createElement('div'), sp=document.createElement('span'), b=document.createElement('button');
+      sp.textContent=hhmm(m.t)+' '+m.n+': '+m.m; b.type='button'; b.textContent='지우기';
+      b.onclick=function(){ PROF.api.del(m.id).catch(function(){ toast('지우지 못했어요'); }); };
+      d.appendChild(sp); d.appendChild(b); ls.appendChild(d);
+    });
+  };
+  window.openProf=function(){
+    setDialog('👩‍🏫','linear-gradient(135deg,#d4af52,#1f6f68)','교수 모드','수업 채팅 관리');
+    var body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot'); foot.innerHTML='';
+    if(!PROF.ready){
+      body.innerHTML='<div id="profBody">'+pLead('교수님 구글 계정으로 로그인하면 수업 채팅을 열고 닫을 수 있습니다. 학생 화면에는 이 메뉴가 보이지 않습니다.')+'</div>';
+      addFoot('구글 계정으로 로그인', function(){ profLogin().then(window.openProf, function(e){ try{ console.warn(e); toast('로그인하지 못했어요: '+((e&&e.code)||'오류')); }catch(_){} }); }, true);
+      addFoot('닫기', closeDialog, false); showDialog(); return;
+    }
+    if(!PROF.admin){
+      body.innerHTML='<div id="profBody">'+pLead('로그인은 되었지만 아직 관리자로 등록되지 않은 계정입니다. 아래 사용자 ID를 등록해야 교수 모드가 켜집니다.')
+        +'<div id="profUid" style="margin-top:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-family:Consolas,monospace;font-size:14px;word-break:break-all;user-select:all"></div></div>';
+      document.getElementById('profUid').textContent=PROF.user.uid;
+      addFoot('ID 복사', function(){ try{ navigator.clipboard.writeText(PROF.user.uid).then(function(){ toast('복사했습니다'); }); }catch(e){} }, true);
+      addFoot('로그아웃', function(){ (PROF.signOut?PROF.signOut():Promise.resolve()).then(function(){ PROF.ready=false; closeDialog(); }); }, false);
+      addFoot('닫기', closeDialog, false); showDialog(); return;
+    }
+    body.innerHTML='<div id="profBody">'
+      +'<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><b id="profState" style="font-size:15px"></b>'
+      +'<button type="button" class="btn primary" id="profToggle"></button><button type="button" class="btn" id="profClear">대화 모두 지우기</button></div>'
+      +'<div style="display:flex;gap:6px;margin-top:12px"><input id="profInp" type="text" maxlength="40" placeholder="공지 보내기 (학생 화면 위에 크게 표시)" '
+      +'style="flex:1;min-width:0;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);font-size:15px">'
+      +'<button type="button" class="btn" id="profSend">보내기</button></div>'
+      +'<div class="psec-d" style="margin-top:10px">최근 글(새 글이 위) · 채팅을 새로 열면 그 전 글은 학생 화면에 보이지 않습니다.</div><div class="prof-list" id="profList"></div></div>';
+    document.getElementById('profToggle').onclick=function(){ PROF.api.setOn(!PROF.on).catch(function(e){ console.warn(e); toast('바꾸지 못했어요(규칙·관리자 등록 확인)'); }); };
+    document.getElementById('profClear').onclick=function(){ if(confirm('채팅 글을 모두 지울까요? 되돌릴 수 없습니다.')) PROF.api.clear().catch(function(){ toast('지우지 못했어요'); }); };
+    var pi=document.getElementById('profInp');
+    function psend(){ var t=cleanMsg(pi.value); if(!t) return; PROF.api.send(t).then(function(){ pi.value=''; }, function(e){ console.warn(e); toast('보내지 못했어요(3초 간격)'); }); }
+    document.getElementById('profSend').onclick=psend;
+    pi.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); psend(); } });
+    if(PROF.signOut) addFoot('로그아웃', function(){ PROF.signOut().then(function(){ PROF.ready=false; PROF.admin=false; closeDialog(); }); }, false);
+    addFoot('닫기', closeDialog, true); showDialog(); window.profRender();
+  };
+  (function(){
+    var b=document.getElementById('profBtn'); if(!b) return;
+    var want=/[?&]prof\b/.test(location.search);
+    try{ if(want) localStorage.setItem('aupt_prof','1'); if(localStorage.getItem('aupt_prof')==='1') want=true; }catch(e){}
+    if(want){ b.style.display=''; b.onclick=function(){ window.openProf(); }; }
+  })();
 
   /* ---- 정해진 문구 말풍선 (자유 입력 없음 → 욕설·괴롭힘 관리 부담 없음) ---- */
   var QUICK=['안녕하세요 👋','여기 모여요!','같이 가요','도와줄래요?','고마워요 🙏','잠깐만요','수업 들어가요','잘 가요 👋'];

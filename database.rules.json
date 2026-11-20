@@ -21,6 +21,38 @@
           "$other": { ".validate": false }
         }
       }
+    },
+    "config": {
+      "chat": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.uid === 'PROF_UID_HERE'",
+        ".validate": "newData.hasChildren(['on','t'])",
+        "on": { ".validate": "newData.isBoolean()" },
+        "t": { ".validate": "newData.isNumber() && newData.val() <= now + 60000" },
+        "$other": { ".validate": false }
+      }
+    },
+    "chatLast": {
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.isNumber() && newData.val() === now && (!data.exists() || now - data.val() >= 2500)"
+      }
+    },
+    "chat": {
+      "$room": {
+        ".read": "auth != null && $room === 'main' && (root.child('config/chat/on').val() === true || auth.uid === 'PROF_UID_HERE')",
+        ".write": "auth != null && $room === 'main' && auth.uid === 'PROF_UID_HERE'",
+        "$id": {
+          ".write": "auth != null && $room === 'main' && !data.exists() && newData.exists() && root.child('config/chat/on').val() === true",
+          ".validate": "newData.hasChildren(['u','n','m','t']) && newData.child('u').val() === auth.uid && newData.parent().parent().parent().child('chatLast').child(auth.uid).val() === now",
+          "u": { ".validate": "newData.isString()" },
+          "n": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 8" },
+          "m": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 40" },
+          "t": { ".validate": "newData.val() === now" },
+          "a": { ".validate": "newData.val() === true && auth.uid === 'PROF_UID_HERE'" },
+          "$other": { ".validate": false }
+        }
+      }
     }
   }
 }
