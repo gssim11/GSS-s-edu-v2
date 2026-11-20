@@ -1257,6 +1257,7 @@ function loop(now){
   // player movement (blocked while modal open or spectating)
   const canMove = state.entered && !anyModalOpen() && !state.spectate;
   player.moving=false;
+  let pushUp=false;
   if (canMove){
     let vx=0, vy=0;
     if (keys['arrowleft']||keys['a']||keys['ㅁ']) vx-=1;
@@ -1273,6 +1274,7 @@ function loop(now){
       if(!collidesBuilding(player.x,ny)) player.y=ny;
       player.moving=true; player.walk+=dt*12;
       player.dir = Math.abs(vx)>Math.abs(vy) ? (vx>0?'right':'left') : (vy>0?'down':'up');
+      pushUp = vy<0 && Math.abs(vy)>=Math.abs(vx);
     }
     else if (player.mt){
       let dx=player.mt.x-player.x, dy=player.mt.y-player.y; const dd=Math.hypot(dx,dy)||1;
@@ -1290,6 +1292,7 @@ function loop(now){
     }
   }
 
+  if (canMove) autoDoor(pushUp);
   if(window.mpTick) window.mpTick(dt);
   // NPC AI
   npcs.forEach(c=>updateNPC(c,dt*(state.timeScale||1)));
@@ -1321,6 +1324,22 @@ function loop(now){
   requestAnimationFrame(loop);
 }
 
+/* 문 앞에서 위(건물 쪽)로 걸어 들어가면 E를 누르지 않아도 열린다.
+   한 번 열린 뒤에는 문 앞을 벗어났다가 다시 들어와야 또 열린다(창을 닫자마자 다시 열리는 것 방지). */
+function autoDoor(pushUp){
+  let hit=null;
+  for (const b of BUILDINGS){
+    if (!b.subj && !b.role) continue;
+    const dx=Math.abs(player.x-(b.x+b.w/2)), dy=player.y-(b.y+b.h);
+    if (dx<34 && dy>-10 && dy<16){ hit=b; break; }
+  }
+  if (!hit){ state.doorArmed=true; return; }
+  if (pushUp && state.doorArmed!==false){
+    state.doorArmed=false;
+    state.near={ type: hit.subj ? 'building' : hit.role, ref: hit };
+    tryInteract();
+  }
+}
 function collidesBuilding(x,y){
   for (const b of BUILDINGS){
     if (x> b.x-8 && x< b.x+b.w+8 && y> b.y-6 && y< b.y+b.h-6) return true;
@@ -2129,6 +2148,12 @@ window.emos = [];   // {x,y,e,t}
   });
   btn.onclick=function(ev){ ev.stopPropagation(); bar.classList.toggle('show'); };
   document.addEventListener('click', function(){ bar.classList.remove('show'); });
+  /* 캠퍼스 화면(캔버스)·조이스틱 등 창 바깥 어디를 눌러도 닫히게 — 캡처 단계라 다른 처리기가 막아도 동작 */
+  document.addEventListener('pointerdown', function(ev){
+    if(!bar.classList.contains('show')) return;
+    if(bar.contains(ev.target) || btn.contains(ev.target)) return;
+    bar.classList.remove('show');
+  }, true);
   document.addEventListener('keydown', function(e){
     var k=e.key; if(!state.entered || anyModalOpen()) return;
     if(k>='1' && k<='9'){ var i=parseInt(k,10)-1; if(EMOJIS[i]) emoteReact(EMOJIS[i]); }
