@@ -16,6 +16,8 @@
           "t": { ".validate": "newData.isNumber() && newData.val() <= now + 60000" },
           "e": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 12" },
           "et": { ".validate": "newData.isNumber()" },
+          "q": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() < 16" },
+          "qt": { ".validate": "newData.isNumber()" },
           "$other": { ".validate": false }
         }
       }

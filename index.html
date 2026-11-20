@@ -291,7 +291,11 @@
   #emoBar{position:absolute;right:16px;bottom:182px;z-index:13;display:none;gap:6px;
     background:linear-gradient(135deg,rgba(11,34,78,.96),rgba(7,19,46,.96));border:1px solid var(--gold-line);
     border-radius:16px;padding:8px;box-shadow:0 10px 28px rgba(0,0,0,.5)}
-  #emoBar.show{display:flex;flex-wrap:wrap;max-width:180px}
+  #emoBar.show{display:flex;flex-wrap:wrap;max-width:236px}
+  #emoBar .qp-sep{flex-basis:100%;font-size:11px;color:var(--muted);letter-spacing:.04em;padding:4px 2px 0;border-top:1px solid rgba(212,175,82,.18);margin-top:2px}
+  #emoBar button.qp{width:auto;height:32px;padding:0 10px;font-size:12.5px;color:#e3eafa;border-radius:16px;white-space:nowrap}
+  .mp-go{margin-left:8px;padding:2px 10px;border-radius:12px;border:1px solid rgba(79,209,197,.55);background:rgba(79,209,197,.12);color:#a8f0e8;font-size:12px;cursor:pointer}
+  .mp-go:hover{background:rgba(79,209,197,.26)}
   #emoBar button{width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.1);
     background:rgba(255,255,255,.05);font-size:20px;cursor:pointer;transition:.12s}
   #emoBar button:hover{background:rgba(212,175,82,.22);transform:scale(1.08)}
@@ -2261,6 +2265,7 @@ window.MP_CONFIG = {
     if(d.d==='up'||d.d==='down'||d.d==='left'||d.d==='right') r.c.dir=d.d;
     r.seen=Date.now();
     if(typeof d.e==='number' && d.et && d.et!==r.ex){ r.ex=d.et; if(!fresh && EMOJIS[d.e]) emoteQuiet(EMOJIS[d.e], r.c); }
+    if(typeof d.q==='number' && d.qt && d.qt!==r.qx){ r.qx=d.qt; if(!fresh && QUICK[d.q]){ r.c.bubble=QUICK[d.q]; r.c.bubbleT=4; } }
     if(fresh) rebuild();
   }
 
@@ -2290,14 +2295,16 @@ window.MP_CONFIG = {
     D.onChildAdded(room,function(s){ onState(s.key,s.val()); });
     D.onChildChanged(room,function(s){ onState(s.key,s.val()); });
     D.onChildRemoved(room,function(s){ onState(s.key,null); });
-    return { send:function(d){ d.t=D.serverTimestamp(); return D.set(me,d); }, leave:function(){ return D.remove(me); } };
+    return { send:function(d){ d.t=D.serverTimestamp(); return D.set(me,d); }, leave:function(){ return D.remove(me); },
+             phrase:function(i){ return D.update(me,{q:i, qt:Date.now()}); } };
   }
   /* ---- 연결 방식 2: 시험용(같은 브라우저 창끼리) ---- */
   function startLocal(){
     var bc=new BroadcastChannel('aupt-mp-'+ROOM); myId='L'+Math.random().toString(36).slice(2,9);
     bc.onmessage=function(ev){ var m=ev.data||{}; if(m.hello){ if(m.id!==myId) last.t=0; return; } onState(m.id, m.d); };
     bc.postMessage({id:myId, hello:true});
-    return { send:function(d){ d.t=Date.now(); bc.postMessage({id:myId,d:d}); }, leave:function(){ bc.postMessage({id:myId,d:null}); } };
+    return { send:function(d){ d.t=Date.now(); bc.postMessage({id:myId,d:d}); }, leave:function(){ bc.postMessage({id:myId,d:null}); },
+             phrase:function(i){ var d=packet(); d.q=i; d.qt=Date.now(); d.t=Date.now(); bc.postMessage({id:myId,d:d}); } };
   }
 
   function wanted(){ return !!window.MP_CONFIG || /[?&]mp=local\b/.test(location.search); }
@@ -2316,7 +2323,9 @@ window.MP_CONFIG = {
   function sendNow(){ if(!tr) return; last={x:player.x,y:player.y,d:player.dir,t:performance.now()}; try{ tr.send(packet()); }catch(e){} }
 
   window.mpTick=function(dt){
-    if(!state.entered || !wanted()) return;
+    if(!state.entered) return;
+    if(player.bubbleT>0){ player.bubbleT-=dt; if(player.bubbleT<=0) player.bubble=null; }
+    if(!wanted()) return;
     if(!tr){ start(); return; }
     var now=performance.now();
     if(!document.hidden){
@@ -2352,14 +2361,47 @@ window.MP_CONFIG = {
     var list=window.MP_REMOTES.slice().sort(function(a,b){ return a.name<b.name?-1:1; });
     setDialog('👥','linear-gradient(135deg,#2c9c92,#2a3550)','함께 접속','지금 캠퍼스에 있는 사람');
     var body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
-    var rows=[{t:myName()+' <span style="color:var(--muted);font-weight:400">· 나</span>', c:cleanColor(player.color)}]
-      .concat(list.map(function(c){ return {t:c.name, c:c.color}; }));
+    var rows=[{t:myName()+' <span style="color:var(--muted);font-weight:400">· 나</span>', d:'📍 '+placeOf(player), c:cleanColor(player.color)}]
+      .concat(list.map(function(c,i){ return {t:c.name, d:'📍 '+placeOf(c)+' <button type="button" class="mp-go" data-i="'+i+'">찾아가기</button>', c:c.color}; }));
     body.innerHTML = pLead(full ? '지금은 접속 인원이 많아 <b>혼자 모드</b>로 진행 중입니다. 잠시 뒤 다시 들어오면 함께 접속됩니다.'
-        : '같은 시간에 들어온 사람은 캠퍼스에 <b>청록색 이름표</b>로 보입니다. 숫자 키 1~9나 😀 버튼의 이모지 반응도 서로 보입니다.')
-      + pSec('접속 중 '+rows.length+'명') + rowList(rows)
-      + pInfo('안내','닉네임·옷 색·위치만 주고받고, 로그인이나 개인정보는 쓰지 않습니다. 닉네임은 입장 화면에서 정합니다.');
+        : '같은 시간에 들어온 사람은 캠퍼스에 <b>청록색 이름표</b>로 보입니다. 😀 버튼의 이모지와 <b>짧은 인사말</b>도 서로 보입니다.')
+      + pSec('접속 중 '+rows.length+'명', list.length?'「찾아가기」를 누르면 그 사람 옆으로 이동합니다.':'') + rowList(rows)
+      + pInfo('안내','닉네임·옷 색·위치만 주고받고, 로그인이나 개인정보는 쓰지 않습니다. 인사말은 정해진 문구만 고를 수 있습니다. 닉네임은 입장 화면에서 정합니다.');
+    Array.prototype.forEach.call(body.querySelectorAll('.mp-go'), function(b){
+      b.onclick=function(){ var c=list[+b.getAttribute('data-i')]; if(!c) return;
+        player.x=clamp(c.x+34,20,WORLD.w-20); player.y=clamp(c.y+6,20,WORLD.h-20); player.tx=null; player.ty=null; player.moving=false;
+        if(window.recenterCam) window.recenterCam(); closeDialog(); last.t=0;
+        try{ toast(c.name+' 님 옆으로 왔습니다'); }catch(e){} };
+    });
     foot.innerHTML=''; addFoot('닫기', closeDialog, true); showDialog();
   };
+  /* 지금 어느 건물 근처인지 (가장 가까운 건물 문 기준) */
+  function placeOf(c){
+    var best=null, bd=1e9;
+    (typeof BUILDINGS!=='undefined'?BUILDINGS:[]).forEach(function(b){
+      var cx=Math.max(b.x,Math.min(c.x,b.x+b.w)), cy=Math.max(b.y,Math.min(c.y,b.y+b.h)), d=Math.hypot(c.x-cx,c.y-cy);
+      if(d<bd){ bd=d; best=b; } });
+    return (best && bd<140) ? best.name+' 앞' : '캠퍼스 광장';
+  }
+
+  /* ---- 정해진 문구 말풍선 (자유 입력 없음 → 욕설·괴롭힘 관리 부담 없음) ---- */
+  var QUICK=['안녕하세요 👋','여기 모여요!','같이 가요','도와줄래요?','고마워요 🙏','잠깐만요','수업 들어가요','잘 가요 👋'];
+  window.MP_QUICK=QUICK;
+  window.mpPhrase=function(i){
+    if(!QUICK[i]) return;
+    player.bubble=QUICK[i]; player.bubbleT=4;
+    try{ sfx('coin'); }catch(_){}
+    if(tr && tr.phrase){ try{ var p=tr.phrase(i); if(p && p.catch) p.catch(function(e){ try{ console.warn('인사말 전송 실패(규칙 확인 필요)', e); }catch(_){} }); }catch(e){} }
+  };
+  (function(){
+    var bar=document.getElementById('emoBar'); if(!bar) return;
+    var sep=document.createElement('div'); sep.className='qp-sep'; sep.textContent='인사말'; bar.appendChild(sep);
+    QUICK.forEach(function(q,i){
+      var b=document.createElement('button'); b.type='button'; b.className='qp'; b.textContent=q;
+      b.onclick=function(ev){ ev.stopPropagation(); window.mpPhrase(i); bar.classList.remove('show'); };
+      bar.appendChild(b);
+    });
+  })();
   try{ var chip=document.getElementById('mpChip'); if(chip){ chip.onclick=window.openOnline; chip.onkeydown=function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); window.openOnline(); } }; } }catch(e){}
   updateChip();
 })();
