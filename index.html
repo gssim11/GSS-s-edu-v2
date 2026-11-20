@@ -828,13 +828,104 @@ function drawGround(){
   drawEntrance(); drawBillboard();
 }
 
+/* ============================================================================
+   환경 애니메이션 (2026-11): 계절(실제 날짜)·나무 흔들림·떨어지는 잎/꽃잎/눈·
+   나비·새 떼·구름 그림자·노을·밤 가로등 불빛
+   ========================================================================== */
+var ENV_SEASON=(function(){
+  var q=/[?&]season=(spring|summer|autumn|winter)\b/.exec(location.search); if(q) return q[1];
+  var m=new Date().getMonth(); return m>=2&&m<=4?'spring':m>=5&&m<=7?'summer':m>=8&&m<=10?'autumn':'winter';
+})();
+var ENV={ parts:[], birds:null, birdNext:6, lastT:0 };
+function envHour(){ return (state.clock/60)%24; }
+function envDark(){ var hr=envHour(); if(hr>=19||hr<5) return 1; if(hr>=17) return (hr-17)/2; if(hr<7) return (7-hr)/2; return 0; }
+function envTime(){ return performance.now()/1000; }
+
+/* 나무: 바람에 흔들리고 계절 색이 바뀜 */
 function drawTree(x,y){
-  ctx.fillStyle='rgba(0,0,0,.26)';ctx.beginPath();ctx.ellipse(x,y+15,22,7,0,0,Math.PI*2);ctx.fill();
+  var t=envTime(), sw=Math.sin(t*1.2+x*0.037)*1.8, sw2=Math.sin(t*1.7+x*0.05)*1.1;
+  var C = ENV_SEASON==='autumn' ? ['#8a4b1e','#c0662a','#e0a23c'] : ENV_SEASON==='winter' ? ['#24452f','#2c5538','#33613f'] : ENV_SEASON==='spring' ? ['#2f6a3c','#3c7f4a','#4c9358'] : ['#2c5738','#356a43','#3f7c4e'];
+  ctx.fillStyle='rgba(0,0,0,.26)';ctx.beginPath();ctx.ellipse(x+sw*.5,y+15,22,7,0,0,Math.PI*2);ctx.fill();
   ctx.fillStyle='#6b4a2a';ctx.fillRect(x-4,y,8,17);
-  ctx.fillStyle='#2c5738';ctx.beginPath();ctx.arc(x,y-8,21,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='#356a43';ctx.beginPath();ctx.arc(x-9,y-3,14,0,Math.PI*2);ctx.arc(x+10,y-5,13,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='#3f7c4e';ctx.beginPath();ctx.arc(x-3,y-13,10,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=C[0];ctx.beginPath();ctx.arc(x+sw*.6,y-8,21,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=C[1];ctx.beginPath();ctx.arc(x-9+sw,y-3,14,0,Math.PI*2);ctx.arc(x+10+sw2,y-5,13,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=C[2];ctx.beginPath();ctx.arc(x-3+sw*1.2,y-13,10,0,Math.PI*2);ctx.fill();
+  if(ENV_SEASON==='spring'){ ctx.fillStyle='#f6b8cf'; for(var i=0;i<9;i++){ ctx.beginPath(); ctx.arc(x-14+((i*13)%28)+sw,y-20+((i*7)%22),2.2,0,Math.PI*2); ctx.fill(); } }
+  if(ENV_SEASON==='autumn'){ ctx.fillStyle='#f2c75c'; for(var j=0;j<6;j++){ ctx.beginPath(); ctx.arc(x-12+((j*11)%26)+sw,y-16+((j*9)%20),1.8,0,Math.PI*2); ctx.fill(); } }
+  if(ENV_SEASON==='winter'){ ctx.fillStyle='rgba(250,252,255,.92)'; ctx.beginPath(); ctx.arc(x+sw*.6,y-12,17,Math.PI*1.08,Math.PI*1.92); ctx.arc(x-3+sw*1.2,y-17,8,Math.PI,Math.PI*2); ctx.fill(); }
 }
+
+/* 월드 좌표 위에 그리는 것 (구름 그림자·나비·새) */
+function envWorldTop(){
+  var t=envTime(), dark=envDark();
+  if(dark<0.6){
+    ctx.save(); ctx.globalAlpha=0.07*(1-dark); ctx.fillStyle='#0a1430';
+    for(var i=0;i<3;i++){ var cx=((t*9+i*700)%(WORLD.w+600))-300, cy=200+i*330+Math.sin(t*0.05+i)*40;
+      ctx.beginPath(); ctx.ellipse(cx,cy,170,60,0,0,Math.PI*2); ctx.ellipse(cx+110,cy+20,120,48,0,0,Math.PI*2); ctx.fill(); }
+    ctx.restore();
+  }
+  if(dark<0.5 && ENV_SEASON!=='winter'){
+    var cols=['#ffd166','#f2a6b4','#a8f0e8','#ffffff','#c9a7ff','#ffb36b'];
+    FLOWERS.forEach(function(f,k){ for(var b=0;b<2;b++){ var ph=k*1.7+b*3.1;
+      var bx=f.x+Math.sin(t*0.6+ph)*46+Math.sin(t*1.9+ph)*8, by=f.y-14+Math.cos(t*0.8+ph*1.3)*26, fl=Math.abs(Math.sin(t*14+ph));
+      ctx.fillStyle=cols[(k*2+b)%cols.length];
+      ctx.beginPath(); ctx.ellipse(bx-2.6*fl,by,2.8*fl+0.4,2.2,0,0,Math.PI*2); ctx.ellipse(bx+2.6*fl,by,2.8*fl+0.4,2.2,0,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#2a2320'; ctx.fillRect(bx-0.5,by-2,1,4); } });
+  }
+  if(dark<0.7){
+    if(!ENV.birds){ ENV.birdNext-=1/60; if(ENV.birdNext<=0){ var dir=Math.random()<.5?1:-1;
+      ENV.birds={ x:dir>0?-80:WORLD.w+80, y:120+Math.random()*(WORLD.h-300), dir:dir, n:3+Math.floor(Math.random()*3), sp:70+Math.random()*30 }; } }
+    if(ENV.birds){ var B=ENV.birds; B.x+=B.dir*B.sp/60; B.y+=Math.sin(t*0.8)*0.15;
+      for(var q=0;q<B.n;q++){ var ox=-B.dir*(q*22), oy=(q%2?1:-1)*Math.ceil(q/2)*14, wx=B.x+ox, wy=B.y+oy, fl=Math.sin(t*10+q)*4;
+        ctx.fillStyle='rgba(0,0,0,.12)'; ctx.beginPath(); ctx.ellipse(wx+18,wy+60,5,1.6,0,0,Math.PI*2); ctx.fill();
+        ctx.strokeStyle='#26304a'; ctx.lineWidth=1.8; ctx.beginPath(); ctx.moveTo(wx-7,wy-fl); ctx.quadraticCurveTo(wx-3,wy-2,wx,wy); ctx.quadraticCurveTo(wx+3,wy-2,wx+7,wy-fl); ctx.stroke(); }
+      if(B.x<-200||B.x>WORLD.w+200){ ENV.birds=null; ENV.birdNext=18+Math.random()*25; } }
+  }
+}
+
+/* 화면 좌표: 떨어지는 잎·꽃잎·눈, 밤에는 반딧불(여름) */
+function envScreen(){
+  var t=envTime(), dark=envDark(), kind=ENV_SEASON==='autumn'?'leaf':ENV_SEASON==='spring'?'petal':ENV_SEASON==='winter'?'snow':(dark>0.5?'fly':null);
+  if(!kind || state.overview){ ENV.parts.length=0; return; }
+  var N=kind==='snow'?55:kind==='fly'?18:26;
+  while(ENV.parts.length<N) ENV.parts.push({x:Math.random()*VW, y:Math.random()*VH, v:0.4+Math.random()*0.8, r:Math.random()*6.28, s:0.7+Math.random()*0.7, ph:Math.random()*6.28});
+  if(ENV.parts.length>N) ENV.parts.length=N;
+  ctx.save();
+  ENV.parts.forEach(function(p){
+    if(kind==='fly'){ p.x+=Math.sin(t*0.7+p.ph)*0.5; p.y+=Math.cos(t*0.6+p.ph)*0.4;
+      var a=0.4+0.6*Math.abs(Math.sin(t*2+p.ph)); ctx.fillStyle='rgba(230,255,140,'+(a*dark).toFixed(2)+')'; ctx.beginPath(); ctx.arc(p.x,p.y,2.2,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='rgba(230,255,140,'+(a*dark*0.25).toFixed(2)+')'; ctx.beginPath(); ctx.arc(p.x,p.y,7,0,Math.PI*2); ctx.fill(); }
+    else {
+      var fall=kind==='snow'?0.9:0.7; p.y+=p.v*fall*1.4; p.x+=Math.sin(t*1.1+p.ph)*0.6+(kind==='snow'?0.15:0.35); p.r+=0.02*p.v;
+      if(p.y>VH+10){ p.y=-10; p.x=Math.random()*VW; } if(p.x>VW+10) p.x=-10;
+      if(kind==='snow'){ ctx.fillStyle='rgba(255,255,255,.85)'; ctx.beginPath(); ctx.arc(p.x,p.y,1.6*p.s+0.6,0,Math.PI*2); ctx.fill(); }
+      else { ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.scale(1,Math.abs(Math.cos(t*2+p.ph))*0.7+0.3);
+        ctx.fillStyle=kind==='leaf'?(p.ph>3?'rgba(214,120,48,.85)':'rgba(232,178,64,.85)'):'rgba(248,186,208,.9)';
+        ctx.beginPath(); ctx.ellipse(0,0,4*p.s,2.4*p.s,0,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+    }
+    if(p.x<-20) p.x=VW+10; if(p.y<-20) p.y=VH+10;
+  });
+  ctx.restore();
+}
+
+/* 노을 색조 + 밤 가로등·건물 문 불빛 (밤 어둡게 한 뒤에 덧그림) */
+function envW2S(x,y){
+  if(state.overview){ var sc=Math.min(VW/WORLD.w,VH/WORLD.h)*0.98; return {x:(VW-WORLD.w*sc)/2+x*sc, y:(VH-WORLD.h*sc)/2+y*sc, z:sc}; }
+  var Z=window.camZoom||1, ccx=cam.x+VW/2, ccy=cam.y+VH/2; return {x:(x-ccx)*Z+VW/2, y:(y-ccy)*Z+VH/2, z:Z};
+}
+function envLights(){
+  var hr=envHour(), warm=0;
+  if(hr>=16.3&&hr<17.3) warm=(hr-16.3); else if(hr>=17.3&&hr<19) warm=1-(hr-17.3)/1.7; else if(hr>=5.2&&hr<6.8) warm=0.6*(1-Math.abs(hr-6)/0.8);
+  if(warm>0.01){ ctx.save(); var gr=ctx.createLinearGradient(0,0,0,VH); gr.addColorStop(0,'rgba(255,150,80,'+(0.16*warm).toFixed(3)+')'); gr.addColorStop(1,'rgba(255,90,90,'+(0.06*warm).toFixed(3)+')'); ctx.fillStyle=gr; ctx.fillRect(0,0,VW,VH); ctx.restore(); }
+  var dark=envDark(); if(dark<0.05) return;
+  ctx.save(); ctx.globalCompositeOperation='lighter';
+  var pts=LAMPS.map(function(l){ return {x:l.x,y:l.y-34,r:70}; }).concat(BUILDINGS.map(function(b){ return {x:b.x+b.w/2,y:b.y+b.h-24,r:48}; }));
+  pts.forEach(function(p){ var s=envW2S(p.x,p.y), R=p.r*s.z; if(s.x<-R||s.x>VW+R||s.y<-R||s.y>VH+R) return;
+    var g=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,R); g.addColorStop(0,'rgba(255,214,140,'+(0.30*dark).toFixed(3)+')'); g.addColorStop(1,'rgba(255,214,140,0)');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(s.x,s.y,R,0,Math.PI*2); ctx.fill(); });
+  ctx.restore();
+}
+
 function drawLamp(x,y){
   ctx.fillStyle='rgba(0,0,0,.22)';ctx.beginPath();ctx.ellipse(x,y+2,6,2.6,0,0,Math.PI*2);ctx.fill();
   ctx.strokeStyle='#0b224e';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y-32);ctx.stroke();
@@ -1064,6 +1155,7 @@ function drawRoof(b, style){
   }
   ctx.fillStyle='#0b1f47';ctx.fillRect(gx-8,gy+28,gw+16,12);
   ctx.fillStyle='#d4af52';ctx.fillRect(gx-8,gy+40,gw+16,2.5);
+  if(ENV_SEASON==='winter'){ ctx.fillStyle='rgba(250,252,255,.95)'; drawRoundRect(gx-10,gy+24,gw+20,6,3); ctx.fill(); }
 }
 
 /* ---- 강의실 내부 장면 (강의관 대화창 위, 요약·퀴즈·결과 동안 유지) ---- */
@@ -1415,8 +1507,11 @@ function render(){
     ctx.strokeStyle='rgba(79,209,197,.9)'; ctx.lineWidth=2;
     ctx.beginPath(); ctx.arc(p.x, p.y, 24, 0, Math.PI*2); ctx.stroke();
   }
+  envWorldTop();
   ctx.restore();
+  envScreen();
   funNightOverlay();
+  envLights();
   drawMinimap();
 }
 
