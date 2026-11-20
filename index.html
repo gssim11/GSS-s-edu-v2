@@ -2466,7 +2466,7 @@ window.MP_ADMINS = ['oMuzhTQifgeftCT7SblXF34zeq13'];
     D.onChildRemoved(room,function(s){ onState(s.key,null); });
     /* 수업 채팅: 켜짐 여부는 누구나 읽고, 글은 켜진 동안만 읽고 쓴다(규칙이 강제) */
     var chatOffs=[];
-    D.onValue(D.ref(db,'config/chat'), function(s){ chatCfg(s.val()); }, function(){ chatCfg(null); });
+    (function listenCfg(){ D.onValue(D.ref(db,'config/chat'), function(s){ chatCfg(s.val()); }, function(){ chatCfg(null); setTimeout(listenCfg,30000); }); })();   /* 읽기 거부(규칙 변경 중 등)로 끊기면 30초 뒤 다시 구독 */
     return { send:function(d){ d.t=D.serverTimestamp(); return D.set(me,d); }, leave:function(){ return D.remove(me); },
              phrase:function(i){ return D.update(me,{q:i, qt:Date.now()}); },
              chatListen:function(){
