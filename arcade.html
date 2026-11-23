@@ -191,7 +191,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
   </div>
   <div id="combo" hidden></div>
   <div id="coachL" class="coach left" hidden>🕹️ 조이스틱을 밀어서 이동</div>
-  <div id="coachR" class="coach right" hidden>💥 필살기 준비! 여기를 누르세요 ↓</div>
+  <div id="coachR" class="coach right" hidden>💥 필살기는 계속 쓸 수 있어요 ↓</div>
   <div id="bannerWrap"></div>
   <div id="joyZone" aria-label="이동 조이스틱"><div id="joyBase"><i class="ar n"></i><i class="ar e"></i><i class="ar s"></i><i class="ar w"></i><div id="joyKnob"></div></div></div>
   <div class="act"><button class="abtn" id="ultB" type="button" aria-label="필살기"><i id="ultI"></i><span class="ab"><b>💥</b>필살기</span></button><button class="abtn" id="dashB" type="button" aria-label="회피"><i id="dashI"></i><span class="ab"><b>💨</b>회피</span></button></div>
@@ -204,7 +204,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 <script>
 (function(){
 'use strict';
-var ART=window.ARCADE_ART,WORLDS=window.ARCADE_WORLDS, KEY='aupt_arcade_v1', ARENA=1700, BOSS_AT=60, MAXLV=5, C=850;
+var ART=window.ARCADE_ART,WORLDS=window.ARCADE_WORLDS, KEY='aupt_arcade_v1', ARENA=1700, BOSS_AT=60, MAXLV=5, C=850, ULT_CD=.8;
 var $=function(id){return document.getElementById(id);};
 function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e;}
 function rnd(a,b){return a+Math.random()*(b-a);}
@@ -215,7 +215,7 @@ function today(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-
 var reduce=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
 
 /* ---------- 저장 ---------- */
-var SV={gold:0,hero:'rookie',owned:['rookie'],meta:{atk:0,hp:0,mag:0,luck:0},stars:{},wrong:{},best:0,daily:'',sound:true,kills:0,srs:{},plays:{},last:'',guided:false,ultUsed:0};
+var SV={gold:0,hero:'rookie',owned:['rookie'],meta:{atk:0,hp:0,mag:0,luck:0},stars:{},wrong:{},best:0,daily:'',sound:true,kills:0,srs:{},plays:{},last:'',guided:false,ultUsed:0,build:{}};
 try{var raw=JSON.parse(localStorage.getItem(KEY)||'null');if(raw){Object.keys(raw).forEach(function(k){SV[k]=raw[k];});}}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(SV));}catch(e){}}
 var HEROES=[
@@ -261,7 +261,7 @@ function continueTarget(){var w=WORLDS.filter(function(x){return x.id===SV.last;
 function launch(w,i){if(i>=0)startStage(w,i,'stage');else startStage(w,-1,'final');}
 function renderGuide(cb){
   var b=$('guideBox');b.innerHTML='';b.appendChild(el('h2','','조작 방법'));
-  [['🕹️','조이스틱','왼쪽 아래 조이스틱을 밀어 이동 · 화면 왼쪽 어디서든 시작 가능'],['🌊','공격','가까운 적에게 자동 발사'],['💨','회피 버튼','오른쪽 맨 아래 · 짧게 돌진, 그동안 무적'],['💥','필살기 버튼','회피 버튼 위 · 금색으로 빛나면 누르기 · 주변 적 전멸급 피해 · 체력 30% 미만이면 자동 발동'],['📘','문제','레벨업·보스 때 출제 · 정답이면 체력 회복과 강화'],['🚑','쓰러졌을 때','응급 처치 문제로 최대 2번 부활']].forEach(function(r){
+  [['🕹️','조이스틱','왼쪽 아래 조이스틱을 밀어 이동 · 화면 왼쪽 어디서든 시작 가능'],['🌊','공격','가까운 적에게 자동 발사'],['💨','회피 버튼','오른쪽 맨 아래 · 짧게 돌진, 그동안 무적'],['💥','필살기 버튼','회피 버튼 위 · 횟수 제한 없이 계속 사용 · 주변 적 큰 피해 · 체력 30% 미만이면 자동 발동'],['📘','문제','레벨업·보스 때 출제 · 정답이면 체력 회복과 강화'],['🚑','쓰러졌을 때','응급 처치 문제로 최대 2번 부활']].forEach(function(r){
     var x=el('div','grow');x.appendChild(el('span','e',r[0]));var t=el('span');t.appendChild(el('b','',r[1]));t.appendChild(el('small','',r[2]));x.appendChild(t);b.appendChild(x);});
   var g=el('button','go',cb?'확인했어요':'닫기');g.type='button';g.id='guideGo';g.onclick=function(){SV.guided=true;save();$('guide').hidden=true;if(cb)cb();};b.appendChild(g);
   $('guide').hidden=false;$('guide').scrollTop=0;
@@ -339,28 +339,40 @@ var UP={
  nova:{n:'회복 폭발',e:'💥',w:1,d:function(l){return l>=MAXLV?'진화: 폭발 시 체력 회복':'주기적 원형 폭발';}},
  might:{n:'근력',e:'💪',d:function(){return '공격력 +18%';}},haste:{n:'민첩',e:'⏱️',d:function(){return '공격 속도 +14%';}},
  vital:{n:'지구력',e:'❤️',d:function(){return '최대 체력 +22, 즉시 회복';}},swift:{n:'보행 훈련',e:'👟',d:function(){return '이동 속도 +10%';}},
- magnet:{n:'집중',e:'🧲',d:function(){return '구슬 흡수 범위 +45%';}},crit:{n:'정확한 진단',e:'🎯',d:function(){return '치명타 확률 +9%';}}
+ magnet:{n:'집중',e:'🧲',d:function(){return '구슬 흡수 범위 +45%';}},crit:{n:'정확한 진단',e:'🎯',d:function(){return '치명타 확률 +9%';}},
+ heal:{n:'응급 회복',e:'💚',d:function(){return '모든 스킬 최대 · 체력 50 회복';}}
 };
+var CAPS={might:['dmg',3],haste:['rate',2.2],swift:['spd',1.6],vital:['hp',160],magnet:['mag',3.5],crit:['crit',.45]};
+function cardOpen(k){if(k==='heal')return false;if(UP[k].w)return (G.p.w[k]||0)<MAXLV;var c=CAPS[k];return G.p.b[c[0]]<c[1];}
 function cardOptions(n){
   var P=G.p, out=[];
-  var pool=Object.keys(UP).filter(function(k){return !UP[k].w||(P.w[k]||0)<MAXLV;});
-  var owned=pool.filter(function(k){return UP[k].w&&P.w[k];}),fresh=pool.filter(function(k){return UP[k].w&&!P.w[k];}),stats=pool.filter(function(k){return !UP[k].w;});
+  var pool=Object.keys(UP).filter(cardOpen);
+  if(!pool.length)return ['heal'];
+  var owned=pool.filter(function(k){return UP[k].w&&P.w[k];}),fresh=pool.filter(function(k){return UP[k].w&&!P.w[k];});
   if(owned.length&&Math.random()<.8) out.push(pick(owned));
   if(fresh.length&&Math.random()<.75){var f=pick(fresh);if(out.indexOf(f)<0) out.push(f);}
   shuffle(pool).forEach(function(k){if(out.length<n&&out.indexOf(k)<0)out.push(k);});
   return shuffle(out.slice(0,n));
 }
+function saveBuild(){if(!G||G.mode==='daily')return;var w={},b={},P=G.p;Object.keys(P.w).forEach(function(k){w[k]=P.w[k];});Object.keys(P.b).forEach(function(k){b[k]=P.b[k];});SV.build[G.world.id]={w:w,b:b};save();}
+function loadBuild(id){
+  var B=SV.build[id],P=G.p;if(!B)return;
+  Object.keys(B.w||{}).forEach(function(k){if(UP[k]&&UP[k].w)P.w[k]=Math.min(MAXLV,Math.max(P.w[k]||0,B.w[k]));});
+  var b=B.b||{};['dmg','rate','spd','mag'].forEach(function(k){if(b[k])P.b[k]=b[k];});P.b.crit=b.crit||0;P.b.hp=b.hp||0;
+  P.dmg*=P.b.dmg;P.rate*=P.b.rate;P.spd*=P.b.spd;P.mag*=P.b.mag;P.crit+=P.b.crit;P.maxhp+=P.b.hp;P.hp=P.maxhp;
+}
 function applyCard(k){
   var P=G.p;
   if(UP[k].w){P.w[k]=(P.w[k]||0)+1;}
-  else if(k==='might')P.dmg*=1.18;else if(k==='haste')P.rate*=1.14;else if(k==='vital'){P.maxhp+=22;P.hp=Math.min(P.maxhp,P.hp+40);}
-  else if(k==='swift')P.spd*=1.1;else if(k==='magnet')P.mag*=1.45;else if(k==='crit')P.crit+=.09;
-  G.cards.push(k);
+  else if(k==='heal')P.hp=Math.min(P.maxhp,P.hp+50);
+  else if(k==='might'){P.dmg*=1.18;P.b.dmg*=1.18;}else if(k==='haste'){P.rate*=1.14;P.b.rate*=1.14;}else if(k==='vital'){P.maxhp+=22;P.b.hp+=22;P.hp=Math.min(P.maxhp,P.hp+40);}
+  else if(k==='swift'){P.spd*=1.1;P.b.spd*=1.1;}else if(k==='magnet'){P.mag*=1.45;P.b.mag*=1.45;}else if(k==='crit'){P.crit+=.09;P.b.crit+=.09;}
+  G.cards.push(k);saveBuild();
 }
 
 /* ---------- 게임 시작 ---------- */
 var G=null;
-var GAPS=[1,2,4,8,16];
+var GAPS=[1,3,6,12,24];
 function dueList(wd,except){
   var out=[],now=SV.plays[wd.id]||0,W=SV.wrong[wd.id]||[],R=SV.srs[wd.id]||{};
   wd.stages.forEach(function(s){if(s.n===except)return;s.q.forEach(function(q,i){var k=s.n+':'+i,r=R[k],bad=W.indexOf(k)>=0;if(bad||(r&&r.due<=now))out.push({q:q,w:wd.id,s:s.n,i:i,rev:true,pri:bad?-1:r.due});});});
@@ -381,9 +393,9 @@ function poolFor(wd,idx,mode){
     var R=SV.srs[wd.id]||{};
     return wd.stages.map(function(s){var bi=0,bb=9;s.q.forEach(function(q,k){var v=(R[s.n+':'+k]||{b:0}).b;if(v<bb){bb=v;bi=k;}});return tag(wd,s,s.q[bi],bi,true);});
   }
-  var st=wd.stages[idx],main=st.q.map(function(q,k){var x=tag(wd,st,q,k);x.nw=k+1;x.of=st.q.length;return x;});
-  var rev=dueList(wd,st.n).filter(function(x){return x.s<st.n;}).sort(function(a,b){return a.pri-b.pri||a.s-b.s||a.i-b.i;}).slice(0,6),out=[],m=0,r=0;
-  while(m<main.length||r<rev.length){if(m<main.length)out.push(main[m++]);if(m>=2&&r<rev.length)out.push(rev[r++]);}
+  var st=wd.stages[idx],R0=SV.srs[wd.id]||{},main=st.q.map(function(q,k){var x=tag(wd,st,q,k);x.nw=k+1;x.of=st.q.length;return x;}).filter(function(x){var r=R0[st.n+':'+x.i];return !r||r.b===0;});
+  var rev=dueList(wd,st.n).filter(function(x){return x.s<st.n;}).sort(function(a,b){return a.pri-b.pri||a.s-b.s||a.i-b.i;}).slice(0,3),out=[],m=0,r=0;
+  while(m<main.length||r<rev.length){if(m<main.length)out.push(main[m++]);if((m>=2||m>=main.length)&&r<rev.length)out.push(rev[r++]);}
   return out;
 }
 function startStage(wd,idx,mode){
@@ -393,11 +405,11 @@ function startStage(wd,idx,mode){
   var stageName=mode==='stage'?wd.stages[idx].n+LAB[wd.id]+' '+wd.stages[idx].t:mode==='wrong'?'자동 복습':mode==='final'?'전 범위 총정리':'오늘의 도전';
   var sid=wd?STYLE_OF[wd.id]:Object.keys(STYLES)[new Date().getDate()%9],S=STYLES[sid];
   G={world:world,idx:idx,mode:mode,name:stageName,sid:sid,style:S,sx:{},diff:d,t:0,clock:0,paused:true,ended:false,shake:0,flash:0,bossAt:S.obj?85:BOSS_AT,goalDone:false,rest:0,spdMul:1,moved:false,walls:[],
-    p:{x:C,y:C,r:15,hp:maxhp,maxhp:maxhp,spd:195*H.spd,dmg:(10+SV.meta.atk*.6)*H.dmg,rate:1,crit:.1,mag:125*(1+SV.meta.mag*.12),regen:H.regen||0,inv:0,dash:0,dashCd:0,dashMax:2.6*(H.dash||1),dx:0,dy:1,walk:0,lv:1,xp:0,next:8,w:{},cd:{},orbitA:0,face:1,revives:2},
+    p:{x:C,y:C,r:15,hp:maxhp,maxhp:maxhp,spd:195*H.spd,dmg:(10+SV.meta.atk*.6)*H.dmg,rate:1,crit:.1,mag:125*(1+SV.meta.mag*.12),regen:H.regen||0,inv:0,dash:0,dashCd:0,dashMax:2.6*(H.dash||1),dx:0,dy:1,walk:0,lv:1,xp:0,next:8,w:{},cd:{},orbitA:0,face:1,revives:2,b:{dmg:1,rate:1,spd:1,mag:1,crit:0,hp:0}},
     en:[],shots:[],eshots:[],orbs:[],picks:[],fx:[],txt:[],rings:[],bolts:[],
     kills:0,combo:0,comboT:0,maxCombo:0,score:0,gold:0,ult:45,spawn:.8,elite:[34],boss:null,bossDone:false,
-    pool:poolFor(wd,idx,mode),qi:0,asked:0,correct:0,wrong:[],retry:[],pendingLv:0,qCool:0,cards:[],hero:H};
-  G.p.w[H.start]=1;if(H.start!=='wave')G.p.w.wave=1;
+    pool:poolFor(wd,idx,mode),seenQ:[],qi:0,asked:0,correct:0,wrong:[],pendingLv:0,qCool:0,cards:[],hero:H};
+  G.p.w[H.start]=1;if(H.start!=='wave')G.p.w.wave=1;if(wd)loadBuild(wd.id);
   $('play').style.setProperty('--accent',world.color);
   show('play');closeOv();$('bossBar').hidden=true;$('combo').hidden=true;$('joyZone').style.display='';resize();joyHome();S.init();hud();
   if(!SV.guided)renderGuide(stageIntro);else stageIntro();
@@ -408,7 +420,8 @@ function stageIntro(){
   b.appendChild(el('div','stg',G.world.name+' ('+G.world.subj+')'+(G.mode==='stage'?' · '+(G.idx+1)+' / '+G.world.stages.length:'')));
   b.appendChild(el('h2','',G.name));
   var r=el('div','rule');var t=el('b','',S.tag+' ');r.appendChild(t);r.appendChild(document.createTextNode(S.rule));b.appendChild(r);
-  var p=el('div','pl');if(nNew)p.appendChild(el('span','','✨ 새 개념 '+nNew));if(nRev)p.appendChild(el('span','','🔁 복습 '+nRev));b.appendChild(p);
+  var p=el('div','pl');if(nNew)p.appendChild(el('span','','✨ 새 개념 '+nNew));if(nRev)p.appendChild(el('span','','🔁 복습 '+nRev));if(!nNew&&!nRev)p.appendChild(el('span','','✅ 지금 볼 문제 없음 · 자유 전투'));b.appendChild(p);
+  var own=Object.keys(G.p.w).sort();var sk=el('div','pl');own.forEach(function(k){sk.appendChild(el('span','',UP[k].e+' '+UP[k].n+' '+G.p.w[k]));});b.appendChild(sk);
   var g=el('button','go','출발');g.type='button';g.id='stageGo';g.onclick=function(){closeOv();G.paused=false;banner(G.name);snd('level');};b.appendChild(g);
   $('ov').hidden=false;
 }
@@ -582,9 +595,9 @@ function fireWeapons(dt){
   }
 }
 function useUlt(){
-  if(!G||G.paused||G.ended||G.ult<100)return;
-  var P=G.p;G.ult=0;SV.ultUsed=(SV.ultUsed||0)+1;G.shake=20;G.flash=.3;snd('ult');G.rings.push({x:P.x,y:P.y,r:20,max:430,l:.5,c:G.world.color});G.eshots=[];
-  near(P.x,P.y,430,function(e){hit(e,e.boss?130:200);});banner('회복의 파동');
+  if(!G||G.paused||G.ended||(G.ultCd||0)>0)return;
+  var P=G.p;G.ultCd=ULT_CD;SV.ultUsed=(SV.ultUsed||0)+1;G.shake=Math.max(G.shake,8);G.flash=Math.max(G.flash,.06);snd('ult');G.rings.push({x:P.x,y:P.y,r:20,max:430,l:.5,c:G.world.color});G.eshots=[];
+  near(P.x,P.y,430,function(e){hit(e,e.boss?45:200);});
 }
 function useDash(){
   if(!G||G.paused||G.ended)return;var P=G.p;if(P.dashCd>0)return;
@@ -592,15 +605,20 @@ function useDash(){
 }
 
 /* ---------- 문제 ---------- */
+function qNorm(t){return t.replace(/[\s·,.?!()\[\]「」'"-]/g,'');}
+function qGrams(t){var g={},n=0;for(var i=0;i<t.length-1;i++){var k=t.substr(i,2);if(!g[k]){g[k]=1;n++;}}g._n=n;return g;}
+function qSame(a,b){if(a.t===b.t)return true;if(a.a!==b.a)return false;var c=0;Object.keys(a.g).forEach(function(k){if(k!=='_n'&&b.g[k])c++;});return c/(a.g._n+b.g._n-c)>=.7;}
+function qSeen(it){var x={t:qNorm(it.q.q),a:qNorm(it.q.o[it.q.a])};x.g=qGrams(x.t);return G.seenQ.some(function(y){return qSame(x,y);})?null:x;}
 function nextQ(){
-  if(G.retry.length&&(G.asked%2===1||G.qi>=G.pool.length)) return G.retry.shift();
-  if(G.qi>=G.pool.length){G.qi=0;G.pool=G.pool.map(function(x){var y={};Object.keys(x).forEach(function(k){y[k]=x[k];});y.rev=true;delete y.nw;return y;});}
-  return G.pool[G.qi++];
+  while(G.qi<G.pool.length){var it=G.pool[G.qi++],x=qSeen(it);if(x){G.seenQ.push(x);return it;}}
+  return null;
 }
 function askQuestion(kind){
   if(!G||G.ended)return;
   if(G.q||G.menu){ if(kind==='level') G.pendingLv++; else G.qWait=kind; return; }
-  var it=nextQ(),q=it.q,idx=[0,1,2,3];
+  var it=nextQ();
+  if(!it){G.paused=true;G.q={kind:kind,free:true};afterQ(true,false);return;}
+  var q=it.q,idx=[0,1,2,3];
   if(!q.o.every(function(x){return /^[0-9약]/.test(x);})) idx=shuffle(idx);
   G.paused=true;G.asked++;
   G.q={kind:kind,it:it,idx:idx,t:0,limit:kind==='revive'?25:22,done:false};
@@ -623,7 +641,7 @@ function answer(k){
   Q.idx.forEach(function(orig,j){var x=$('opt'+j);x.disabled=true;if(orig===it.q.a)x.classList.add('ok');else if(j===k)x.classList.add('no');});
   var id=it.s+':'+it.i,L=SV.wrong[it.w]=SV.wrong[it.w]||[];
   if(ok){G.correct++;G.ult=Math.min(100,G.ult+(fast?40:28));G.gold+=fast?5:3;G.p.hp=Math.min(G.p.maxhp,G.p.hp+(fast?24:16));var at=L.indexOf(id);if(at>=0)L.splice(at,1);if(G.sid==='oxygen')G.sx.o=Math.min(100,G.sx.o+25);snd('ok');}
-  else{if(L.indexOf(id)<0)L.push(id);if(G.wrong.indexOf(it)<0)G.wrong.push(it);if(!it.isRetry)G.retry.push({q:it.q,w:it.w,s:it.s,i:it.i,isRetry:true,rev:true});snd('no');}
+  else{if(L.indexOf(id)<0)L.push(id);if(G.wrong.indexOf(it)<0)G.wrong.push(it);snd('no');}
   if(!L.length)delete SV.wrong[it.w];srsUpdate(it,ok);save();
   var b=$('ovBox'),head=ok?(fast?'정답! 체력 +24 · 빠른 판단 보너스':'정답! 체력 +16'):k<0?'시간 초과':'오답';
   var ex=el('div','exp');var st=el('b','',head+' ');st.style.color=ok?'var(--good)':'var(--bad)';ex.appendChild(st);ex.appendChild(document.createTextNode(it.q.e));b.appendChild(ex);
@@ -688,7 +706,7 @@ function finish(win){
   if(win&&G.mode==='daily'&&SV.daily!==today()){bonus=150;SV.daily=today();}
   reward+=bonus;SV.gold+=reward;
   var isNew=false,unlock=false;
-  if(G.mode==='stage'&&win){var S=SV.stars[G.world.id]=SV.stars[G.world.id]||{},n=G.world.stages[G.idx].n,prev=S[n]||0;if(stars>prev)S[n]=stars;unlock=!prev&&G.idx<G.world.stages.length-1;}
+  if(G.mode==='stage'&&win){var S=SV.stars[G.world.id]=SV.stars[G.world.id]||{},n=G.world.stages[G.idx].n,prev=S[n]||0,RR=SV.srs[G.world.id]||{},qs=G.world.stages[G.idx].q,got=qs.filter(function(_,i){var r=RR[n+':'+i];return r&&r.b>0;}).length/qs.length;stars=got>=.9?3:got>=.7?2:1;if(stars>prev)S[n]=stars;unlock=!prev&&G.idx<G.world.stages.length-1;}
   if(G.mode!=='daily')SV.plays[G.world.id]=(SV.plays[G.world.id]||0)+1;
   if(G.score>SV.best){SV.best=G.score;isNew=true;}
   save();
@@ -712,7 +730,7 @@ function update(dt){
   G.t+=dt;P.inv=Math.max(0,P.inv-dt);P.dashCd=Math.max(0,P.dashCd-dt);if(P.regen)P.hp=Math.min(P.maxhp,P.hp+P.regen*dt);
   var mx=input.x,my=input.y,ml=Math.hypot(mx,my);
   if(ml>0){G.moved=true;mx/=Math.max(1,ml);my/=Math.max(1,ml);P.dx=mx;P.dy=my;if(Math.abs(mx)>.1)P.face=mx>0?1:-1;P.walk+=dt*11;}
-  if(G.ult>=100&&P.hp<P.maxhp*.3)useUlt();
+  G.ultCd=Math.max(0,(G.ultCd||0)-dt);if(P.hp<P.maxhp*.3&&(G.autoUlt||0)<=G.t){G.autoUlt=G.t+3;useUlt();}
   var sp=P.spd*(G.spdMul||1);if(P.dash>0){P.dash-=dt;sp*=3.4;if(!ml){mx=P.dx;my=P.dy;}if(!reduce&&G.fx.length<170)G.fx.push({x:P.x,y:P.y,vx:0,vy:0,r:9,l:.16,c:'#9fe8ff'});}
   P.x=clamp(P.x+mx*sp*dt,20,ARENA-20);P.y=clamp(P.y+my*sp*dt,20,ARENA-20);
   if(!G.boss&&(G.t>=G.bossAt||(G.goalDone&&G.t>=45)))spawnBoss();
@@ -837,10 +855,10 @@ function draw(){
 function hud(){
   var P=G.p;$('hpE').style.width=clamp(P.hp/P.maxhp*100,0,100)+'%';$('hpT').textContent=Math.ceil(P.hp)+' / '+Math.round(P.maxhp);
   $('xpE').style.width=clamp(P.xp/P.next*100,0,100)+'%';$('lvT').textContent='Lv.'+P.lv;
-  var left=Math.max(0,Math.ceil(G.bossAt-G.t)),mn=Math.floor(left/60),sc=left%60;$('timeT').textContent=G.boss?'BOSS':mn+':'+(sc<10?'0':'')+sc;var gt=$('goalT');gt.hidden=false;gt.textContent=G.style.goal();$('coachL').hidden=G.moved||G.paused;$('joyZone').style.display=G.ended?'none':'';$('coachR').hidden=!(G.ult>=100&&(SV.ultUsed||0)<3)||G.paused;$('goldT').textContent='🪙'+G.gold;
+  var left=Math.max(0,Math.ceil(G.bossAt-G.t)),mn=Math.floor(left/60),sc=left%60;$('timeT').textContent=G.boss?'BOSS':mn+':'+(sc<10?'0':'')+sc;var gt=$('goalT');gt.hidden=false;gt.textContent=G.style.goal();$('coachL').hidden=G.moved||G.paused;$('joyZone').style.display=G.ended?'none':'';$('coachR').hidden=!((G.ultCd||0)<=0&&(SV.ultUsed||0)<3&&G.t>2)||G.paused;$('goldT').textContent='🪙'+G.gold;
   if(G.boss)$('bossE').style.width=clamp(G.boss.hp/G.boss.max*100,0,100)+'%';
   var c=$('combo');if(G.combo>=5){c.hidden=false;c.innerHTML='';c.appendChild(document.createTextNode(G.combo));c.appendChild(el('small','','COMBO x'+(1+Math.min(4,Math.floor(G.combo/15)))));}else c.hidden=true;
-  $('ultI').style.height=G.ult+'%';$('ultB').classList.toggle('ready',G.ult>=100);$('dashI').style.height=(1-P.dashCd/P.dashMax)*100+'%';
+  var uc=G.ultCd||0;$('ultI').style.height=(1-uc/ULT_CD)*100+'%';$('ultB').classList.toggle('ready',uc<=0);$('dashI').style.height=(1-P.dashCd/P.dashMax)*100+'%';
 }
 
 /* ---------- 입력 ---------- */
