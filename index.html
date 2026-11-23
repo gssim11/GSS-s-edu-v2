@@ -716,6 +716,7 @@ function navRects(){
   FESTIVAL.forEach(function(f){ box(f.x-34,f.y-12,f.x+34,f.y+24); });
   box(CAFE.x-68,CAFE.y-20,CAFE.x+68,CAFE.y+36);
   box(STAGE.x-94,STAGE.y-10,STAGE.x+94,STAGE.y+38);
+  box(PORTAL.x-50,PORTAL.y-8,PORTAL.x-33,PORTAL.y+8); box(PORTAL.x+33,PORTAL.y-8,PORTAL.x+50,PORTAL.y+8);
   box(ENTRANCE.x-156,ENTRANCE.y-40,ENTRANCE.x-118,ENTRANCE.y+24);
   box(ENTRANCE.x+118,ENTRANCE.y-40,ENTRANCE.x+156,ENTRANCE.y+24);
   box(BILLBOARD.x-12,BILLBOARD.y-4,BILLBOARD.x+14,BILLBOARD.y+66);
@@ -907,7 +908,7 @@ function drawRoundRect(x,y,w,h,r){
 
 const FSER = "'Nanum Myeongjo','Batang',Georgia,serif";
 const FSAN = "'Malgun Gothic','Segoe UI',sans-serif";
-const ENTRANCE={x:900,y:1040}, BILLBOARD={x:150,y:1030};
+const ENTRANCE={x:900,y:1040}, BILLBOARD={x:150,y:1030}, PORTAL={x:900,y:896};
 const DECO=[{"x": 25, "y": 300}, {"x": 1775, "y": 300}, {"x": 25, "y": 620}, {"x": 1775, "y": 620}, {"x": 25, "y": 960}, {"x": 1775, "y": 960}, {"x": 900, "y": 1100}, {"x": 360, "y": 1100}];
 const LAMPS=[{"x": 360, "y": 300}, {"x": 720, "y": 300}, {"x": 1080, "y": 300}, {"x": 1440, "y": 300}, {"x": 360, "y": 620}, {"x": 720, "y": 620}, {"x": 1080, "y": 620}, {"x": 1440, "y": 620}];
 const BENCHES=[{"x": 790, "y": 900}, {"x": 1010, "y": 900}, {"x": 790, "y": 700}, {"x": 1010, "y": 700}];
@@ -939,6 +940,7 @@ function drawGround(){
   ctx.strokeStyle='#b79a48';ctx.lineWidth=2;ctx.beginPath();ctx.arc(PLAZA.x,PLAZA.y,90,0,Math.PI*2);ctx.stroke();
   if(ASSET.crest.complete && ASSET.crest.naturalWidth){ctx.save();ctx.globalAlpha=.8;var CS=46;ctx.drawImage(ASSET.crest,PLAZA.x-CS/2,PLAZA.y-80,CS,CS);ctx.restore();}
   drawFountain(PLAZA.x,PLAZA.y+6);
+  drawGamePortal();
   // decor layers
   FLOWERS.forEach(f=>drawFlowerbed(f.x,f.y));
   BENCHES.forEach(b=>drawBench(b.x,b.y));
@@ -1666,6 +1668,7 @@ function updateNear(){
     else if (best.type==='council') label = '📣 물치 학회실';
     else if (best.type==='career') label = '💼 대학일자리플러스센터';
     else if (best.type==='gate') label = '🏫 학과 안내·홍보 (입구)';
+    else if (best.type==='portal') label = '🌀 게임 포탈 — 게임으로 복습';
     else if (best.type==='staff') label = best.ref.name+' 와(과) 대화';
     else label = '둘러보기';
     showPrompt(label);
@@ -1690,6 +1693,7 @@ function tryInteract(){
   else if (n.type==='council') openCouncil();
   else if (n.type==='career') openCareer();
   else if (n.type==='gate') openWelcome();
+  else if (n.type==='portal') openGamePortal();
   else if (n.type==='staff') openStaff(n.ref);
 }
 
@@ -3484,6 +3488,9 @@ function loop(now){
 /* 문 앞에서 위(건물 쪽)로 걸어 들어가면 E를 누르지 않아도 열린다.
    한 번 열린 뒤에는 문 앞을 벗어났다가 다시 들어와야 또 열린다(창을 닫자마자 다시 열리는 것 방지). */
 function autoDoor(pushUp){
+  const _pd=Math.abs(player.x-PORTAL.x)<26 && player.y-PORTAL.y>-10 && player.y-PORTAL.y<18;
+  if(!_pd) state.portalArmed=true;
+  else if(pushUp && state.portalArmed!==false){ state.portalArmed=false; state.near={type:'portal',ref:PORTAL}; tryInteract(); return; }
   let hit=null;
   for (const b of BUILDINGS){
     if (!b.subj && !b.role) continue;
@@ -3784,6 +3791,7 @@ function funOpenAch(){
 /* ---------- HUD / near / draw orchestration ---------- */
 function updateFunHUD(){ const el=document.getElementById('coins'); if(el) el.textContent=state.coinCount; }
 function funNearCheck(){
+  if(dist(player.x,player.y,PORTAL.x,PORTAL.y+8)<58) return { type:'portal', ref:PORTAL };
   if(dist(player.x,player.y,pet.x,pet.y)<64) return { type:'pet', ref:pet };
   if(dist(player.x,player.y,CAFE.x,CAFE.y)<64) return { type:'cafe', ref:CAFE };
   if(dist(player.x,player.y,STAGE.x,STAGE.y)<72) return { type:'stage', ref:STAGE };
@@ -4147,6 +4155,81 @@ try{ document.getElementById('mapBtn').onclick=function(){ state.overview=!state
   cv.addEventListener('touchcancel', endT, {passive:false});
 })();
 
+/* ===== 회복 원정대 게임 포탈 (분수대와 정문 사이) ===== */
+function drawGamePortal(){
+  var x=PORTAL.x,y=PORTAL.y,t=ENV.reduce?0:performance.now()/1000,cy=y-34;
+  ctx.save();
+  ctx.fillStyle='rgba(0,0,0,.26)';ctx.beginPath();ctx.ellipse(x,y+9,58,12,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#d9c58c';ctx.fillRect(x-56,y+1,112,8);ctx.fillStyle='#8f7338';ctx.fillRect(x-56,y+8,112,3);
+  var g=ctx.createRadialGradient(x,cy,3,x,cy,42);g.addColorStop(0,'#ffffff');g.addColorStop(.25,'#7df3ff');g.addColorStop(.62,'#8a4dff');g.addColorStop(1,'#2a116f');
+  ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(x,cy,33,39,0,0,Math.PI*2);ctx.fill();
+  ctx.save();ctx.beginPath();ctx.ellipse(x,cy,33,39,0,0,Math.PI*2);ctx.clip();ctx.lineCap='round';
+  for(var i=0;i<4;i++){ctx.strokeStyle=i%2?'rgba(255,255,255,.7)':'rgba(125,243,255,.8)';ctx.lineWidth=2.4;ctx.beginPath();for(var k=0;k<=24;k++){var a=t*2.4+i*1.57+k*.34,r=2+k*1.45,px=x+Math.cos(a)*r*.86,py=cy+Math.sin(a)*r;if(k)ctx.lineTo(px,py);else ctx.moveTo(px,py);}ctx.stroke();}
+  ctx.restore();
+  ctx.strokeStyle='#0b224e';ctx.lineWidth=10;ctx.beginPath();ctx.ellipse(x,cy,38,44,0,Math.PI*.04,Math.PI*.96,true);ctx.stroke();
+  ctx.strokeStyle='#f0d488';ctx.lineWidth=5;ctx.beginPath();ctx.ellipse(x,cy,38,44,0,Math.PI*.04,Math.PI*.96,true);ctx.stroke();
+  [-1,1].forEach(function(s){ctx.fillStyle='#0b224e';ctx.fillRect(x+s*41-8,y-30,16,37);ctx.fillStyle='#f0d488';ctx.fillRect(x+s*41-8,y-33,16,5);ctx.fillRect(x+s*41-10,y+3,20,5);ctx.fillStyle=(Math.sin(t*4+s)>0)?'#7df3ff':'#d66bff';ctx.beginPath();ctx.arc(x+s*41,y-15,3.6,0,Math.PI*2);ctx.fill();});
+  for(var n=0;n<7;n++){var q=t*1.5+n*.9,px2=x+Math.sin(q*1.7+n)*44,py2=y-((t*26+n*17)%82);ctx.globalAlpha=Math.max(0,.9-((t*26+n*17)%82)/82);ctx.fillStyle=n%2?'#ffe27a':'#7df3ff';ctx.beginPath();ctx.arc(px2,py2,2,0,Math.PI*2);ctx.fill();}
+  ctx.globalAlpha=1;ctx.font="800 12px 'Malgun Gothic',sans-serif";ctx.textAlign='center';ctx.textBaseline='middle';var lb='🎮 게임 포탈',lw=ctx.measureText(lb).width+16;
+  ctx.fillStyle='#0b224e';ctx.beginPath();ctx.roundRect(x-lw/2,y-96,lw,20,6);ctx.fill();ctx.strokeStyle='#f0d488';ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle='#fff';ctx.fillText(lb,x,y-85.5);
+  ctx.restore();
+}
+var ARCADE_INFO=[['neuroanat','신경 미궁','신경해부학','🧠'],['neuro','회복의 성채','신경계 물리치료','♿'],['anatomy','뼈의 사원','해부학','🦴'],['funcanat','움직임 공방','기능해부·신경운동','🤸'],['exercise','근력 투기장','운동치료학','🏋️'],['msk','관절 협곡','근골격계 물리치료','🦵'],['modality','에너지 발전소','물리적인자치료','⚡'],['cardio','호흡의 심해','심화호흡물리치료','🫁'],['clindx','판단의 탑','임상의사결정','🧭']];
+function arcadeSaveData(){ try{ return JSON.parse(localStorage.getItem('aupt_arcade_v1')||'null')||{}; }catch(e){ return {}; } }
+function arcadeWorldStat(S,id){
+  var st=(S.stars&&S.stars[id])||{}, stars=0, due={}, now=(S.plays&&S.plays[id])||0, R=(S.srs&&S.srs[id])||{};
+  Object.keys(st).forEach(function(k){ stars+=st[k]; });
+  Object.keys(R).forEach(function(k){ if(R[k].due<=now) due[k]=1; });
+  ((S.wrong&&S.wrong[id])||[]).forEach(function(k){ due[k]=1; });
+  return {stars:stars, due:Object.keys(due).length};
+}
+function goArcade(id,play){
+  try{ saveProg(); }catch(e){}
+  try{ sessionStorage.setItem('aupt_from_campus', location.search.replace(/^\?/,'').replace(/(^|&)from=arcade/,'').replace(/^&/,'')||'1'); }catch(e){}
+  var url='arcade.html'+(id?'?w='+encodeURIComponent(id)+(play?'&play=1':''):'');
+  var o=document.getElementById('portalWarp'); if(!o){ o=document.createElement('div'); o.id='portalWarp'; document.body.appendChild(o); }
+  o.className='on'; try{ sfx('coin'); }catch(e){}
+  setTimeout(function(){ location.href=url; }, ENV.reduce?0:520);
+}
+function openGamePortal(){
+  var S=arcadeSaveData(), last=ARCADE_INFO.filter(function(w){ return w[0]===S.last; })[0];
+  setDialog('🌀','linear-gradient(135deg,#7c4dff,#2fc7e0)','회복 원정대 포탈','게임으로 전공 복습 · 9개 과목');
+  var body=document.getElementById('dlg-body'), foot=document.getElementById('dlg-foot');
+  body.innerHTML=pLead('과목을 고르면 해당 전장으로 바로 이동합니다. 1장부터 차례로 깨면 지난 내용이 자동으로 복습됩니다.')+'<div class="pgrid" id="pgrid"></div>';
+  var g=document.getElementById('pgrid');
+  ARCADE_INFO.forEach(function(w){
+    var v=arcadeWorldStat(S,w[0]), b=document.createElement('button'); b.type='button'; b.className='pworld';
+    var ic=document.createElement('span'); ic.className='pic'; ic.textContent=w[3];
+    var tx=document.createElement('span'); tx.className='ptx'; var n=document.createElement('b'); n.textContent=w[1]; var m=document.createElement('small'); m.textContent='('+w[2]+')'; var q=document.createElement('em'); q.textContent='★ '+v.stars+(v.due?' · 복습 '+v.due:''); tx.appendChild(n); tx.appendChild(m); tx.appendChild(q);
+    b.appendChild(ic); b.appendChild(tx); b.onclick=function(){ goArcade(w[0],false); }; g.appendChild(b);
+  });
+  foot.innerHTML='';
+  addFoot(last?'▶ 이어하기: '+last[1]:'▶ 게임 시작', function(){ goArcade(last?last[0]:'neuroanat', true); }, true);
+  addFoot('닫기', closeDialog);
+  showDialog();
+}
+(function(){
+  var st=document.createElement('style');
+  st.textContent='.pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:8px}.pworld{display:flex;gap:6px;align-items:center;min-height:66px;padding:7px;text-align:left;border-radius:12px;color:#eef3ff;background:linear-gradient(135deg,#27306f,#182450);border:1px solid rgba(240,212,136,.45);cursor:pointer;font:inherit}.pworld:hover{background:linear-gradient(135deg,#3a3f95,#20306b)}.pic{flex:none;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.12);font-size:18px}.ptx{min-width:0}.ptx b{display:block;font-size:15px}.ptx small{display:block;font-size:12px;color:#c7d2ec}.ptx em{display:block;font-style:normal;font-size:12px;color:#f0d488;margin-top:1px}#portalWarp{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:0;background:radial-gradient(circle,#fff 0 6%,#7df3ff 16%,#7c4dff 42%,#12072f 76%)}#portalWarp.on{animation:pwarp .52s ease-in forwards}@keyframes pwarp{0%{opacity:0;transform:scale(.2) rotate(0)}55%{opacity:1}100%{opacity:1;transform:scale(3.2) rotate(200deg)}}';
+  document.head.appendChild(st);
+  addEventListener('pageshow',function(){ var o=document.getElementById('portalWarp'); if(o) o.className=''; });
+  var _hall=openHall;
+  openHall=function(b){
+    _hall(b);
+    try{ if(b && ARCADE_INFO.some(function(w){ return w[0]===b.subj; })){ var f=document.getElementById('dlg-foot'); addFoot('🎮 게임으로 복습', function(){ goArcade(b.subj,false); }); if(f&&f.lastChild) f.insertBefore(f.lastChild,f.firstChild); } }catch(e){}
+  };
+  function coinsFromGame(){
+    try{ var br=JSON.parse(localStorage.getItem('aupt_arcade_bridge')||'null'); if(!br||!br.coins) return; localStorage.removeItem('aupt_arcade_bridge'); state.coinCount+=br.coins; updateFunHUD(); saveProg(); toast('🎮 게임 승리 보상 +'+br.coins+'🪙'); }catch(e){}
+  }
+  var U=new URLSearchParams(location.search), back=U.get('from')==='arcade', ok=false;
+  try{ ok=!!sessionStorage.getItem('aupt_from_campus'); }catch(e){}
+  if(back){ U.delete('from'); try{ history.replaceState(null,'',location.pathname+(U.toString()?'?'+U.toString():'')); }catch(e){} }
+  setTimeout(function(){
+    if(back&&ok&&!state.entered){ var s=document.getElementById('startBtn'); if(s) s.click(); player.x=PORTAL.x; player.y=PORTAL.y+50; player.dir='down'; state.portalArmed=false; player.mt=null; cam.x=clamp(player.x-VW/2,0,Math.max(0,WORLD.w-VW)); cam.y=clamp(player.y-VH/2,0,Math.max(0,WORLD.h-VH)); }
+    coinsFromGame();
+  },320);
+})();
+
 /* tap-to-move / tap-to-interact (top-level) */
 player.mt=null; player.mtI=false;
 function screenToWorld(cx,cy){ var Z=window.camZoom||1; return { x:(cx-VW/2)/Z + cam.x + VW/2, y:(cy-VH/2)/Z + cam.y + VH/2 }; }
@@ -4163,6 +4246,7 @@ function tapApproach(wx,wy){
   if(typeof pet!=='undefined')props.push({x:pet.x,y:pet.y+24});
   if(typeof FESTIVAL!=='undefined')props.push({x:FESTIVAL[1].x,y:FESTIVAL[1].y+34});
   for(var j=0;j<props.length;j++){ var d=dist(wx,wy,props[j].x,props[j].y); if(d<bd){bd=d;best=props[j];} }
+  if(Math.abs(wx-PORTAL.x)<56 && wy>PORTAL.y-84 && wy<PORTAL.y+22) best={x:PORTAL.x,y:PORTAL.y+26};
   return best;
 }
 window.handleTap=function(cx,cy){
@@ -4320,7 +4404,7 @@ function drawMinimap(){
     ctx.fillStyle = b.subj ? (state.visited.has(b.subj) ? '#5fd39a' : b.color) : 'rgba(165,180,205,.6)';
     ctx.fillRect(mx+b.x*sx, my+b.y*sy, Math.max(3,b.w*sx), Math.max(2,b.h*sy));
   }
-  try{ ctx.fillStyle='#f0d488'; ctx.fillRect(mx+ENTRANCE.x*sx-2, my+ENTRANCE.y*sy-2, 4, 4); }catch(e){}
+  try{ ctx.fillStyle='#f0d488'; ctx.fillRect(mx+ENTRANCE.x*sx-2, my+ENTRANCE.y*sy-2, 4, 4); ctx.fillStyle='#d66bff'; ctx.beginPath(); ctx.arc(mx+PORTAL.x*sx, my+PORTAL.y*sy, 3.2, 0, Math.PI*2); ctx.fill(); }catch(e){}
   ctx.fillStyle='rgba(225,235,255,.5)';
   for(var j=0;j<npcs.length;j++){ ctx.fillRect(mx+npcs[j].x*sx-1, my+npcs[j].y*sy-1, 2, 2); }
   var _mr=window.MP_REMOTES||[]; ctx.fillStyle='#4fd1c5'; for(var q=0;q<_mr.length;q++){ ctx.fillRect(mx+_mr[q].x*sx-1.5, my+_mr[q].y*sy-1.5, 3, 3); }
