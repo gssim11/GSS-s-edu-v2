@@ -54,7 +54,7 @@ var PROP={
  daily:function(x,T){circle(x,0,0,16,T.pal[1]);circle(x,-2,-3,9,T.pal[0]);}
 };
 function prop(id,v){return memo('prop|'+id+'|'+v,function(){var c=mk(160,160),x=c.getContext('2d');x.scale(2,2);x.translate(40,40);x.fillStyle='rgba(0,0,0,.26)';x.beginPath();x.ellipse(0,24,27,7,0,0,TAU);x.fill();(PROP[id]||PROP.daily)(x,theme(id),seeded(v*41+7));return c;});}
-function props(id,arena){return memo('props|'+id,function(){var r=seeded(id.charCodeAt(0)*131+id.length),L=[];for(var i=0;i<78;i++){var a=70+r()*(arena-140),b=70+r()*(arena-140);if(Math.hypot(a-arena/2,b-arena/2)<150)continue;L.push({x:a,y:b,v:Math.floor(r()*3),s:.72+r()*.45,f:r()<.5?-1:1});}return L;});}
+function props(id,arena){return memo('props|'+id+'|'+arena,function(){var r=seeded(id.charCodeAt(0)*131+id.length),L=[],N=Math.round(78*Math.pow(arena/1700,2));for(var i=0;i<N;i++){var a=70+r()*(arena-140),b=70+r()*(arena-140);if(Math.hypot(a-arena/2,b-arena/2)<120)continue;L.push({x:a,y:b,v:Math.floor(r()*3),s:.72+r()*.45,f:r()<.5?-1:1});}return L;});}
 
 /* ---------- 몬스터 ---------- */
 function gear(x,r,n,dark,mid){x.fillStyle=dark;x.beginPath();for(var i=0;i<n*2;i++){var a0=(i-.28)/(n*2)*TAU,a1=(i+.28)/(n*2)*TAU,R=i%2?r*.8:r;x.lineTo(Math.cos(a0)*R,Math.sin(a0)*R);x.lineTo(Math.cos(a1)*R,Math.sin(a1)*R);}x.closePath();x.fill();circle(x,0,0,r*.68,mid);}

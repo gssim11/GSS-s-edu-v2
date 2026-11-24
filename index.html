@@ -687,6 +687,7 @@ addEventListener('keydown', e=>{
   if (k==='escape'){ if(isShown('dlg')) closeDialog(); else if(isShown('help')) hideEl('help'); else if(isShown('ach')) hideEl('ach'); }
 });
 addEventListener('keyup', e=>{ keys[e.key.toLowerCase()] = false; });
+addEventListener('blur', ()=>{ Object.keys(keys).forEach(k=>{ keys[k]=false; }); });
 
 /* ---------- Camera & State ---------- */
 const cam = { x:0, y:0 };
@@ -3424,9 +3425,9 @@ function loop(now){
     { const tv=window.touchVec; if(tv){ vx+=tv.x; vy+=tv.y; } }
     if (vx||vy){
       player.mt=null;
-      const m=Math.hypot(vx,vy)||1; vx/=m; vy/=m;
-      const nx=clamp(player.x+vx*playerSpd()*dt, 20, WORLD.w-20);
-      const ny=clamp(player.y+vy*playerSpd()*dt, 20, WORLD.h-20);
+      const m=Math.hypot(vx,vy)||1, _pw=Math.min(1,m); vx/=m; vy/=m;
+      const nx=clamp(player.x+vx*playerSpd()*_pw*dt, 20, WORLD.w-20);
+      const ny=clamp(player.y+vy*playerSpd()*_pw*dt, 20, WORLD.h-20);
       if(!collidesBuilding(nx,player.y)) player.x=nx;
       if(!collidesBuilding(player.x,ny)) player.y=ny;
       player.moving=true; player.walk+=dt*12;
@@ -3837,7 +3838,7 @@ window.touchVec = { x:0, y:0 };
   const R=46; let jid=null, cx=0, cy=0;
   function setKnob(dx,dy){ if(knob) knob.style.transform='translate('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px)'; }
   function jStart(e){ const t=e.changedTouches[0]; const r=pad.getBoundingClientRect(); cx=r.left+r.width/2; cy=r.top+r.height/2; jid=t.identifier; jMoveTouch(t); e.preventDefault(); }
-  function jMoveTouch(t){ let dx=t.clientX-cx, dy=t.clientY-cy; const m=Math.hypot(dx,dy)||1; const cl=Math.min(m,R); dx=dx/m*cl; dy=dy/m*cl; setKnob(dx,dy); window.touchVec.x=Math.max(-1,Math.min(1,dx/R)); window.touchVec.y=Math.max(-1,Math.min(1,dy/R)); }
+  function jMoveTouch(t){ let dx=t.clientX-cx, dy=t.clientY-cy; const m=Math.hypot(dx,dy)||1; const cl=Math.min(m,R); dx=dx/m*cl; dy=dy/m*cl; setKnob(dx,dy); const DZ=10; if(m<DZ){ window.touchVec.x=0; window.touchVec.y=0; return; } const p=Math.max(.35,Math.min(1,(m-DZ)/(R*.72-DZ))); window.touchVec.x=dx/cl*p; window.touchVec.y=dy/cl*p; }
   function jMove(e){ if(jid===null) return; for(const t of e.changedTouches){ if(t.identifier===jid){ jMoveTouch(t); e.preventDefault(); } } }
   function jEnd(e){ for(const t of e.changedTouches){ if(t.identifier===jid){ jid=null; window.touchVec.x=0; window.touchVec.y=0; setKnob(0,0); } } }
   if(pad){

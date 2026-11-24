@@ -442,7 +442,9 @@ function poolFor(wd,idx,mode){
   while(m<main.length||r<rev.length){if(m<main.length)out.push(main[m++]);if((m>=2||m>=main.length)&&r<rev.length)out.push(rev[r++]);}
   return out;
 }
+function fitArena(){var a=Math.round(clamp(Math.max(VW,VH)*1.2,900,1700));ARENA=a;C=a/2;}
 function startStage(wd,idx,mode){
+  show('play');resize();fitArena();
   var world=wd||{id:'daily',name:'오늘의 도전',subj:'전 과목 혼합',color:'#ff7a59',bg:'#26101d',icon:'🔥'};
   if(wd){SV.last=wd.id;save();}
   var H=hero(),maxhp=140+H.hp+SV.meta.hp*10,d=mode==='stage'?1+idx*.025:mode==='daily'?1.12:mode==='final'?1.2:1;
@@ -466,7 +468,7 @@ function stageIntro(){
   var r=el('div','rule');var t=el('b','',S.tag+' ');r.appendChild(t);r.appendChild(document.createTextNode(S.rule));b.appendChild(r);
   var p=el('div','pl');if(nNew)p.appendChild(el('span','','✨ 새 개념 '+nNew));if(nRev)p.appendChild(el('span','','🔁 복습 '+nRev));if(!nNew&&!nRev)p.appendChild(el('span','','✅ 지금 볼 문제 없음 · 자유 전투'));b.appendChild(p);
   var own=Object.keys(G.p.w).sort();var sk=el('div','pl');own.forEach(function(k){sk.appendChild(el('span','',UP[k].e+' '+UP[k].n+' '+G.p.w[k]));});b.appendChild(sk);
-  var g=el('button','go','출발');g.type='button';g.id='stageGo';g.onclick=function(){closeOv();G.paused=false;banner(G.name);snd('level');};b.appendChild(g);
+  var g=el('button','go','출발');g.type='button';g.id='stageGo';g.onclick=function(){closeOv();G.paused=false;banner(G.name);snd('level');if(G.sid!=='canyon'&&!G.opened){G.opened=true;for(var i=0;i<5;i++)spawnEnemy('grunt');}};b.appendChild(g);
   $('ov').hidden=false;
 }
 function banner(t){var w=$('bannerWrap');w.innerHTML='';var b=el('div','',t);b.id='banner';w.appendChild(b);setTimeout(function(){if(b.parentNode)b.remove();},1750);}
@@ -479,7 +481,7 @@ function emoji(t,x,y,s){ctx.font=(s||26)+'px serif';ctx.textAlign='center';ctx.t
 var STYLE_OF={neuroanat:'maze',neuro:'guard',anatomy:'collect',funcanat:'belt',exercise:'rounds',msk:'canyon',modality:'capture',cardio:'oxygen',clindx:'turret'};
 var STYLES={
  maze:{tag:'미궁 탈출',obj:1,rule:'벽 사이를 돌며 신호 노드 3개를 밟으면 보스가 깨어납니다.',
-  init:function(){for(var a=-2;a<=2;a++)for(var b=-2;b<=2;b++)if(a||b)G.walls.push({x:C+a*230-55,y:C+b*230-55,w:110,h:110});G.sx.nodes=[{x:C+345,y:C-115},{x:C-345,y:C+115},{x:C+115,y:C+345}];},
+  init:function(){var g=Math.min(230,(C-70)/2),w=Math.min(110,g*.5);for(var a=-2;a<=2;a++)for(var b=-2;b<=2;b++)if(a||b)G.walls.push({x:C+a*g-w/2,y:C+b*g-w/2,w:w,h:w});G.sx.nodes=[{x:C+g*1.5,y:C-g*.5},{x:C-g*1.5,y:C+g*.5},{x:C+g*.5,y:C+g*1.5}];},
   tick:function(){var P=G.p;pushOut(P,P.r);G.en.forEach(function(e){if(!e.boss)pushOut(e,e.r*.8);});G.sx.nodes.forEach(function(n){if(!n.on&&Math.hypot(n.x-P.x,n.y-P.y)<42){n.on=true;G.ult=Math.min(100,G.ult+18);G.rings.push({x:n.x,y:n.y,r:8,max:170,l:.34,c:G.world.color});near(n.x,n.y,170,function(e){hit(e,40);});snd('level');}});if(G.sx.nodes.every(function(n){return n.on;}))G.goalDone=true;},
   draw:function(){G.walls.forEach(function(w){ctx.fillStyle='rgba(0,0,0,.3)';ctx.fillRect(w.x+7,w.y+14,w.w,w.h);ctx.fillStyle='#2c2178';ctx.fillRect(w.x,w.y+w.h-16,w.w,16);ctx.fillStyle='#5748c9';ctx.fillRect(w.x,w.y,w.w,w.h-16);ctx.fillStyle='#7b6cf0';ctx.fillRect(w.x+7,w.y+7,w.w-14,w.h-30);ctx.strokeStyle='#120d24';ctx.lineWidth=3;ctx.strokeRect(w.x,w.y,w.w,w.h);ctx.strokeStyle='rgba(255,255,255,.3)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(w.x+26,w.y+24);ctx.lineTo(w.x+52,w.y+40);ctx.lineTo(w.x+82,w.y+28);ctx.stroke();});G.sx.nodes.forEach(function(n){ctx.fillStyle=n.on?'#58e6a0':'#ffd166';ctx.beginPath();ctx.arc(n.x,n.y,15+(n.on?0:Math.sin(G.t*5)*3),0,6.3);ctx.fill();emoji('⚡',n.x,n.y,16);});},
   goal:function(){return '⚡ 신호 노드 '+G.sx.nodes.filter(function(n){return n.on;}).length+' / 3';},point:function(){return G.sx.nodes.filter(function(n){return !n.on;})[0];}},
@@ -501,7 +503,7 @@ var STYLES={
  rounds:{tag:'3라운드 격투',obj:1,rule:'라운드마다 정해진 수를 쓰러뜨립니다. 라운드 사이에 쉬며 체력을 회복합니다.',
   init:function(){G.sx={r:1,base:0,need:[12,18,24]};},
   tick:function(dt){var X=G.sx,P=G.p;if(G.rest>0){G.rest-=dt;return;}if(G.goalDone)return;if(G.kills-X.base>=X.need[X.r-1]){if(X.r<3){X.r++;X.base=G.kills;G.rest=2.6;G.eshots=[];P.hp=Math.min(P.maxhp,P.hp+35);banner('ROUND '+X.r);snd('level');}else G.goalDone=true;}},
-  draw:function(){ctx.strokeStyle='rgba(255,93,162,.45)';ctx.lineWidth=8;ctx.strokeRect(C-520,C-520,1040,1040);},
+  draw:function(){ctx.strokeStyle='rgba(255,93,162,.45)';ctx.lineWidth=8;ctx.strokeRect(C-Math.min(520,C-34),C-Math.min(520,C-34),Math.min(520,C-34)*2,Math.min(520,C-34)*2);},
   goal:function(){var X=G.sx;return G.goalDone?'🏆 결승 보스':'🥊 ROUND '+X.r+' · '+Math.min(X.need[X.r-1],G.kills-X.base)+' / '+X.need[X.r-1];},point:function(){return null;}},
  canyon:{tag:'협곡 돌파',rule:'좁은 협곡에서 위쪽 적을 막아 냅니다. 좌우로 움직여 공격을 피하세요.',
   init:function(){G.p.y=C+VH*.2;},
@@ -509,7 +511,7 @@ var STYLES={
   draw:function(cx,cy){var h=canyonHW()+16;ctx.fillStyle='#07131f';ctx.fillRect(cx-VW/2,cy-VH/2,VW/2-h,VH);ctx.fillRect(C+h,cy-VH/2,VW/2-h,VH);ctx.strokeStyle='#5fb7ff';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(C-h,cy-VH/2);ctx.lineTo(C-h,cy+VH/2);ctx.moveTo(C+h,cy-VH/2);ctx.lineTo(C+h,cy+VH/2);ctx.stroke();ctx.fillStyle='rgba(95,183,255,.14)';var o=(G.t*90)%120;for(var y=cy-VH/2-120+o;y<cy+VH/2;y+=120)ctx.fillRect(C-h,y,h*2,5);},
   goal:function(){return '🏔️ 협곡 '+(G.boss?'보스 격파':'방어');},point:function(){return null;}},
  capture:{tag:'발전기 점령',obj:1,rule:'발전기 원 안에 머물면 충전됩니다. 3곳을 모두 켜면 보스가 나타납니다.',
-  init:function(){G.sx={z:[{x:C-250,y:C-170,p:0},{x:C+250,y:C-120,p:0},{x:C,y:C+290,p:0}]};},
+  init:function(){var k=Math.max(.68,C/850);G.sx={z:[{x:C-250*k,y:C-170*k,p:0},{x:C+250*k,y:C-120*k,p:0},{x:C,y:C+290*k,p:0}]};},
   tick:function(dt){var P=G.p;G.sx.z.forEach(function(z){if(z.p>=1)return;if(Math.hypot(z.x-P.x,z.y-P.y)<92){z.p+=dt/3;if(z.p>=1){z.p=1;G.ult=Math.min(100,G.ult+30);G.rings.push({x:z.x,y:z.y,r:10,max:260,l:.4,c:'#f4e04d'});near(z.x,z.y,260,function(e){hit(e,70);});snd('level');}}});if(G.sx.z.every(function(z){return z.p>=1;}))G.goalDone=true;},
   draw:function(){G.sx.z.forEach(function(z){ctx.fillStyle=z.p>=1?'rgba(244,224,77,.22)':'rgba(255,255,255,.05)';ctx.strokeStyle='rgba(244,224,77,.65)';ctx.lineWidth=3;ctx.beginPath();ctx.arc(z.x,z.y,92,0,6.3);ctx.fill();ctx.stroke();ctx.strokeStyle='#f4e04d';ctx.lineWidth=9;ctx.beginPath();ctx.arc(z.x,z.y,74,-1.57,-1.57+z.p*6.283);ctx.stroke();ctx.fillStyle='#fff';emoji('⚡',z.x,z.y,30);});},
   goal:function(){return '⚡ 발전기 '+G.sx.z.filter(function(z){return z.p>=1;}).length+' / 3';},point:function(){var P=G.p,L=G.sx.z.filter(function(z){return z.p<1;}).sort(function(a,b){return Math.hypot(a.x-P.x,a.y-P.y)-Math.hypot(b.x-P.x,b.y-P.y);});return L[0];}},
@@ -535,9 +537,18 @@ var TYPES={
  shoot:{hp:20,spd:62,r:15,dmg:8,xp:2,c:4,score:24},
  mini:{hp:6,spd:112,r:9,dmg:4,xp:0,c:2,score:4}
 };
+function edgePoint(){
+  var P=G.p,cx=clamp(P.x,VW/2,Math.max(VW/2,ARENA-VW/2)),cy=clamp(P.y,VH/2,Math.max(VH/2,ARENA-VH/2)),m=36,hw=VW/2+m,hh=VH/2+m,x,y;
+  for(var n=0;n<14;n++){
+    var t=Math.random()*(hw+hh)*2;
+    if(t<hw*2){x=cx-hw+t;y=Math.random()<.5?cy-hh:cy+hh;}else{x=Math.random()<.5?cx-hw:cx+hw;y=cy-hh+(t-hw*2);}
+    if(x>=20&&x<=ARENA-20&&y>=20&&y<=ARENA-20&&Math.hypot(x-P.x,y-P.y)>=165)return {x:x,y:y};
+  }
+  var a=Math.random()*6.283;return {x:clamp(P.x+Math.cos(a)*230,20,ARENA-20),y:clamp(P.y+Math.sin(a)*230,20,ARENA-20)};
+}
 function spawnEnemy(type,x,y,mul){
   var T=TYPES[type],a=Math.random()*6.283,R=Math.hypot(VW,VH)/2+50,P=G.p;
-  if(x===undefined){if(G.sid==='canyon'){x=C+rnd(-canyonHW(),canyonHW());y=C-VH/2-30;}else{x=clamp(P.x+Math.cos(a)*R,20,ARENA-20);y=clamp(P.y+Math.sin(a)*R,20,ARENA-20);}}
+  if(x===undefined){if(G.sid==='canyon'){x=C+rnd(-canyonHW(),canyonHW());y=C-VH/2-30;}else{var ep=edgePoint();x=ep.x;y=ep.y;}}
   var hp=T.hp*.85*G.diff*(1+G.t/150)*(mul||1);
   var e={type:type,x:x,y:y,hp:hp,max:hp,spd:T.spd*.9*(1+(G.diff-1)*.12)*rnd(.92,1.08),r:T.r*(mul>2?1.5:1),dmg:T.dmg*.62*(1+(G.diff-1)*.2),xp:T.xp*(mul>2?5:1),score:T.score*(mul||1),c:T.c,flash:0,slow:0,wob:Math.random()*6,fire:rnd(1,2.4),elite:mul>2,oh:0};
   G.en.push(e);return e;
@@ -549,7 +560,7 @@ function spawnWave(dt){
   var n=(b?1:1+Math.floor(t/30)),types=['grunt'];
   if(t>9)types.push('fast');if(t>18)types.push('split');if(t>30)types.push('shoot');if(t>42)types.push('tank');
   for(var i=0;i<n;i++)spawnEnemy(pick(types));
-  if(!b&&G.sid!=='canyon'&&t>25&&Math.random()<.06){var a=Math.random()*6.283,R=Math.hypot(VW,VH)/2+40;for(var k=0;k<9;k++){var q=a+k*.698;spawnEnemy('fast',clamp(G.p.x+Math.cos(q)*R,20,ARENA-20),clamp(G.p.y+Math.sin(q)*R,20,ARENA-20));}}
+  if(!b&&G.sid!=='canyon'&&t>25&&Math.random()<.06){var a=Math.random()*6.283;for(var k=0;k<9;k++){var q=a+k*.698;spawnEnemy('fast',clamp(G.p.x+Math.cos(q)*(VW/2+36),20,ARENA-20),clamp(G.p.y+Math.sin(q)*(VH/2+36),20,ARENA-20));}}
 }
 function spawnBoss(){
   var P=G.p,hp=(360+Object.keys(P.w).length*45)*G.diff,a=Math.random()*6.283;
@@ -965,7 +976,7 @@ function loop(now){
 }
 requestAnimationFrame(loop);
 
-window.__arc={get G(){return G;},SV:SV,WORLDS:WORLDS,startStage:startStage,update:update,updateFx:updateFx,draw:draw,answer:answer,dueList:dueList,STYLES:STYLES,goalPoint:function(){return G&&G.style.point&&G.style.point();},useUlt:useUlt,useDash:useDash,renderHome:renderHome,renderMap:renderMap,renderStore:renderStore,input:input,finish:finish,cardOptions:cardOptions,loop:loop};
+window.__arc={get G(){return G;},get ARENA(){return ARENA;},SV:SV,WORLDS:WORLDS,startStage:startStage,update:update,updateFx:updateFx,draw:draw,answer:answer,dueList:dueList,STYLES:STYLES,goalPoint:function(){return G&&G.style.point&&G.style.point();},useUlt:useUlt,useDash:useDash,renderHome:renderHome,renderMap:renderMap,renderStore:renderStore,input:input,finish:finish,cardOptions:cardOptions,loop:loop};
 renderHome();
 (function(){var q=new URLSearchParams(location.search),id=q.get('w'),w=WORLDS.filter(function(x){return x.id===id;})[0];
   if(!w)return;if(q.get('play')==='1')launch(w,nextIdx(w));else renderMap(w);
