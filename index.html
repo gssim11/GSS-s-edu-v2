@@ -4383,7 +4383,9 @@ try{ document.getElementById('mapBtn').onclick=function(){ state.overview=!state
   var md=false, mlx=0,mly=0, msx=0,msy=0, mmoved=false, mt0=0;
   cv.addEventListener('mousedown', function(e){ md=true; mlx=msx=e.clientX; mly=msy=e.clientY; mmoved=false; mt0=Date.now(); });
   window.addEventListener('mousemove', function(e){ if(!md) return; if(Math.abs(e.clientX-msx)+Math.abs(e.clientY-msy)>6) mmoved=true; if(mmoved){ var pz=window.camZoom||1,_po=window.panOffset; _po.x=clampP(_po.x-(e.clientX-mlx)/pz); _po.y=clampP(_po.y-(e.clientY-mly)/pz); mlx=e.clientX; mly=e.clientY; } });
-  window.addEventListener('mouseup', function(e){ if(md && !mmoved && (Date.now()-mt0)<350 && window.handleTap) window.handleTap(e.clientX,e.clientY); md=false; });
+  window.addEventListener('mouseup', function(e){ if(md && !mmoved && (Date.now()-mt0)<350 && window.handleTap) window.handleTap(e.clientX,e.clientY,'mouse'); md=false; });
+  window.addEventListener('touchstart', function(){ window._lastTouchT=Date.now(); }, {capture:true, passive:true});
+  window.addEventListener('touchend', function(){ window._lastTouchT=Date.now(); }, {capture:true, passive:true});
   if(!(('ontouchstart' in window)||navigator.maxTouchPoints>0)) return;
   var pin=null, dragId=null, lx=0, ly=0, sx=0, sy=0, moved=false, tt0=0;
   function ft(list,id){ for(var i=0;i<list.length;i++) if(list[i].identifier===id) return list[i]; return null; }
@@ -4511,8 +4513,10 @@ function tapApproach(wx,wy){
   if(Math.abs(wx-PORTAL.x)<56 && wy>PORTAL.y-84 && wy<PORTAL.y+22) best={x:PORTAL.x,y:PORTAL.y+26};
   return best;
 }
-window.handleTap=function(cx,cy){
+window.handleTap=function(cx,cy,src){
   if(!state.entered || anyModalOpen() || state.spectate || state.overview) return;
+  if(Date.now()<(window._tapBlockUntil||0)) return;
+  if(src==='mouse' && Date.now()-(window._lastTouchT||0)<900) return;   /* 터치 뒤 흉내 마우스 클릭은 무시 */
   var w=screenToWorld(cx,cy);
   var ap=tapApproach(w.x,w.y);
   if(ap){ player.mt={x:clamp(ap.x,20,WORLD.w-20),y:clamp(ap.y,20,WORLD.h-20)}; player.mtI=true; }
@@ -4568,7 +4572,7 @@ document.addEventListener('visibilitychange', function(){ if(!document.hidden){ 
   var sb=document.getElementById('startBtn');
   if(sb) sb.addEventListener('click', function(){ setTimeout(showHint,450); setTimeout(rotHint,1700); });
   /* 닫기: × 버튼, 안내창 자체, 캠퍼스 화면 등 어디를 눌러도 바로 닫힘(캡처 단계라 다른 터치 처리기가 막아도 동작) · Esc */
-  function hideHint(){ var el=document.getElementById('ctrlhint'); if(el && el.classList.contains('show')){ el.classList.remove('show'); clearTimeout(el._t); } }
+  function hideHint(){ var el=document.getElementById('ctrlhint'); if(el && el.classList.contains('show')){ el.classList.remove('show'); clearTimeout(el._t); window._tapBlockUntil=Date.now()+600; } }
   document.addEventListener('pointerdown', hideHint, true);
   document.addEventListener('touchstart', hideHint, {capture:true, passive:true});
   document.addEventListener('keydown', function(e){ if(e.key==='Escape') hideHint(); });
