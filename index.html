@@ -837,6 +837,7 @@ function pickDestination(c){
     // during class -> stand at hall door; break -> pace nearby
     const b = building(c.subj); const d = doorOf(b);
     if (isClassTime()){ c.tx=c.homeX; c.ty=c.homeY; }
+    else if (professors.filter(function(x){ return x.subj===c.subj; }).length>1){ c.tx = c.homeX + rnd(-22,22); c.ty = c.homeY + rnd(-4,40); }
     else { c.tx = d.x + rnd(-70,70); c.ty = d.y + rnd(-10,50); }
   } else {
     // student
@@ -1366,11 +1367,14 @@ function hallFrame(){
   g.fillStyle='#6b4f34'; g.fillRect(14,118,50,6); g.fillRect(18,124,4,22); g.fillRect(56,124,4,22);
   const pr=HALL_PROPS[b.subj||b.role]||['planter']; drawProp(g,pr[0],39,118,1.15);
   /* 교수 + 교탁 */
-  const p=professors.find(function(x){ return x.subj===b.subj; }), pc=p?p.color:b.color, ph=p?p.hair:'#1f1f1f';
+  const hps=professors.filter(function(x){ return x.subj===b.subj; }).slice(0,2);
   const gest=Math.sin(t*2.2), happy=HALL.react==='clap'&&now<HALL.reactUntil;
-  hallMini(g,100,96+(happy?Math.abs(Math.sin(t*9))*-2:0),{color:pc,hair:ph,prof:true,hand:true,handSide:1,handX:gest*3+6,handY:-gest*2-2});
-  g.fillStyle='#5b4029'; g.beginPath(); g.moveTo(80,112); g.lineTo(120,112); g.lineTo(116,150); g.lineTo(84,150); g.closePath(); g.fill();
-  g.fillStyle='#d4af52'; g.fillRect(80,112,40,3); g.fillStyle='#f4ead0'; g.font='bold 8.5px "Malgun Gothic",sans-serif'; g.fillText(p?p.name:'교수',100,128);
+  (hps.length?hps:[null]).forEach(function(p,pi){
+    const px=pi?160:100, pc=p?p.color:b.color, ph=p?p.hair:'#1f1f1f', gs=pi?-gest:gest;
+    hallMini(g,px,96+(happy?Math.abs(Math.sin(t*9+pi))*-2:0),{color:pc,hair:ph,prof:true,hand:true,handSide:pi?-1:1,handX:(gs*3+6)*(pi?-1:1),handY:-gs*2-2});
+    g.fillStyle='#5b4029'; g.beginPath(); g.moveTo(px-20,112); g.lineTo(px+20,112); g.lineTo(px+16,150); g.lineTo(px-16,150); g.closePath(); g.fill();
+    g.fillStyle='#d4af52'; g.fillRect(px-20,112,40,3); g.fillStyle='#f4ead0'; g.font='bold 8.5px "Malgun Gothic",sans-serif'; g.fillText(p?p.name:'교수',px,128);
+  });
   /* 학생 좌석 */
   const clap=happy, think=HALL.react==='think'&&now<HALL.reactUntil;
   HALL.seats.forEach(function(st){
@@ -1998,7 +2002,7 @@ function usRegister(subj, set){
 }
 function usDone(subj){ var S=UNIT_SETS[subj]; try{ var d=JSON.parse(localStorage.getItem(S.key)||'[]'); return Array.isArray(d)?d:[]; }catch(e){ return []; } }
 function usMark(subj,n){ var S=UNIT_SETS[subj], d=usDone(subj); if(d.indexOf(n)<0){ d.push(n); try{ localStorage.setItem(S.key, JSON.stringify(d)); }catch(e){} } return d; }
-function usWho(subj){ var p=professors.find(function(x){ return x.subj===subj; }); return p?p.name:'교수님'; }
+function usWho(subj){ var ps=professors.filter(function(x){ return x.subj===subj; }); if(!ps.length) return '교수님'; if(ps.length===1) return ps[0].name; return ps.map(function(p){ return p.name.replace(/ 교수$/,''); }).join('·')+' 교수'; }
 function usTop(){ try{ document.querySelector('#dlg .modal').scrollTop=0; }catch(e){} }
 function openUnitHall(subj){
   var S=UNIT_SETS[subj], b=building(subj); if(!S||!b) return;
@@ -3514,7 +3518,7 @@ function addFoot(label, fn, primary){
 }
 
 /* --- Lecture summaries (offline; LLM-enhanced if enabled) --- */
-const LECTURE = {"anatomy": "해부학은 근육의 이는곳·닿는곳·작용·신경(OIAN)을 구조와 기능으로 연결하는 과목입니다. 회전근개(SITS: 가시위·가시아래·작은원·어깨밑근), 손목 굽힘근은 안쪽위관절융기·폄근은 가쪽위관절융기, 볼기근과 볼기신경, 넙다리네갈래근(넙다리신경)과 뒤넙다리근(정강신경)처럼 근육과 신경을 묶어 기억합니다. 운동생리학에서는 에너지 체계(ATP-PCr·해당·유산소), 근섬유 유형, 훈련 적응을 다룹니다. 강의관 첫 화면의 12강 단원 강의에서 이어 가세요. (안산대 물리치료학과 · 김신영 교수 담당: 해부학및실습·운동생리학)", "neuroanat": "신경해부학·신경과학은 뉴런·시냅스에서 감각·운동 경로, 소뇌·바닥핵, 뇌신경, 뇌줄기, 자율신경, 통증까지 “구조가 곧 기능”으로 잇습니다. 핵심 감별은 UMN(반대쪽·경직·과반사) vs LMN(같은쪽·이완·위축), 신경로 교차 위치입니다. (안산대 물리치료학과 · 정형국 교수 담당: 신경해부학·임상운동학 · 콘텐츠는 심경섭 「신경해부학 강의록·시험문항」 기반)", "neuro": "신경계물리치료는 뇌졸중·파킨슨·소뇌실조·ALS·SCI·MS·GBS 등 신경계 손상 환자의 회복을 다룹니다. 최신 근거는 과제지향 훈련·충분한 반복량·치료 강도를 우선합니다. (안산대 물리치료학과 · 심경섭 교수 담당: 신경계물리치료중재학·지역사회물리치료학 · 「NeuroPT-3」 국시 정리 기반)", "exercise": "운동치료학은 손상을 줄이고 기능을 되찾기 위해 운동을 처방하는 과목입니다. 관절가동범위(PROM·AROM·A-AROM)와 신장(정적 신장 30초 이상, PNF 유지-이완), 관절가동술(오목-볼록 규칙, Maitland 1~4·Kaltenborn 1~3등급)로 가동성을 회복하고, 저항운동(과부하·SAID, 발살바 회피)·유산소(Karvonen 60~70%)·균형(발목·엉덩·디딤 전략)·수중운동으로 수행력을 높입니다. 조직 치유 단계(급성 4~6일 → 아급성 → 만성)에 맞춰 강도를 바꾸는 것이 핵심입니다. 강의관 첫 화면의 12강 단원 강의에서 이어 가세요. (안산대 물리치료학과 · 신호진 교수 담당: 운동치료학·인체생리학)", "funcanat": "기능해부·신경운동은 움직임을 면·축·관절운동학(구르기·미끄러지기·돌기)과 토크(힘 × 모멘트 팔)로 설명합니다. 근육의 길이-장력·힘-속도 관계와 능동·수동 불충분, 어깨위팔리듬(오목위팔 120도 + 어깨가슴 60도 ≈ 2:1), 무릎 나사집돌림, 넙다리뼈 경사각(성인 약 125도), 보행 주기(디딤기 약 60% · 흔듦기 약 40%)가 핵심입니다. 강의관 첫 화면의 13강 단원 강의에서 이어 가세요. (안산대 물리치료학과 · 김도현 학과장 담당: 신경계운동치료실습·기능해부학 및 실습)", "msk": "근골격계물리치료는 증상을 만드는 조직을 가려내고(Cyriax: 능동·수동·저항 검사, 끝느낌, 관절주머니 패턴), 칼텐본 관절가동술(치료면, 견인·미끄러짐 1~3등급, 볼록-오목 규칙)로 관절놀이를 회복하는 과목입니다. 특수검사는 민감도·특이도로 해석합니다 — 예를 들어 하지직거상은 민감해 음성이면 배제에, 교차 하지직거상은 특이해 양성이면 확진에 유용합니다. 강의관 첫 화면의 12강 단원 강의에서 이어 가세요. (안산대 물리치료학과 · 정호발 교수 담당: 정형물리치료실습·근골격계운동치료실습)", "modality": "물리적인자치료는 열·냉·전기·음파·기계적 에너지로 통증·부종·근기능을 조절해 운동을 돕는 과목입니다. 급성기에는 한랭·압박, 만성기에는 열(표재열·연속 초음파)로 조직을 데운 뒤 신장합니다. 초음파는 1 MHz가 깊게·3 MHz가 얕게, 연속은 열·펄스는 비열 효과입니다. TENS는 일반형(50~100 Hz, 관문조절)과 침형(2~4 Hz, 내인성 오피오이드), NMES는 수술 후 근력 회복, 간섭전류는 4000 Hz 반송파의 맥놀이를 씁니다. 강의관 첫 화면의 10강 단원 강의에서 이어 가세요. (안산대 물리치료학과 · 김동훈 교수 담당: 물리적인자치료실습·근거중심신경계물리치료학)", "cardio": "심화호흡물리치료는 심장(1~5장: 임상 결정과정·심장재활과 운동처방·심혈관계 구조와 평가·심장질환과 위험인자)과 호흡(6~13장: 호흡재활·호흡기계 구조와 평가·호흡질환·호흡운동·체위배출과 기도청결·노인 운동처방·사례연구)을 잇는 과목입니다. 핵심은 산소운반 사슬(허파→심장→혈액→모세혈관→조직)의 어느 고리가 손상되었는지 찾고, 병태생리에 맞춰 중재를 고르는 것 — 폐쇄성(날숨 장애·공기 걸림)에는 오므린 입술호흡·가로막 호흡, 제한성(팽창 장애)에는 들숨근 훈련·강화 폐활량호흡입니다. 강의관 첫 화면의 13장 단원 강의에서 장별 핵심과 확인 퀴즈를 이어 가세요. (안산대 물리치료학과 · 심경섭 교수 담당: 심화호흡물리치료학 · 「심장호흡물리치료」 2판 기반)", "clindx": "임상의사결정·물리치료진단은 가설연역적 추론으로 환자의 움직임 문제를 규정하고(ICF), 적신호를 걸러 내며, 진단 확률(민감도·특이도·우도비)과 측정의 질(신뢰도·MDC·MCID)을 따져 결정하는 과목입니다. 근거기반 실무 5단계(질문·검색·평가·적용·평가)와 PICO, SOAP 기록·SMART 목표, 공유 의사결정을 함께 다룹니다. 강의관 첫 화면의 10강 단원 강의에서 이어 가세요. (안산대 물리치료학과 · 이광재 교수 담당: 물리치료진단학·물리치료진단실습·임상의사결정)"};
+const LECTURE = {"anatomy": "해부학은 근육의 이는곳·닿는곳·작용·신경(OIAN)을 구조와 기능으로 연결하는 과목입니다. 회전근개(SITS: 가시위·가시아래·작은원·어깨밑근), 손목 굽힘근은 안쪽위관절융기·폄근은 가쪽위관절융기, 볼기근과 볼기신경, 넙다리네갈래근(넙다리신경)과 뒤넙다리근(정강신경)처럼 근육과 신경을 묶어 기억합니다. 운동생리학에서는 에너지 체계(ATP-PCr·해당·유산소), 근섬유 유형, 훈련 적응을 다룹니다. 강의관 첫 화면의 12강 단원 강의에서 이어 가세요. (안산대 물리치료학과 · 김신영 교수 담당: 해부학및실습·운동생리학)", "neuroanat": "신경해부학·신경과학은 뉴런·시냅스에서 감각·운동 경로, 소뇌·바닥핵, 뇌신경, 뇌줄기, 자율신경, 통증까지 “구조가 곧 기능”으로 잇습니다. 핵심 감별은 UMN(반대쪽·경직·과반사) vs LMN(같은쪽·이완·위축), 신경로 교차 위치입니다. (안산대 물리치료학과 · 정형국·심경섭 교수 담당 · 콘텐츠는 심경섭 「신경해부학 강의록·시험문항」 기반)", "neuro": "신경계물리치료는 뇌졸중·파킨슨·소뇌실조·ALS·SCI·MS·GBS 등 신경계 손상 환자의 회복을 다룹니다. 최신 근거는 과제지향 훈련·충분한 반복량·치료 강도를 우선합니다. (안산대 물리치료학과 · 심경섭 교수 담당: 신경계물리치료중재학·지역사회물리치료학 · 「NeuroPT-3」 국시 정리 기반)", "exercise": "운동치료학은 손상을 줄이고 기능을 되찾기 위해 운동을 처방하는 과목입니다. 관절가동범위(PROM·AROM·A-AROM)와 신장(정적 신장 30초 이상, PNF 유지-이완), 관절가동술(오목-볼록 규칙, Maitland 1~4·Kaltenborn 1~3등급)로 가동성을 회복하고, 저항운동(과부하·SAID, 발살바 회피)·유산소(Karvonen 60~70%)·균형(발목·엉덩·디딤 전략)·수중운동으로 수행력을 높입니다. 조직 치유 단계(급성 4~6일 → 아급성 → 만성)에 맞춰 강도를 바꾸는 것이 핵심입니다. 강의관 첫 화면의 12강 단원 강의에서 이어 가세요. (안산대 물리치료학과 · 신호진 교수 담당: 운동치료학·인체생리학)", "funcanat": "기능해부·신경운동은 움직임을 면·축·관절운동학(구르기·미끄러지기·돌기)과 토크(힘 × 모멘트 팔)로 설명합니다. 근육의 길이-장력·힘-속도 관계와 능동·수동 불충분, 어깨위팔리듬(오목위팔 120도 + 어깨가슴 60도 ≈ 2:1), 무릎 나사집돌림, 넙다리뼈 경사각(성인 약 125도), 보행 주기(디딤기 약 60% · 흔듦기 약 40%)가 핵심입니다. 강의관 첫 화면의 13강 단원 강의에서 이어 가세요. (안산대 물리치료학과 · 김도현 학과장 담당: 신경계운동치료실습·기능해부학 및 실습)", "msk": "근골격계물리치료는 증상을 만드는 조직을 가려내고(Cyriax: 능동·수동·저항 검사, 끝느낌, 관절주머니 패턴), 칼텐본 관절가동술(치료면, 견인·미끄러짐 1~3등급, 볼록-오목 규칙)로 관절놀이를 회복하는 과목입니다. 특수검사는 민감도·특이도로 해석합니다 — 예를 들어 하지직거상은 민감해 음성이면 배제에, 교차 하지직거상은 특이해 양성이면 확진에 유용합니다. 강의관 첫 화면의 12강 단원 강의에서 이어 가세요. (안산대 물리치료학과 · 정호발 교수 담당: 정형물리치료실습·근골격계운동치료실습)", "modality": "물리적인자치료는 열·냉·전기·음파·기계적 에너지로 통증·부종·근기능을 조절해 운동을 돕는 과목입니다. 급성기에는 한랭·압박, 만성기에는 열(표재열·연속 초음파)로 조직을 데운 뒤 신장합니다. 초음파는 1 MHz가 깊게·3 MHz가 얕게, 연속은 열·펄스는 비열 효과입니다. TENS는 일반형(50~100 Hz, 관문조절)과 침형(2~4 Hz, 내인성 오피오이드), NMES는 수술 후 근력 회복, 간섭전류는 4000 Hz 반송파의 맥놀이를 씁니다. 강의관 첫 화면의 10강 단원 강의에서 이어 가세요. (안산대 물리치료학과 · 김동훈 교수 담당: 물리적인자치료실습·근거중심신경계물리치료학)", "cardio": "심화호흡물리치료는 심장(1~5장: 임상 결정과정·심장재활과 운동처방·심혈관계 구조와 평가·심장질환과 위험인자)과 호흡(6~13장: 호흡재활·호흡기계 구조와 평가·호흡질환·호흡운동·체위배출과 기도청결·노인 운동처방·사례연구)을 잇는 과목입니다. 핵심은 산소운반 사슬(허파→심장→혈액→모세혈관→조직)의 어느 고리가 손상되었는지 찾고, 병태생리에 맞춰 중재를 고르는 것 — 폐쇄성(날숨 장애·공기 걸림)에는 오므린 입술호흡·가로막 호흡, 제한성(팽창 장애)에는 들숨근 훈련·강화 폐활량호흡입니다. 강의관 첫 화면의 13장 단원 강의에서 장별 핵심과 확인 퀴즈를 이어 가세요. (안산대 물리치료학과 · 심경섭 교수 담당: 심화호흡물리치료학 · 「심장호흡물리치료」 2판 기반)", "clindx": "임상의사결정·물리치료진단은 가설연역적 추론으로 환자의 움직임 문제를 규정하고(ICF), 적신호를 걸러 내며, 진단 확률(민감도·특이도·우도비)과 측정의 질(신뢰도·MDC·MCID)을 따져 결정하는 과목입니다. 근거기반 실무 5단계(질문·검색·평가·적용·평가)와 PICO, SOAP 기록·SMART 목표, 공유 의사결정을 함께 다룹니다. 강의관 첫 화면의 10강 단원 강의에서 이어 가세요. (안산대 물리치료학과 · 이광재 교수 담당: 물리치료진단학·물리치료진단실습·임상의사결정)"};
 async function lectureSummary(subj, who){
   const hb=building(subj); if(hb){ hallShow(hb, '강의 요약', HALL_KEY[subj]||''); hallSay('핵심만 짚어 볼게요', 3); }
   const body=document.getElementById('dlg-body'); const foot=document.getElementById('dlg-foot');

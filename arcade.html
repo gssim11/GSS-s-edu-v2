@@ -217,7 +217,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 <script>
 (function(){
 'use strict';
-var ART=window.ARCADE_ART,WORLDS=window.ARCADE_WORLDS, KEY='aupt_arcade_v1', ARENA=1700, BOSS_AT=60, MAXLV=5, C=850, ULT_CD=.8;
+var ART=window.ARCADE_ART,WORLDS=window.ARCADE_WORLDS, KEY='aupt_arcade_v1', ARENA=1700, BOSS_AT=35, MAXLV=5, C=850, ULT_CD=2.5;
 var $=function(id){return document.getElementById(id);};
 function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e;}
 function rnd(a,b){return a+Math.random()*(b-a);}
@@ -274,7 +274,7 @@ function continueTarget(){var w=WORLDS.filter(function(x){return x.id===SV.last;
 function launch(w,i){if(i>=0)startStage(w,i,'stage');else startStage(w,-1,'final');}
 function renderGuide(cb){
   var b=$('guideBox');b.innerHTML='';b.appendChild(el('h2','','조작 방법'));
-  [['🕹️','조이스틱','왼쪽 아래 조이스틱을 밀어 이동 · 화면 왼쪽 어디서든 시작 가능'],['🌊','공격','가까운 적에게 자동 발사'],['💨','회피 버튼','오른쪽 맨 아래 · 짧게 돌진, 그동안 무적'],['💥','필살기 버튼','회피 버튼 위 · 횟수 제한 없이 계속 사용 · 주변 적 큰 피해 · 체력 30% 미만이면 자동 발동'],['📘','문제','레벨업·보스 때 출제 · 정답이면 체력 회복과 강화'],['🚑','쓰러졌을 때','응급 처치 문제로 최대 2번 부활']].forEach(function(r){
+  [['🕹️','조이스틱','왼쪽 아래 조이스틱을 밀어 이동 · 화면 왼쪽 어디서든 시작 가능'],['🌊','공격','가까운 적에게 자동 발사'],['💨','회피 버튼','오른쪽 맨 아래 · 짧게 돌진, 그동안 무적'],['💥','필살기 버튼','회피 버튼 위 · 횟수 제한 없음(2.5초마다) · 주변 적 큰 피해 · 체력 30% 미만이면 자동 발동'],['📘','문제','레벨업·보스·미사일 피격 때 출제 · 피격 문제를 맞히면 피해 없음 · 장마다 문제를 모두 풀어야 클리어'],['🚑','쓰러졌을 때','응급 처치 문제로 최대 2번 부활']].forEach(function(r){
     var x=el('div','grow');x.appendChild(el('span','e',r[0]));var t=el('span');t.appendChild(el('b','',r[1]));t.appendChild(el('small','',r[2]));x.appendChild(t);b.appendChild(x);});
   var g=el('button','go',cb?'확인했어요':'닫기');g.type='button';g.id='guideGo';g.onclick=function(){SV.guided=true;save();$('guide').hidden=true;if(cb)cb();};b.appendChild(g);
   $('guide').hidden=false;$('guide').scrollTop=0;
@@ -437,7 +437,7 @@ function poolFor(wd,idx,mode){
     var R=SV.srs[wd.id]||{};
     return wd.stages.map(function(s){var bi=0,bb=9;s.q.forEach(function(q,k){var v=(R[s.n+':'+k]||{b:0}).b;if(v<bb){bb=v;bi=k;}});return tag(wd,s,s.q[bi],bi,true);});
   }
-  var st=wd.stages[idx],R0=SV.srs[wd.id]||{},main=st.q.map(function(q,k){var x=tag(wd,st,q,k);x.nw=k+1;x.of=st.q.length;return x;}).filter(function(x){var r=R0[st.n+':'+x.i];return !r||r.b===0;});
+  var st=wd.stages[idx],R0=SV.srs[wd.id]||{},main=st.q.map(function(q,k){var x=tag(wd,st,q,k);x.nw=k+1;x.of=st.q.length;return x;});
   var rev=dueList(wd,st.n).filter(function(x){return x.s<st.n;}).sort(function(a,b){return a.pri-b.pri||a.s-b.s||a.i-b.i;}).slice(0,3),out=[],m=0,r=0;
   while(m<main.length||r<rev.length){if(m<main.length)out.push(main[m++]);if((m>=2||m>=main.length)&&r<rev.length)out.push(rev[r++]);}
   return out;
@@ -450,8 +450,8 @@ function startStage(wd,idx,mode){
   var H=hero(),maxhp=140+H.hp+SV.meta.hp*10,d=mode==='stage'?1+idx*.025:mode==='daily'?1.12:mode==='final'?1.2:1;
   var stageName=mode==='stage'?wd.stages[idx].n+LAB[wd.id]+' '+wd.stages[idx].t:mode==='wrong'?'자동 복습':mode==='final'?'전 범위 총정리':'오늘의 도전';
   var sid=wd?STYLE_OF[wd.id]:Object.keys(STYLES)[new Date().getDate()%9],S=STYLES[sid];
-  G={world:world,idx:idx,mode:mode,name:stageName,sid:sid,style:S,sx:{},diff:d,t:0,clock:0,paused:true,ended:false,shake:0,flash:0,bossAt:S.obj?85:BOSS_AT,goalDone:false,rest:0,spdMul:1,moved:false,walls:[],
-    p:{x:C,y:C,r:15,hp:maxhp,maxhp:maxhp,spd:195*H.spd,dmg:(10+SV.meta.atk*.6)*H.dmg,rate:1,crit:.1,mag:125*(1+SV.meta.mag*.12),regen:H.regen||0,inv:0,dash:0,dashCd:0,dashMax:2.6*(H.dash||1),dx:0,dy:1,walk:0,lv:1,xp:0,next:8,w:{},cd:{},orbitA:0,face:1,revives:2,b:{dmg:1,rate:1,spd:1,mag:1,crit:0,hp:0}},
+  G={world:world,idx:idx,mode:mode,name:stageName,sid:sid,style:S,sx:{},diff:d,t:0,clock:0,paused:true,ended:false,shake:0,flash:0,bossAt:S.obj?55:BOSS_AT,goalDone:false,rest:0,spdMul:1,moved:false,walls:[],
+    p:{x:C,y:C,r:15,hp:maxhp,maxhp:maxhp,spd:195*H.spd,dmg:(10+SV.meta.atk*.6)*H.dmg,rate:1,crit:.1,mag:125*(1+SV.meta.mag*.12),regen:H.regen||0,inv:0,dash:0,dashCd:0,dashMax:2.6*(H.dash||1),dx:0,dy:1,walk:0,lv:1,xp:0,next:5,w:{},cd:{},orbitA:0,face:1,revives:2,b:{dmg:1,rate:1,spd:1,mag:1,crit:0,hp:0}},
     en:[],shots:[],eshots:[],orbs:[],picks:[],fx:[],txt:[],rings:[],bolts:[],
     kills:0,combo:0,comboT:0,maxCombo:0,score:0,gold:0,ult:45,spawn:.8,elite:[34],boss:null,bossDone:false,
     pool:poolFor(wd,idx,mode),seenQ:[],qi:0,asked:0,correct:0,wrong:[],pendingLv:0,qCool:0,cards:[],hero:H};
@@ -466,7 +466,7 @@ function stageIntro(){
   b.appendChild(el('div','stg',G.world.name+' ('+G.world.subj+')'+(G.mode==='stage'?' · '+(G.idx+1)+' / '+G.world.stages.length:'')));
   b.appendChild(el('h2','',G.name));
   var r=el('div','rule');var t=el('b','',S.tag+' ');r.appendChild(t);r.appendChild(document.createTextNode(S.rule));b.appendChild(r);
-  var p=el('div','pl');if(nNew)p.appendChild(el('span','','✨ 새 개념 '+nNew));if(nRev)p.appendChild(el('span','','🔁 복습 '+nRev));if(!nNew&&!nRev)p.appendChild(el('span','','✅ 지금 볼 문제 없음 · 자유 전투'));b.appendChild(p);
+  var p=el('div','pl');if(nNew)p.appendChild(el('span','',(G.mode==='stage'?'📝 이번 장 문제 ':'✨ 새 개념 ')+nNew+(G.mode==='stage'?' · 모두 풀어야 클리어':'')));if(nRev)p.appendChild(el('span','','🔁 복습 '+nRev));if(!nNew&&!nRev)p.appendChild(el('span','','✅ 지금 볼 문제 없음 · 자유 전투'));b.appendChild(p);
   var own=Object.keys(G.p.w).sort();var sk=el('div','pl');own.forEach(function(k){sk.appendChild(el('span','',UP[k].e+' '+UP[k].n+' '+G.p.w[k]));});b.appendChild(sk);
   var g=el('button','go','출발');g.type='button';g.id='stageGo';g.onclick=function(){closeOv();G.paused=false;banner(G.name);snd('level');if(G.sid!=='canyon'&&!G.opened){G.opened=true;for(var i=0;i<5;i++)spawnEnemy('grunt');}};b.appendChild(g);
   $('ov').hidden=false;
@@ -549,24 +549,24 @@ function edgePoint(){
 function spawnEnemy(type,x,y,mul){
   var T=TYPES[type],a=Math.random()*6.283,R=Math.hypot(VW,VH)/2+50,P=G.p;
   if(x===undefined){if(G.sid==='canyon'){x=C+rnd(-canyonHW(),canyonHW());y=C-VH/2-30;}else{var ep=edgePoint();x=ep.x;y=ep.y;}}
-  var hp=T.hp*.85*G.diff*(1+G.t/150)*(mul||1);
-  var e={type:type,x:x,y:y,hp:hp,max:hp,spd:T.spd*.9*(1+(G.diff-1)*.12)*rnd(.92,1.08),r:T.r*(mul>2?1.5:1),dmg:T.dmg*.62*(1+(G.diff-1)*.2),xp:T.xp*(mul>2?5:1),score:T.score*(mul||1),c:T.c,flash:0,slow:0,wob:Math.random()*6,fire:rnd(1,2.4),elite:mul>2,oh:0};
+  var hp=T.hp*1.0*G.diff*(1+G.t/120)*(mul||1);
+  var e={type:type,x:x,y:y,hp:hp,max:hp,spd:T.spd*.9*(1+(G.diff-1)*.12)*rnd(.92,1.08),r:T.r*(mul>2?1.5:1),dmg:T.dmg*.78*(1+(G.diff-1)*.2),xp:T.xp*(mul>2?5:1),score:T.score*(mul||1),c:T.c,flash:0,slow:0,wob:Math.random()*6,fire:rnd(1,2.4),elite:mul>2,oh:0};
   G.en.push(e);return e;
 }
 function spawnWave(dt){
   if(G.rest>0)return;G.spawn-=dt;if(G.spawn>0||G.en.length>=(lowFx?70:115))return;
   var t=G.t,b=!!G.boss;
-  G.spawn=(b?1.8:clamp(1.3-t*.012,.52,1.3))/(.85+G.diff*.15);
-  var n=(b?1:1+Math.floor(t/30)),types=['grunt'];
-  if(t>9)types.push('fast');if(t>18)types.push('split');if(t>30)types.push('shoot');if(t>42)types.push('tank');
+  G.spawn=(b?1.5:clamp(1.15-t*.014,.45,1.15))/(.85+G.diff*.15);
+  var n=(b?1:1+Math.floor(t/22)),types=['grunt'];
+  if(t>6)types.push('fast');if(t>10)types.push('shoot');if(t>14)types.push('split');if(t>26)types.push('tank');
   for(var i=0;i<n;i++)spawnEnemy(pick(types));
   if(!b&&G.sid!=='canyon'&&t>25&&Math.random()<.06){var a=Math.random()*6.283;for(var k=0;k<9;k++){var q=a+k*.698;spawnEnemy('fast',clamp(G.p.x+Math.cos(q)*(VW/2+36),20,ARENA-20),clamp(G.p.y+Math.sin(q)*(VH/2+36),20,ARENA-20));}}
 }
 function spawnBoss(){
-  var P=G.p,hp=(360+Object.keys(P.w).length*45)*G.diff,a=Math.random()*6.283;
+  var P=G.p,hp=(480+Object.keys(P.w).length*55)*G.diff,a=Math.random()*6.283;
   var b={type:'boss',x:G.sid==='canyon'?C:clamp(P.x+Math.cos(a)*280,70,ARENA-70),y:G.sid==='canyon'?C-VH*.34:clamp(P.y+Math.sin(a)*280,70,ARENA-70),hp:hp,max:hp,spd:64+G.diff*7,r:46,dmg:13*(1+(G.diff-1)*.25),xp:0,score:1200,c:5,flash:0,slow:0,wob:0,fire:2,oh:0,boss:true,phase:0,pat:0,charge:0,cvx:0,cvy:0,stun:0,shield:false};
   G.en.push(b);G.boss=b;$('bossBar').hidden=false;$('bossT').textContent=(G.mode==='stage'?G.name+' 수문장':'원정 수문장');
-  banner('보스 출현');snd('boss');G.shake=14;
+  banner('👑 왕 출현');snd('boss');G.shake=14;
 }
 function radial(e,n,spd,off){for(var i=0;i<n;i++){var a=(off||0)+i/n*6.283;G.eshots.push({x:e.x,y:e.y,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,r:7,d:e.dmg*.55,life:4});}}
 function bossAI(b,dt){
@@ -578,7 +578,7 @@ function bossAI(b,dt){
   b.fire-=dt;
   if(b.fire<=0){
     var enrage=b.phase, p=b.pat++%4;
-    b.fire=clamp(3.1-enrage*.3,2.2,3.1);
+    b.fire=clamp(2.6-enrage*.3,1.8,2.6);
     if(p===0)radial(b,12+enrage*3,175,b.pat*.3);
     else if(p===1){var A=Math.atan2(dy,dx);for(var i=-2;i<=2;i++)G.eshots.push({x:b.x,y:b.y,vx:Math.cos(A+i*.2)*250,vy:Math.sin(A+i*.2)*250,r:7,d:b.dmg*.55,life:3});}
     else if(p===2){b.charge=.62;b.cvx=dx/d*500;b.cvy=dy/d*500;addTxt(b.x,b.y-60,'돌진!','#ff8fa3',18);}
@@ -616,6 +616,11 @@ function kill(e){
   else if(Math.random()<.018)G.picks.push({x:e.x,y:e.y,k:pick(['heart','magnet','bomb']),t:0});
   if(Math.random()<.13){G.gold+=e.elite?8:1;}
   if(e.boss){G.bossDone=true;G.shake=26;G.flash=.5;G.gold+=40;snd('win');G.en.forEach(function(x){if(x!==e&&x.hp>0){x.hp=0;burst(x.x,x.y,enemyColor(x),6);}});G.eshots=[];G.orbs.forEach(function(o){o.on=true;});setTimeout(finishFlow,reduce?100:1150);}
+}
+function shotHit(d){
+  var P=G.p;if(P.inv>0||P.dash>0||G.ended)return;
+  if(G.q||G.menu||!qAvail()){damagePlayer(d);return;}
+  G.hitD=d;askQuestion('hit');
 }
 function damagePlayer(d){
   var P=G.p;if(P.inv>0||P.dash>0||G.ended)return;
@@ -664,6 +669,13 @@ function qNorm(t){return t.replace(/[\s·,.?!()\[\]「」'"-]/g,'');}
 function qGrams(t){var g={},n=0;for(var i=0;i<t.length-1;i++){var k=t.substr(i,2);if(!g[k]){g[k]=1;n++;}}g._n=n;return g;}
 function qSame(a,b){if(a.t===b.t)return true;if(a.a!==b.a)return false;var c=0;Object.keys(a.g).forEach(function(k){if(k!=='_n'&&b.g[k])c++;});return c/(a.g._n+b.g._n-c)>=.7;}
 function qSeen(it){var x={t:qNorm(it.q.q),a:qNorm(it.q.o[it.q.a])};x.g=qGrams(x.t);return G.seenQ.some(function(y){return qSame(x,y);})?null:x;}
+function qAvail(){
+  for(var j=G.qi;j<G.pool.length;j++)if(qSeen(G.pool[j]))return true;
+  if(G.mode==='stage'&&!G.refill){G.refill=true;var st=G.world.stages[G.idx],ex=[];
+    G.world.stages.forEach(function(s){if(s.n>=st.n)return;s.q.forEach(function(q,i){ex.push({q:q,w:G.world.id,s:s.n,i:i,rev:true});});});
+    G.pool=G.pool.concat(shuffle(ex));return qAvail();}
+  return false;
+}
 function nextQ(){
   while(G.qi<G.pool.length){var it=G.pool[G.qi++],x=qSeen(it);if(x){G.seenQ.push(x);return it;}}
   return null;
@@ -671,8 +683,9 @@ function nextQ(){
 function askQuestion(kind){
   if(!G||G.ended)return;
   if(G.q||G.menu){ if(kind==='level') G.pendingLv++; else G.qWait=kind; return; }
+  if(kind==='wrapup'){for(var j=G.qi;j<G.pool.length;j++)if(G.pool[j].nw){var mv=G.pool.splice(j,1)[0];G.pool.splice(G.qi,0,mv);break;}}
   var it=nextQ();
-  if(!it){G.paused=true;G.q={kind:kind,free:true};afterQ(true,false);return;}
+  if(!it){if(kind==='hit'){damagePlayer(G.hitD||10);return;}G.paused=true;G.q={kind:kind,free:true};afterQ(true,false);return;}
   var q=it.q,idx=[0,1,2,3];
   if(!q.o.every(function(x){return /^[0-9약]/.test(x);})) idx=shuffle(idx);
   G.paused=true;G.asked++;
@@ -681,7 +694,7 @@ function askQuestion(kind){
 }
 function renderQ(){
   var Q=G.q,it=Q.it,b=$('ovBox');b.innerHTML='';
-  var label={level:'⬆ 레벨 업 문제',boss:'⚔ 보스 방어막 문제',revive:'🚑 응급 처치: 맞히면 부활',chest:'🎁 보물상자 문제',wrapup:'📘 이번 장 마무리 문제'}[Q.kind];
+  var label={hit:'🛡 미사일 피격! 맞히면 피해 없음',level:'⬆ 레벨 업 문제',boss:'⚔ 보스 방어막 문제',revive:'🚑 응급 처치: 맞히면 부활',chest:'🎁 보물상자 문제',wrapup:'📘 이번 장 마무리 문제'}[Q.kind];
   var tg=el('div','qtag');tg.appendChild(el('span','',label));tg.appendChild(el('span','',(G.world.id==='daily'?subjOf(it.w)+' · ':'')+(it.nw?'✨ 이번 장 '+it.nw+'/'+it.of:'🔁 복습 · '+it.s+(LAB[it.w]||'장'))));b.appendChild(tg);
   var tb=el('div','tbar'),te=el('em');te.id='qTime';tb.appendChild(te);b.appendChild(tb);
   b.appendChild(el('p','qtext',it.q.q));
@@ -695,10 +708,10 @@ function answer(k){
   var it=Q.it,ok=k>=0&&Q.idx[k]===it.q.a,fast=ok&&Q.t<7;
   Q.idx.forEach(function(orig,j){var x=$('opt'+j);x.disabled=true;if(orig===it.q.a)x.classList.add('ok');else if(j===k)x.classList.add('no');});
   var id=it.s+':'+it.i,L=SV.wrong[it.w]=SV.wrong[it.w]||[];
-  if(ok){G.correct++;G.ult=Math.min(100,G.ult+(fast?40:28));G.gold+=fast?5:3;G.p.hp=Math.min(G.p.maxhp,G.p.hp+(fast?24:16));var at=L.indexOf(id);if(at>=0)L.splice(at,1);if(G.sid==='oxygen')G.sx.o=Math.min(100,G.sx.o+25);snd('ok');}
+  if(ok){G.correct++;G.ult=Math.min(100,G.ult+(fast?40:28));G.gold+=fast?5:3;if(Q.kind!=='hit')G.p.hp=Math.min(G.p.maxhp,G.p.hp+(fast?24:16));var at=L.indexOf(id);if(at>=0)L.splice(at,1);if(G.sid==='oxygen')G.sx.o=Math.min(100,G.sx.o+25);snd('ok');}
   else{if(L.indexOf(id)<0)L.push(id);if(G.wrong.indexOf(it)<0)G.wrong.push(it);snd('no');}
   if(!L.length)delete SV.wrong[it.w];srsUpdate(it,ok);save();
-  var b=$('ovBox'),head=ok?(fast?'정답! 체력 +24 · 빠른 판단 보너스':'정답! 체력 +16'):k<0?'시간 초과':'오답';
+  var b=$('ovBox'),head=Q.kind==='hit'?(ok?'정답! 미사일 피해 없음':(k<0?'시간 초과 · 피해를 입습니다':'오답 · 피해를 입습니다')):ok?(fast?'정답! 체력 +24 · 빠른 판단 보너스':'정답! 체력 +16'):k<0?'시간 초과':'오답';
   var ex=el('div','exp');var st=el('b','',head+' ');st.style.color=ok?'var(--good)':'var(--bad)';ex.appendChild(st);ex.appendChild(document.createTextNode(it.q.e));b.appendChild(ex);
   var c=el('button','go','계속');c.type='button';c.id='qGo';c.onclick=function(){afterQ(ok,fast);};b.appendChild(c);
   try{c.focus({preventScroll:true});}catch(e){}
@@ -706,6 +719,11 @@ function answer(k){
 function afterQ(ok,fast){
   var Q=G.q;if(!Q)return;G.q=null;var kind=Q.kind,P=G.p;
   if(kind==='wrapup'){closeOv();finishFlow();return;}
+  if(kind==='hit'){
+    G.eshots=G.eshots.filter(function(x){return Math.hypot(x.x-P.x,x.y-P.y)>140;});
+    if(ok){P.inv=1.6;G.rings.push({x:P.x,y:P.y,r:14,max:140,l:.35,c:'#55e7ff'});addTxt(P.x,P.y-40,'방어 성공!','#55e7ff',20);resume();return;}
+    closeOv();P.inv=0;damagePlayer((G.hitD||10)*1.3);if(G.ended||G.q)return;P.inv=1.6;resume();return;
+  }
   if(kind==='revive'){
     if(ok){P.hp=P.maxhp*.7;P.inv=2.6;G.eshots=[];G.en.forEach(function(e){if(!e.boss&&Math.hypot(e.x-P.x,e.y-P.y)<190)e.hp=0;});G.en=G.en.filter(function(e){return e.hp>0;});G.rings.push({x:P.x,y:P.y,r:20,max:220,l:.4,c:'#58e6a0'});banner('부활!');resume();}
     else if(P.revives>0){P.revives--;P.hp=0;askQuestion('revive');}
@@ -781,7 +799,7 @@ function finish(win){
 }
 
 /* ---------- 갱신 ---------- */
-function levelCheck(){var P=G.p;while(P.xp>=P.next){P.xp-=P.next;P.lv++;P.next=Math.round(P.next*1.42+2);snd('level');G.rings.push({x:P.x,y:P.y,r:10,max:120,l:.3,c:'#55e7ff'});if(G.q||G.paused)G.pendingLv++;else askQuestion('level');}}
+function levelCheck(){var P=G.p;while(P.xp>=P.next){P.xp-=P.next;P.lv++;P.next=Math.round(P.next*1.3+2);snd('level');G.rings.push({x:P.x,y:P.y,r:10,max:120,l:.3,c:'#55e7ff'});if(G.q||G.paused)G.pendingLv++;else askQuestion('level');}}
 function update(dt){
   var P=G.p,i,e;
   G.t+=dt;P.inv=Math.max(0,P.inv-dt);P.dashCd=Math.max(0,P.dashCd-dt);if(P.regen)P.hp=Math.min(P.maxhp,P.hp+P.regen*dt);
@@ -790,12 +808,12 @@ function update(dt){
   G.ultCd=Math.max(0,(G.ultCd||0)-dt);if(P.hp<P.maxhp*.3&&(G.autoUlt||0)<=G.t){G.autoUlt=G.t+3;useUlt();}
   var sp=P.spd*(G.spdMul||1);if(P.dash>0){P.dash-=dt;sp*=3.4;if(!ml){mx=P.dx;my=P.dy;}if(!reduce&&G.fx.length<170)G.fx.push({x:P.x,y:P.y,vx:0,vy:0,r:9,l:.16,c:'#9fe8ff'});}
   P.x=clamp(P.x+mx*sp*dt,20,ARENA-20);P.y=clamp(P.y+my*sp*dt,20,ARENA-20);
-  if(!G.boss&&(G.t>=G.bossAt||(G.goalDone&&G.t>=45)))spawnBoss();
+  if(!G.boss&&(G.t>=G.bossAt||(G.goalDone&&G.t>=20)))spawnBoss();
   if(G.elite.length&&G.t>=G.elite[0]){G.elite.shift();spawnEnemy('tank',undefined,undefined,3.4);addTxt(P.x,P.y-52,'정예 출현','#ffd166',20);}
   if(!G.bossDone)spawnWave(dt);
   buildGrid();fireWeapons(dt);if(G.paused&&G.q)return;
   for(i=G.en.length-1;i>=0;i--){
-    e=G.en[i];if(e.hp<=0){G.en.splice(i,1);continue;}
+    e=G.en[i];if(!e)continue;if(e.hp<=0){G.en.splice(i,1);continue;}
     e.flash=Math.max(0,e.flash-dt);e.slow=Math.max(0,e.slow-dt);e.oh=Math.max(0,e.oh-dt);e.wob+=dt*7;
     if(e.boss)bossAI(e,dt);
     else{
@@ -810,7 +828,7 @@ function update(dt){
     if(!dead)near(s.x,s.y,s.r,function(t){if(s.seen.indexOf(t)>=0)return;s.seen.push(t);hit(t,s.d);burst(s.x,s.y,'#bff6ff',3,110);if(s.lv>=3)waveBoom(s.x,s.y,s.lv,s.d);if(s.pierce--<=0){dead=true;return false;}});
     if(dead)G.shots.splice(i,1);
   }
-  for(i=G.eshots.length-1;i>=0;i--){var b=G.eshots[i];b.x+=b.vx*dt;b.y+=b.vy*dt;b.life-=dt;if(b.life<=0){G.eshots.splice(i,1);continue;}if(Math.hypot(b.x-P.x,b.y-P.y)<b.r+P.r*.8){G.eshots.splice(i,1);damagePlayer(b.d);if(G.ended||(G.paused&&G.q))return;}}
+  for(i=G.eshots.length-1;i>=0;i--){var b=G.eshots[i];if(!b)continue;b.x+=b.vx*dt;b.y+=b.vy*dt;b.life-=dt;if(b.life<=0){G.eshots.splice(i,1);continue;}if(Math.hypot(b.x-P.x,b.y-P.y)<b.r+P.r*.8){G.eshots.splice(i,1);shotHit(b.d);if(G.ended||(G.paused&&G.q))return;}}
   for(i=G.orbs.length-1;i>=0;i--){var o=G.orbs[i],od=Math.hypot(P.x-o.x,P.y-o.y);if(od<P.mag)o.on=true;if(o.on){var ov=Math.max(280,600-od);o.x+=(P.x-o.x)/(od||1)*ov*dt;o.y+=(P.y-o.y)/(od||1)*ov*dt;}if(od<P.r+8){P.xp+=o.v;G.orbs.splice(i,1);snd('xp');}}
   G.style.tick(dt);if(G.ended||(G.paused&&G.q))return;
   levelCheck();if(G.paused&&G.q)return;
