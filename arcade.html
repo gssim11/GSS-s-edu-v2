@@ -167,6 +167,12 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 #ultB.ready{border-color:var(--ink);background:radial-gradient(circle at 35% 28%,#fff0a8,#ff9d1f);color:#40230a;box-shadow:0 5px 0 var(--ink),0 0 0 3px #ffe27a,0 0 26px #ffc53d}
 .coach{border:3px solid var(--ink)}.coach.right{right:10px;bottom:calc(210px + env(safe-area-inset-bottom))}.coach.left{bottom:calc(178px + env(safe-area-inset-bottom))}
 #joyZone{position:absolute;left:0;bottom:0;width:60%;height:60%;z-index:1;touch-action:none}
+.abtn{touch-action:none;-webkit-user-select:none;user-select:none}
+.cdT{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:21px;font-weight:900;color:#fff;text-shadow:0 2px 0 #000,0 0 6px #000;pointer-events:none}
+.cdT:empty{display:none}
+.abtn.nope{animation:nope .28s}
+.abtn.hitp{transform:scale(.9)}
+@keyframes nope{0%,100%{translate:0}25%{translate:-5px}75%{translate:5px}}
 #joyBase{position:absolute;width:136px;height:136px;margin:-68px 0 0 -68px;border-radius:50%;background:radial-gradient(circle,rgba(30,22,72,.62) 42%,rgba(92,74,180,.62) 100%);border:3px solid rgba(255,255,255,.72);box-shadow:0 0 0 3px rgba(18,13,36,.72),0 5px 0 rgba(18,13,36,.5);pointer-events:none;transition:opacity .15s}
 #joyBase .ar{position:absolute;width:0;height:0;border:8px solid transparent;opacity:.8}
 #joyBase .n{left:57px;top:3px;border-bottom:11px solid #fff;border-top:0}#joyBase .s{left:57px;bottom:3px;border-top:11px solid #fff;border-bottom:0}#joyBase .w{left:3px;top:57px;border-right:11px solid #fff;border-left:0}#joyBase .e{right:3px;top:57px;border-left:11px solid #fff;border-right:0}
@@ -207,7 +213,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
   <div id="bannerWrap"></div>
   <div id="upWrap" aria-live="polite"></div>
   <div id="joyZone" aria-label="이동 조이스틱"><div id="joyBase"><i class="ar n"></i><i class="ar e"></i><i class="ar s"></i><i class="ar w"></i><div id="joyKnob"></div></div></div>
-  <div class="act"><button class="abtn" id="ultB" type="button" aria-label="필살기"><i id="ultI"></i><span class="ab"><b>💥</b>필살기</span></button><button class="abtn" id="dashB" type="button" aria-label="회피"><i id="dashI"></i><span class="ab"><b>💨</b>회피</span></button></div>
+  <div class="act"><button class="abtn" id="ultB" type="button" aria-label="필살기"><i id="ultI"></i><span class="ab"><b>💥</b>필살기</span><em class="cdT" id="ultT"></em></button><button class="abtn" id="dashB" type="button" aria-label="회피"><i id="dashI"></i><span class="ab"><b>💨</b>회피</span><em class="cdT" id="dashT"></em></button></div>
   <div class="ov" id="ov" hidden><div class="box" id="ovBox" role="dialog" aria-modal="true"></div></div>
 </section>
 
@@ -655,13 +661,15 @@ function fireWeapons(dt){
   }
 }
 function useUlt(){
-  if(!G||G.paused||G.ended||(G.ultCd||0)>0)return;
+  if(!G||G.paused||G.ended||(G.ultCd||0)>0)return false;
   var P=G.p;G.ultCd=ULT_CD;SV.ultUsed=(SV.ultUsed||0)+1;G.shake=Math.max(G.shake,8);G.flash=Math.max(G.flash,.06);snd('ult');G.rings.push({x:P.x,y:P.y,r:20,max:430,l:.5,c:G.world.color});G.eshots=[];
   near(P.x,P.y,430,function(e){hit(e,e.boss?45:200);});
+  return true;
 }
 function useDash(){
-  if(!G||G.paused||G.ended)return;var P=G.p;if(P.dashCd>0)return;
+  if(!G||G.paused||G.ended)return false;var P=G.p;if(P.dashCd>0)return false;
   P.dash=.2;P.dashCd=P.dashMax;burst(P.x,P.y,'#9fe8ff',10,150);
+  return true;
 }
 
 /* ---------- 문제 ---------- */
@@ -946,7 +954,7 @@ function hud(){
   var left=Math.max(0,Math.ceil(G.bossAt-G.t)),mn=Math.floor(left/60),sc=left%60;$('timeT').textContent=G.boss?'BOSS':mn+':'+(sc<10?'0':'')+sc;var skk=Object.keys(P.w).map(function(k){return k+P.w[k];}).join();if(G._skk!==skk){G._skk=skk;var sb=$('skillBar');sb.innerHTML='';Object.keys(P.w).forEach(function(k){var d=el('span','sk'+(P.w[k]>=MAXLV?' evo':''),UP[k].e);d.appendChild(el('small','',P.w[k]>=MAXLV?'★':P.w[k]));sb.appendChild(d);});}var gt=$('goalT');gt.hidden=false;gt.textContent=G.style.goal();$('coachL').hidden=G.moved||G.paused;$('joyZone').style.display=G.ended?'none':'';$('coachR').hidden=!((G.ultCd||0)<=0&&(SV.ultUsed||0)<3&&G.t>2)||G.paused;$('goldT').textContent='🪙'+G.gold;
   if(G.boss)$('bossE').style.width=clamp(G.boss.hp/G.boss.max*100,0,100)+'%';
   var c=$('combo');if(G.combo>=5){c.hidden=false;c.innerHTML='';c.appendChild(document.createTextNode(G.combo));c.appendChild(el('small','','COMBO x'+(1+Math.min(4,Math.floor(G.combo/15)))));}else c.hidden=true;
-  var uc=G.ultCd||0;$('ultI').style.height=(1-uc/ULT_CD)*100+'%';$('ultB').classList.toggle('ready',uc<=0);$('dashI').style.height=(1-P.dashCd/P.dashMax)*100+'%';
+  var uc=G.ultCd||0;$('ultI').style.height=(1-uc/ULT_CD)*100+'%';$('ultB').classList.toggle('ready',uc<=0);$('dashI').style.height=(1-P.dashCd/P.dashMax)*100+'%';var ut=uc>0?uc.toFixed(1):'',dt2=P.dashCd>0?P.dashCd.toFixed(1):'';if($('ultT').textContent!==ut)$('ultT').textContent=ut;if($('dashT').textContent!==dt2)$('dashT').textContent=dt2;
 }
 
 /* ---------- 입력 ---------- */
@@ -975,7 +983,13 @@ jz.addEventListener('pointerdown',function(e){if(joy.on)return;e.preventDefault(
 jz.addEventListener('pointermove',function(e){if(!joy.on||e.pointerId!==joy.id)return;e.preventDefault();joyMove(joyLocal(e));});
 function joyEnd(e){if(!joy.on||e.pointerId!==joy.id)return;joy.on=false;joy.id=null;input.x=0;input.y=0;jb.classList.remove('on');joyHome();keyAxis();}
 jz.addEventListener('pointerup',joyEnd);jz.addEventListener('pointercancel',joyEnd);jz.addEventListener('lostpointercapture',joyEnd);
-$('dashB').onclick=useDash;$('ultB').onclick=useUlt;$('pauseB').onclick=pauseMenu;
+function actBtn(btn,fn){
+  function nope(){btn.classList.remove('nope');void btn.offsetWidth;btn.classList.add('nope');}
+  btn.addEventListener('pointerdown',function(e){e.preventDefault();btn.classList.add('hitp');if(!G||G.paused||G.ended)return;if(!fn())nope();});
+  ['pointerup','pointercancel','pointerleave'].forEach(function(t){btn.addEventListener(t,function(){btn.classList.remove('hitp');});});
+  btn.addEventListener('contextmenu',function(e){e.preventDefault();});
+}
+actBtn($('ultB'),useUlt);actBtn($('dashB'),useDash);$('pauseB').onclick=pauseMenu;
 document.addEventListener('visibilitychange',function(){if(document.hidden&&G&&!G.paused&&!G.ended)pauseMenu();});
 
 /* ---------- 루프 ---------- */
