@@ -226,6 +226,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offse
 var ART=window.ARCADE_ART,WORLDS=window.ARCADE_WORLDS, KEY='aupt_arcade_v1', ARENA=1700, BOSS_AT=35, MAXLV=5, C=850, ULT_CD=2.5;
 var $=function(id){return document.getElementById(id);};
 function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e;}
+function qEl(tag,cls,txt){var e=el(tag,cls);String(txt).split(/(<u>.*?<\/u>)/).forEach(function(p){var m=/^<u>(.*)<\/u>$/.exec(p);if(m)e.appendChild(el('u','',m[1]));else if(p)e.appendChild(document.createTextNode(p));});return e;}
 function rnd(a,b){return a+Math.random()*(b-a);}
 function pick(a){return a[Math.floor(Math.random()*a.length)];}
 function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
@@ -705,7 +706,7 @@ function renderQ(){
   var label={hit:'🛡 미사일 피격! 맞히면 피해 없음',level:'⬆ 레벨 업 문제',boss:'⚔ 보스 방어막 문제',revive:'🚑 응급 처치: 맞히면 부활',chest:'🎁 보물상자 문제',wrapup:'📘 이번 장 마무리 문제'}[Q.kind];
   var tg=el('div','qtag');tg.appendChild(el('span','',label));tg.appendChild(el('span','',(G.world.id==='daily'?subjOf(it.w)+' · ':'')+(it.nw?'✨ 이번 장 '+it.nw+'/'+it.of:'🔁 복습 · '+it.s+(LAB[it.w]||'장'))));b.appendChild(tg);
   var tb=el('div','tbar'),te=el('em');te.id='qTime';tb.appendChild(te);b.appendChild(tb);
-  b.appendChild(el('p','qtext',it.q.q));
+  b.appendChild(qEl('p','qtext',it.q.q));
   var o=el('div','opts');
   Q.idx.forEach(function(orig,k){var x=el('button','opt');x.type='button';x.id='opt'+k;x.appendChild(el('u','',String(k+1)));x.appendChild(el('span','',it.q.o[orig]));x.onclick=function(){answer(k);};o.appendChild(x);});
   b.appendChild(o);$('ov').hidden=false;$('ov').scrollTop=0;
@@ -798,7 +799,7 @@ function finish(win){
   var h=el('h2','',win?'원정 성공':'원정 실패');h.style.textAlign='center';h.style.margin='4px 0 0';b.appendChild(h);
   var pp=el('p','sub',g.name+(isNew?' · 최고 점수 갱신!':''));pp.style.textAlign='center';pp.style.margin='2px 0';b.appendChild(pp);
   var gr=el('div','grid3');[['점수',g.score],['정답',g.correct+'/'+g.asked],['코인','+'+reward],['처치',g.kills],['최대 콤보',g.maxCombo],['레벨',g.p.lv]].forEach(function(x){var d=el('div');d.appendChild(el('b','',x[1]));d.appendChild(document.createTextNode(x[0]));gr.appendChild(d);});b.appendChild(gr);
-  if(g.wrong.length){b.appendChild(el('strong','','다시 볼 개념'));g.wrong.slice(0,4).forEach(function(it){var r=el('div','rev');r.appendChild(el('b','',it.q.q));r.appendChild(document.createTextNode('정답: '+it.q.o[it.q.a]+' — '+it.q.e));b.appendChild(r);});}
+  if(g.wrong.length){b.appendChild(el('strong','','다시 볼 개념'));g.wrong.slice(0,4).forEach(function(it){var r=el('div','rev');r.appendChild(qEl('b','',it.q.q));r.appendChild(document.createTextNode('정답: '+it.q.o[it.q.a]+' — '+it.q.e));b.appendChild(r);});}
   if(win&&g.mode==='stage'&&g.idx<g.world.stages.length-1){var nx=el('button','go','다음 스테이지');nx.type='button';nx.onclick=function(){G=null;startStage(g.world,g.idx+1,'stage');};b.appendChild(nx);}
   var re=el('button','go'+(win&&g.mode==='stage'&&g.idx<g.world.stages.length-1?' alt':''),'다시 도전');re.type='button';re.onclick=function(){G=null;startStage(g.mode==='daily'?null:g.world,g.idx,g.mode);};
   if(!(g.mode==='wrong'&&!dueList(g.world).length))b.appendChild(re);
