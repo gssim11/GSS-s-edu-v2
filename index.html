@@ -2017,7 +2017,7 @@ function openUnitHall(subj){
         +(ok?'<span class="qok">✓ 확인</span>':'')+'<i>'+u.ic+'</i>'+u.n+S.lab+' '+cuEsc(u.t)+'</button>';
     }).join('')+'</div>';
   }
-  var h=pLead(S.lead)
+  var h=(S.notice&&S.notice.length?pSec('📢 게시판',S.noticeDesc||'')+linkList(S.notice):'')+pLead(S.lead)
     +'<div class="cu-prog" role="progressbar" aria-valuemin="0" aria-valuemax="'+N+'" aria-valuenow="'+done.length+'"><span style="width:'+Math.round(done.length/N*100)+'%"></span></div>'
     +'<div class="psec-d" style="margin:5px 0 2px">단원 확인 '+done.length+' / '+N+'</div>';
   S.groups.forEach(function(g){ h+=pSec(g.t,g.d)+tiles(g.parts); });
@@ -2312,6 +2312,7 @@ usRegister('neuroanat',{units:NA_UNITS, quiz:NA_QUIZ, key:'aupt_na_done', lab:'�
           {t:'뇌 (3~7장)',d:'대뇌 · 사이뇌 · 바닥핵 · 뇌줄기 · 소뇌',parts:['뇌']},
           {t:'척수와 말초 (8~11장)',d:'척수 · 뇌신경 · 척수신경 · 자율신경계',parts:['척수·말초']},
           {t:'통합 (12~13장)',d:'수막·뇌실·혈액공급 · 종합과 임상통합',parts:['통합']}],
+  notice:[{t:'📝 신경해부학(1학년): 학과 온라인 캠퍼스 활용 설문', u:'https://forms.gle/3hHMZz5Jur7ey6qW9', hl:true}],
   links:NEUROANAT_LINKS, linksTitle:'신경해부학 학습자료', linksDesc:'심경섭 교수 제작 · 강의록 챕터별 핵심요약·확인문제',
   ref:'2026-2 신경해부학 강의록(심경섭)의 장 구성을 따라 핵심을 요약했습니다.',
   src:function(u){ return '참고: 2026-2 신경해부학 강의록 '+u.n+'장(심경섭) · 「신경과학의 이해 신경해부생리학」 3판'; }});
